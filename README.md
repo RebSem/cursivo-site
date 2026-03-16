@@ -6,6 +6,12 @@ Public multilingual marketing site for Cursivo, built as a dedicated Astro repos
 
 Cursivo is positioned as a multilingual AI CRM for car rental operators. This repo will hold the public site that explains the product clearly, shows the operational workflow, and supports search-first content in English, Russian, and Arabic.
 
+Live links:
+
+- Repo: [https://github.com/RebSem/cursivo-site](https://github.com/RebSem/cursivo-site)
+- Pages: [https://rebsem.github.io/cursivo-site/](https://rebsem.github.io/cursivo-site/)
+- Linear project: [https://linear.app/rebsem/project/cursivo-site-48c5b90dc853](https://linear.app/rebsem/project/cursivo-site-48c5b90dc853)
+
 The initial scope in this repository is:
 
 - Astro 5 starter setup
@@ -61,6 +67,9 @@ npm run check
 ## Deployment
 
 The repository is configured for GitHub Pages deployment through GitHub Actions.
+
+- GitHub Pages URL: [https://rebsem.github.io/cursivo-site/](https://rebsem.github.io/cursivo-site/)
+- GitHub repo homepage is set to the Pages URL.
 
 ## Notes
 
