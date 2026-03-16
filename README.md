@@ -1,6 +1,6 @@
 # Cursivo Site
 
-Public multilingual marketing site for Cursivo, built as a dedicated Astro repository for GitHub Pages.
+Public multilingual marketing site for Cursivo, built as a dedicated Astro repository.
 
 ## Overview
 
@@ -9,13 +9,12 @@ Cursivo is positioned as a multilingual AI CRM for car rental operators. This re
 Live links:
 
 - Repo: [https://github.com/RebSem/cursivo-site](https://github.com/RebSem/cursivo-site)
-- Pages: [https://rebsem.github.io/cursivo-site/](https://rebsem.github.io/cursivo-site/)
 - Linear project: [https://linear.app/rebsem/project/cursivo-site-48c5b90dc853](https://linear.app/rebsem/project/cursivo-site-48c5b90dc853)
 
 The initial scope in this repository is:
 
 - Astro 5 starter setup
-- static deployment target for GitHub Pages
+- deployment target deferred until the final domain is ready
 - project brief committed in the repo
 - implementation tracked in Linear as a dedicated project
 
@@ -33,7 +32,7 @@ The site should answer three questions fast:
 - TypeScript
 - static output
 - plain CSS
-- GitHub Actions deployment to GitHub Pages
+- deployment target to be configured later for the final domain
 
 ## Planned routes
 
@@ -66,12 +65,10 @@ npm run check
 
 ## Deployment
 
-The repository is configured for GitHub Pages deployment through GitHub Actions.
-
-- GitHub Pages URL: [https://rebsem.github.io/cursivo-site/](https://rebsem.github.io/cursivo-site/)
-- GitHub repo homepage is set to the Pages URL.
+Deployment is intentionally deferred until the site is implemented and the final domain is ready.
 
 ## Notes
 
 - The public site is intentionally separate from the internal product repository.
 - The repo starts with a simple branded placeholder page; the full implementation is tracked as Linear issues derived from the brief.
+- The final production domain should be wired later instead of hardcoding a temporary Pages URL.
