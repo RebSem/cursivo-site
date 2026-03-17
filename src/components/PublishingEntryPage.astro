@@ -1,0 +1,242 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import FinalCtaSection from "./FinalCtaSection.astro";
+import { buildArticleSchema, buildBreadcrumbSchema } from "../data/jsonld";
+import type { PublishCollection, PublishEntryCopy, PublishIndexCopy } from "../data/publishing";
+import type { Locale, LocaleLink, NavItem } from "../data/site";
+
+interface EntryMeta {
+	title: string;
+	description: string;
+	publishedAt: Date;
+	category?: string;
+	version?: string;
+	translationKey: string;
+}
+
+interface Props {
+	collection: PublishCollection;
+	currentLocale: Locale;
+	brandMeta: string;
+	navItems: NavItem[];
+	localeLinks: LocaleLink[];
+	footerTitle: string;
+	footerCopy: string;
+	footerMetaLabel: string;
+	footerMetaValue: string;
+	entryMeta: EntryMeta;
+	copy: PublishEntryCopy;
+	indexCopy: PublishIndexCopy;
+	backHref: string;
+	entryPath: string;
+	Content: any;
+	formattedDate: string;
+}
+
+const {
+	collection: _collection,
+	currentLocale,
+	brandMeta,
+	navItems,
+	localeLinks,
+	footerTitle,
+	footerCopy,
+	footerMetaLabel,
+	footerMetaValue,
+	entryMeta,
+	copy,
+	indexCopy,
+	backHref,
+	entryPath,
+	Content,
+	formattedDate,
+} = Astro.props;
+
+const structuredData = [
+	buildBreadcrumbSchema(currentLocale, entryMeta.title, entryPath),
+	buildArticleSchema({
+		locale: currentLocale,
+		title: entryMeta.title,
+		description: entryMeta.description,
+		path: entryPath,
+		datePublished: entryMeta.publishedAt.toISOString(),
+	}),
+];
+const alternatePaths = localeLinks.reduce(
+	(accumulator, link) => {
+		accumulator[link.code] = link.href;
+		return accumulator;
+	},
+	{} as Record<Locale, string>,
+);
+---
+
+<BaseLayout
+	title={entryMeta.title}
+	description={entryMeta.description}
+	lang={currentLocale}
+	brandMeta={brandMeta}
+	navItems={navItems}
+	localeLinks={localeLinks}
+	footerTitle={footerTitle}
+	footerCopy={footerCopy}
+	footerMetaLabel={footerMetaLabel}
+	footerMetaValue={footerMetaValue}
+	currentLocale={currentLocale}
+	structuredData={structuredData}
+	canonicalPath={entryPath}
+	alternatePaths={alternatePaths}
+>
+	<div class="site-container">
+		<div class="page-stack">
+			<section class="entry-hero section-card" data-reveal="soft">
+				<a class="entry-back type-label" href={backHref}>{copy.backLabel}</a>
+				<h1 class="type-display">{entryMeta.title}</h1>
+				<p class="type-body-lg text-muted entry-description">{entryMeta.description}</p>
+				<div class="entry-meta-grid">
+					<div class="entry-meta-item">
+						<p class="type-label">{copy.metaPublishedLabel}</p>
+						<p>{formattedDate}</p>
+					</div>
+					{entryMeta.category && (
+						<div class="entry-meta-item">
+							<p class="type-label">{copy.metaCategoryLabel}</p>
+							<p>{entryMeta.category}</p>
+						</div>
+					)}
+					{entryMeta.version && (
+						<div class="entry-meta-item">
+							<p class="type-label">{copy.metaVersionLabel}</p>
+							<p>{entryMeta.version}</p>
+						</div>
+					)}
+					<div class="entry-meta-item">
+						<p class="type-label">{copy.translationLabel}</p>
+						<p class="entry-translation-links">
+							{localeLinks.map((link) => (
+								<a href={link.href}>{link.label}</a>
+							))}
+						</p>
+					</div>
+				</div>
+			</section>
+
+			<article class="entry-body section-card prose-shell" data-reveal="soft" style="--reveal-delay:120ms;">
+				<Content />
+			</article>
+
+			<FinalCtaSection
+				eyebrow={indexCopy.finalCtaEyebrow}
+				title={indexCopy.finalCtaTitle}
+				intro={indexCopy.finalCtaIntro}
+				links={indexCopy.finalCtaLinks}
+			/>
+		</div>
+	</div>
+</BaseLayout>
+
+<style>
+	.entry-hero {
+		display: grid;
+		gap: 1rem;
+	}
+
+	.entry-back {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.4rem;
+		color: var(--color-terracotta);
+		text-decoration: none;
+	}
+
+	.entry-description {
+		max-width: 44rem;
+		margin-bottom: 0;
+	}
+
+	.entry-meta-grid {
+		display: grid;
+		grid-template-columns: repeat(4, minmax(0, 1fr));
+		gap: 0.95rem;
+		margin-top: var(--space-5);
+	}
+
+	.entry-meta-item {
+		padding: 0.95rem;
+		border-radius: 1rem;
+		border: 1px solid rgba(113, 88, 62, 0.1);
+		background:
+			linear-gradient(180deg, rgba(255, 253, 249, 0.9), rgba(255, 253, 249, 0.76)),
+			rgba(255, 253, 249, 0.72);
+	}
+
+	.entry-meta-item p {
+		margin: 0;
+	}
+
+	.entry-meta-item p:last-child {
+		margin-top: 0.45rem;
+		color: var(--color-slate);
+	}
+
+	.entry-translation-links {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.6rem;
+	}
+
+	.entry-translation-links a {
+		color: var(--color-slate);
+		text-decoration: none;
+	}
+
+	.entry-translation-links a:hover {
+		color: var(--color-ink);
+	}
+
+	.prose-shell :global(p),
+	.prose-shell :global(ul),
+	.prose-shell :global(ol),
+	.prose-shell :global(h2),
+	.prose-shell :global(h3) {
+		max-width: 46rem;
+	}
+
+	.prose-shell :global(ul),
+	.prose-shell :global(ol) {
+		padding-inline-start: 1.1rem;
+	}
+
+	.prose-shell :global(h2) {
+		font-size: var(--text-h2);
+		margin: 2rem 0 0.8rem;
+	}
+
+	.prose-shell :global(h3) {
+		font-size: var(--text-h3);
+		margin: 1.4rem 0 0.55rem;
+	}
+
+	.prose-shell :global(p) {
+		margin: 0 0 1rem;
+		color: var(--color-slate);
+	}
+
+	.prose-shell :global(ul),
+	.prose-shell :global(ol) {
+		line-height: 1.8;
+		color: var(--color-slate);
+	}
+
+	@media (max-width: 900px) {
+		.entry-meta-grid {
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+		}
+	}
+
+	@media (max-width: 640px) {
+		.entry-meta-grid {
+			grid-template-columns: 1fr;
+		}
+	}
+</style>

@@ -1,0 +1,952 @@
+---
+import HeroPipelineSimulator from "./HeroPipelineSimulator.astro";
+import RequestDemoSection from "./RequestDemoSection.astro";
+import StickyDemoButton from "./StickyDemoButton.astro";
+
+const painPoints = [
+	{
+		title: "Hot leads go cold",
+		copy: "When every inquiry lives in messenger threads, fast renters pick whoever answers first.",
+		icon: "clock",
+	},
+	{
+		title: "No pipeline visibility",
+		copy: "Managers cannot see which branch owns which lead, what is quoted, or what is stuck.",
+		icon: "pipeline",
+	},
+	{
+		title: "Quotes stay manual",
+		copy: "Price checks, car matching, and reservation prep still happen by copy-paste.",
+		icon: "quotes",
+	},
+	{
+		title: "Branches drift apart",
+		copy: "Dubai Marina, Downtown, and airport teams end up operating as separate islands.",
+		icon: "branch",
+	},
+];
+
+const trustStats = [
+	{ value: "< 30 sec", label: "response time target" },
+	{ value: "0", label: "lost chat threads" },
+	{ value: "4", label: "workspaces in one system" },
+	{ value: "AI only", label: "qualified lead intake" },
+];
+
+const solutionTabs = [
+	{
+		id: "inbox",
+		label: "Inbox",
+		title: "See every live conversation in one operator inbox.",
+		copy: "Telegram-first intake lands in a structured conversation view with context, owner, status, and branch routing.",
+	},
+	{
+		id: "leads",
+		label: "Leads",
+		title: "Move demand through a real pipeline instead of scrolling chat history.",
+		copy: "Kanban and list views show who is qualified, quoted, pending payment, or ready for reservation handoff.",
+	},
+	{
+		id: "catalog",
+		label: "Catalog",
+		title: "Keep fleet availability and car data close to every quote.",
+		copy: "Operators match the right car, branch, and rental terms without leaving the CRM.",
+	},
+	{
+		id: "quotes",
+		label: "Quotes",
+		title: "Turn qualified requests into fast, consistent offers.",
+		copy: "Cursivo keeps quote details, pickup plans, and reservation tasks tied to the same customer record.",
+	},
+];
+
+const steps = [
+	{
+		number: "01",
+		title: "Onboard fleet",
+		copy: "Import branches, cars, classes, and pricing rules so the system can answer with real context.",
+	},
+	{
+		number: "02",
+		title: "Connect Telegram",
+		copy: "Route inbound inquiries through the AI intake layer and map them to the right branch automatically.",
+	},
+	{
+		number: "03",
+		title: "Start closing deals",
+		copy: "Managers receive qualified leads, quote-ready context, and clear next tasks instead of raw chat noise.",
+	},
+];
+---
+
+<div class="page-stack">
+	<!-- Hero with animated CRM board mockup -->
+	<section class="home-hero section-card" data-home-hero data-reveal="soft">
+		<div class="home-hero-copy">
+			<p class="type-label home-eyebrow">Built for modern car rental operators</p>
+			<h1 class="type-display">
+				Your rental business deserves a real CRM, not scattered chats.
+			</h1>
+			<p class="type-body-lg text-muted">
+				Cursivo is an AI-powered operator CRM for car rental companies. It captures Telegram,
+				WhatsApp, and website leads, qualifies intent, organizes the pipeline, and pushes
+				managers toward the next closing action. The first rollout is focused on the UAE, but
+				the operating model is built for rental teams beyond Dubai too.
+			</p>
+			<div class="home-hero-actions">
+				<a class="home-hero-primary" href="#contact">Request a demo</a>
+				<a class="home-hero-secondary" href="#solution">See how it works</a>
+			</div>
+			<div class="home-hero-notes">
+				<span>Telegram, WhatsApp, web intake</span>
+				<span>Quotes and reservations</span>
+			</div>
+		</div>
+
+		<div class="home-hero-visual" aria-hidden="true">
+			<div class="hero-grid"></div>
+			<HeroPipelineSimulator />
+		</div>
+	</section>
+
+	<section class="pain-grid" id="benefits">
+		{painPoints.map((item, index) => (
+			<article class="pain-card section-card" data-reveal="soft" style={`--reveal-delay:${80 + index * 60}ms;`}>
+				<div class="pain-card-icon" aria-hidden="true">
+					{item.icon === "clock" && (
+						<svg viewBox="0 0 24 24" fill="none">
+							<circle cx="12" cy="12" r="8"></circle>
+							<path d="M12 8v5l3 2"></path>
+						</svg>
+					)}
+					{item.icon === "pipeline" && (
+						<svg viewBox="0 0 24 24" fill="none">
+							<path d="M4 6h7v4H4z"></path>
+							<path d="M13 14h7v4h-7z"></path>
+							<path d="M11 8h2v8h-2z"></path>
+						</svg>
+					)}
+					{item.icon === "quotes" && (
+						<svg viewBox="0 0 24 24" fill="none">
+							<path d="M6 5h12v14H6z"></path>
+							<path d="M9 9h6"></path>
+							<path d="M9 13h6"></path>
+						</svg>
+					)}
+					{item.icon === "branch" && (
+						<svg viewBox="0 0 24 24" fill="none">
+							<path d="M12 5v14"></path>
+							<path d="M7 9h10"></path>
+							<path d="M5 17h4"></path>
+							<path d="M15 17h4"></path>
+						</svg>
+					)}
+				</div>
+				<h2>{item.title}</h2>
+				<p class="text-muted">{item.copy}</p>
+			</article>
+		))}
+	</section>
+
+	<!-- Interactive tabs showing HTML/CSS product previews -->
+	<section class="solution section-card" id="solution" data-reveal="soft">
+		<div class="solution-head">
+			<div>
+				<p class="type-label solution-eyebrow">Meet Cursivo</p>
+				<h2 class="type-h2">Each pain point maps to a cleaner operator workflow.</h2>
+			</div>
+			<p class="text-muted">
+				Click through the core workspaces to see how inbox, leads, catalog, and quotes fit
+				together.
+			</p>
+		</div>
+
+		<div class="solution-tabs" data-solution-tabs>
+			<div class="solution-tab-list" role="tablist" aria-label="Product previews">
+				{solutionTabs.map((tab, index) => (
+					<button
+						type="button"
+						class:list={["solution-tab-button", index === 0 && "is-active"]}
+						role="tab"
+						aria-selected={index === 0 ? "true" : "false"}
+						aria-controls={`panel-${tab.id}`}
+						data-tab-target={tab.id}
+					>
+						{tab.label}
+					</button>
+				))}
+			</div>
+
+			{solutionTabs.map((tab, index) => (
+				<div
+					class:list={["solution-panel", index === 0 && "is-active"]}
+					id={`panel-${tab.id}`}
+					role="tabpanel"
+					data-tab-panel={tab.id}
+					hidden={index === 0 ? undefined : true}
+				>
+					<div class="solution-copy">
+						<h3>{tab.title}</h3>
+						<p class="text-muted">{tab.copy}</p>
+					</div>
+
+					{tab.id === "inbox" && (
+						<div class="solution-preview inbox-preview" aria-hidden="true">
+							<aside>
+								<strong>Queues</strong>
+								<span>Dubai Marina</span>
+								<span>Airport desk</span>
+								<span>VIP hotline</span>
+							</aside>
+							<div class="preview-main">
+								<header>
+									<strong>Lead: Ahmed R.</strong>
+									<span>AI qualified 14 sec ago</span>
+								</header>
+								<div class="chat-row is-incoming">Need a G-Class for Friday evening.</div>
+								<div class="chat-row is-system">AI tagged: luxury, short-term, Marina</div>
+								<div class="chat-row is-outgoing">Sharing available options and pickup terms.</div>
+							</div>
+						</div>
+					)}
+
+					{tab.id === "leads" && (
+						<div class="solution-preview leads-preview" aria-hidden="true">
+							<div>
+								<header>New</header>
+								<div class="mini-lead"><strong>Tourist SUV</strong><span>DXB</span></div>
+								<div class="mini-lead"><strong>Urgent sedan</strong><span>Downtown</span></div>
+							</div>
+							<div>
+								<header>Quoted</header>
+								<div class="mini-lead"><strong>BMW 7</strong><span>Deposit sent</span></div>
+							</div>
+							<div>
+								<header>Reserved</header>
+								<div class="mini-lead"><strong>Range Rover</strong><span>Driver booked</span></div>
+							</div>
+						</div>
+					)}
+
+					{tab.id === "catalog" && (
+						<div class="solution-preview catalog-preview" aria-hidden="true">
+							<div class="catalog-card">
+								<strong>Mercedes G63</strong>
+								<span>Luxury SUV</span>
+								<ul>
+									<li>Dubai Marina</li>
+									<li>Ready today</li>
+									<li>Daily quote preset</li>
+								</ul>
+							</div>
+							<div class="catalog-card">
+								<strong>BMW 520i</strong>
+								<span>Executive sedan</span>
+								<ul>
+									<li>Downtown branch</li>
+									<li>Weekend package</li>
+									<li>Corporate favorite</li>
+								</ul>
+							</div>
+						</div>
+					)}
+
+					{tab.id === "quotes" && (
+						<div class="solution-preview quotes-preview" aria-hidden="true">
+							<header>
+								<strong>Quote #DXB-204</strong>
+								<span>Prepared in 22 sec</span>
+							</header>
+							<div class="quote-grid">
+								<div><span>Vehicle</span><strong>Range Rover Sport</strong></div>
+								<div><span>Rental</span><strong>3 days</strong></div>
+								<div><span>Pickup</span><strong>Dubai Marina</strong></div>
+								<div><span>Status</span><strong>Awaiting approval</strong></div>
+							</div>
+						</div>
+					)}
+				</div>
+			))}
+		</div>
+	</section>
+
+	<!-- Step-by-step AI flow animation -->
+	<section class="ai-flow section-card" id="ai-flow" data-ai-flow data-reveal="soft">
+		<div class="ai-flow-copy">
+			<p class="type-label ai-flow-eyebrow">AI-powered flow</p>
+			<h2 class="type-h2">Telegram message in. Qualified task out.</h2>
+			<p class="text-muted">
+				The intake layer answers first, captures rental intent, creates the CRM lead, and
+				pushes the manager toward the exact next action.
+			</p>
+		</div>
+
+		<div class="ai-flow-grid" aria-live="polite">
+			<div class="ai-flow-chat">
+				<div class="flow-bubble is-incoming" data-flow-message="Need a luxury SUV tonight for 2 days. Marina pickup."></div>
+				<div class="flow-bubble is-system" data-flow-message="AI verified dates, branch, and car class."></div>
+				<div class="flow-bubble is-outgoing" data-flow-message="Lead qualified. Quote context prepared for the Marina team."></div>
+			</div>
+
+			<div class="ai-flow-card" data-flow-card>
+				<p class="type-label">CRM lead created</p>
+				<strong>Lead: Marina luxury SUV</strong>
+				<ul>
+					<li>Source: Telegram</li>
+					<li>Priority: High intent</li>
+					<li>Next: Send quote</li>
+				</ul>
+			</div>
+
+			<div class="ai-flow-task" data-flow-task>
+				<p class="type-label">Manager task</p>
+				<strong>Approve quote and confirm pickup window</strong>
+				<span>Assigned to Marina branch manager</span>
+			</div>
+		</div>
+	</section>
+
+	<section class="steps-grid" id="how-it-works">
+		{steps.map((step, index) => (
+			<article class="step-card section-card" data-reveal="soft" style={`--reveal-delay:${100 + index * 70}ms;`}>
+				<span class="step-number">{step.number}</span>
+				<h2>{step.title}</h2>
+				<p class="text-muted">{step.copy}</p>
+			</article>
+		))}
+	</section>
+
+	<section class="trust section-card" id="why-cursivo" data-reveal="soft">
+		<div class="trust-head">
+			<p class="type-label trust-eyebrow">Why Cursivo</p>
+			<h2 class="type-h2">Designed to remove operator chaos before it becomes lost revenue.</h2>
+		</div>
+		<div class="trust-grid">
+			{trustStats.map((item, index) => (
+				<article class="trust-card" style={`--reveal-delay:${100 + index * 60}ms;`}>
+					<strong>{item.value}</strong>
+					<span>{item.label}</span>
+				</article>
+			))}
+		</div>
+	</section>
+
+	<RequestDemoSection />
+</div>
+
+<StickyDemoButton href="#contact" thresholdSelector="[data-home-hero]" />
+
+<style>
+	.home-hero {
+		position: relative;
+		display: grid;
+		grid-template-columns: minmax(0, 1.05fr) minmax(22rem, 0.95fr);
+		gap: clamp(1.5rem, 3vw, 2.5rem);
+		align-items: center;
+		min-height: min(52rem, 88vh);
+	}
+
+	.home-hero::after {
+		content: "";
+		position: absolute;
+		inset: auto 0 0 auto;
+		width: 18rem;
+		height: 18rem;
+		background: radial-gradient(circle, var(--color-route-soft), transparent 70%);
+		pointer-events: none;
+	}
+
+	.home-eyebrow,
+	.solution-eyebrow,
+	.ai-flow-eyebrow,
+	.trust-eyebrow {
+		margin-bottom: var(--space-3);
+		color: var(--color-terracotta);
+	}
+
+	.home-hero-copy {
+		position: relative;
+		z-index: 1;
+	}
+
+	.home-hero-copy h1 {
+		margin-bottom: var(--space-4);
+		max-width: 11ch;
+	}
+
+	.home-hero-copy p {
+		margin-bottom: 0;
+		max-width: 42rem;
+	}
+
+	.home-hero-actions {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.75rem;
+		margin-top: var(--space-5);
+	}
+
+	.home-hero-primary,
+	.home-hero-secondary {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		padding: 0.9rem 1.1rem;
+		border-radius: var(--radius-pill);
+		text-decoration: none;
+		font-weight: 700;
+		transition:
+			transform var(--motion-fast) ease,
+			background var(--motion-fast) ease,
+			border-color var(--motion-fast) ease;
+	}
+
+	.home-hero-primary {
+		background: linear-gradient(165deg, #ff6b35, #c96a3a) !important;
+		color: #ffffff !important;
+		font-weight: 800;
+		border: 1px solid rgba(255, 255, 255, 0.2) !important;
+		box-shadow: 0 6px 18px rgba(255, 107, 53, 0.3) !important;
+	}
+
+	.home-hero-primary:hover {
+		filter: brightness(1.1);
+		transform: scale(1.05) translateY(-2px);
+		box-shadow: 0 12px 28px rgba(255, 107, 53, 0.45) !important;
+	}
+
+	.home-hero-secondary {
+		border: 1px solid var(--color-border-sand);
+		background: var(--surface-card);
+		color: var(--color-ink);
+	}
+
+	.home-hero-secondary:hover {
+		border-color: var(--color-terracotta);
+		transform: translateY(-1px);
+	}
+
+	.home-hero-notes {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.6rem;
+		margin-top: var(--space-5);
+	}
+
+	.home-hero-notes span {
+		padding: 0.5rem 0.75rem;
+		border-radius: var(--radius-pill);
+		background: var(--color-accent-soft);
+		font-family: var(--font-mono);
+		font-size: var(--text-label);
+		letter-spacing: 0.05em;
+		text-transform: uppercase;
+		color: var(--color-terracotta-active);
+	}
+
+	.home-hero-visual {
+		position: relative;
+		min-height: 30rem;
+		transform: translateY(-1.5rem);
+	}
+
+	.hero-grid {
+		position: absolute;
+		inset: 8% 0 0 8%;
+		border-radius: var(--radius-2xl);
+		background:
+			linear-gradient(90deg, var(--color-route-soft), transparent),
+			linear-gradient(180deg, var(--surface-card), transparent);
+		filter: blur(0.2rem);
+	}
+
+	.pain-grid,
+	.steps-grid {
+		display: grid;
+		grid-template-columns: repeat(4, minmax(0, 1fr));
+		gap: clamp(1rem, 2vw, 1.4rem);
+	}
+
+	.pain-card,
+	.step-card {
+		display: grid;
+		gap: 0.85rem;
+	}
+
+	.pain-card-icon {
+		display: inline-grid;
+		place-items: center;
+		width: 3rem;
+		height: 3rem;
+		border-radius: 1rem;
+		background: var(--color-accent-soft);
+		color: var(--color-terracotta-active);
+	}
+
+	.pain-card-icon svg {
+		width: 1.35rem;
+		height: 1.35rem;
+		stroke: currentColor;
+		stroke-width: 1.7;
+		stroke-linecap: round;
+		stroke-linejoin: round;
+	}
+
+	.pain-card h2,
+	.step-card h2 {
+		font-size: var(--text-h3);
+	}
+
+	.pain-card p,
+	.step-card p {
+		margin: 0;
+	}
+
+	.solution {
+		display: grid;
+		gap: 1.25rem;
+	}
+
+	.solution-head {
+		display: grid;
+		grid-template-columns: minmax(0, 1fr) minmax(16rem, 24rem);
+		gap: 1rem;
+		align-items: end;
+	}
+
+	.solution-head p:last-child {
+		margin-bottom: 0;
+	}
+
+	.solution-tabs {
+		display: grid;
+		gap: 1rem;
+	}
+
+	.solution-tab-list {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.65rem;
+	}
+
+	.solution-tab-button {
+		padding: 0.65rem 0.85rem;
+		border: 1px solid var(--color-border-sand);
+		border-radius: var(--radius-pill);
+		background: var(--surface-card);
+		color: var(--color-slate);
+		cursor: pointer;
+		transition:
+			background var(--motion-fast) ease,
+			color var(--motion-fast) ease,
+			border-color var(--motion-fast) ease;
+	}
+
+	.solution-tab-button.is-active {
+		background: var(--color-accent-soft);
+		border-color: var(--color-terracotta);
+		color: var(--color-terracotta-active);
+	}
+
+	.solution-panel {
+		display: none;
+		grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+		gap: 1.25rem;
+		align-items: center;
+	}
+
+	.solution-panel.is-active {
+		display: grid;
+	}
+
+	.solution-copy h3 {
+		font-size: var(--text-h2);
+		margin-bottom: var(--space-3);
+	}
+
+	.solution-copy p {
+		margin: 0;
+	}
+
+	.solution-preview {
+		display: grid;
+		gap: 0.8rem;
+		padding: 1rem;
+		border: 1px solid var(--color-border-sand);
+		border-radius: var(--radius-xl);
+		background: linear-gradient(180deg, var(--surface-card), var(--surface-raised));
+		box-shadow: var(--shadow-card);
+		min-height: 19rem;
+	}
+
+	.inbox-preview {
+		grid-template-columns: 11rem 1fr;
+	}
+
+	.inbox-preview aside,
+	.preview-main,
+	.leads-preview > div,
+	.catalog-card,
+	.quotes-preview {
+		padding: 0.85rem;
+		border-radius: 1rem;
+		background: var(--surface-page);
+	}
+
+	.inbox-preview aside,
+	.preview-main {
+		display: grid;
+		gap: 0.7rem;
+		align-content: start;
+	}
+
+	.inbox-preview aside span,
+	.preview-main header span,
+	.chat-row,
+	.mini-lead span,
+	.catalog-card span,
+	.quotes-preview span,
+	.quote-grid span {
+		color: var(--color-slate);
+		font-size: var(--text-small);
+	}
+
+	.chat-row {
+		padding: 0.75rem;
+		border-radius: 0.9rem;
+		background: var(--surface-card);
+	}
+
+	.chat-row.is-system {
+		background: var(--color-accent-soft);
+		color: var(--color-terracotta-active);
+	}
+
+	.chat-row.is-outgoing {
+		background: var(--color-navy-soft);
+		color: var(--color-ink);
+	}
+
+	.leads-preview {
+		grid-template-columns: repeat(3, minmax(0, 1fr));
+	}
+
+	.leads-preview > div {
+		display: grid;
+		gap: 0.75rem;
+		align-content: start;
+	}
+
+	.mini-lead {
+		display: grid;
+		gap: 0.3rem;
+		padding: 0.7rem;
+		border-radius: 0.9rem;
+		background: var(--surface-card);
+	}
+
+	.catalog-preview {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+	}
+
+	.catalog-card ul,
+	.ai-flow-card ul {
+		margin: 0;
+		padding-left: 1rem;
+		color: var(--color-slate);
+	}
+
+	.quotes-preview {
+		align-content: start;
+	}
+
+	.quote-grid {
+		display: grid;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		gap: 0.75rem;
+		margin-top: 0.85rem;
+	}
+
+	.quote-grid div {
+		display: grid;
+		gap: 0.25rem;
+		padding: 0.75rem;
+		border-radius: 0.9rem;
+		background: var(--surface-card);
+	}
+
+	.ai-flow {
+		display: grid;
+		gap: 1.2rem;
+	}
+
+	.ai-flow-copy p:last-child {
+		margin-bottom: 0;
+		max-width: 42rem;
+	}
+
+	.ai-flow-grid {
+		display: grid;
+		grid-template-columns: minmax(0, 1fr) minmax(15rem, 18rem) minmax(15rem, 18rem);
+		gap: 1rem;
+		align-items: stretch;
+	}
+
+	.ai-flow-chat,
+	.ai-flow-card,
+	.ai-flow-task {
+		padding: 1rem;
+		border: 1px solid var(--color-border-sand);
+		border-radius: var(--radius-xl);
+		background: linear-gradient(180deg, var(--surface-card), var(--surface-raised));
+		min-height: 15rem;
+	}
+
+	.ai-flow-chat {
+		display: grid;
+		gap: 0.8rem;
+		align-content: start;
+	}
+
+	.flow-bubble {
+		min-height: 3.8rem;
+		padding: 0.85rem;
+		border-radius: 1rem;
+		background: var(--surface-page);
+		color: var(--color-slate);
+		opacity: 0.45;
+		transition:
+			opacity var(--motion-fast) ease,
+			transform var(--motion-fast) ease;
+	}
+
+	.flow-bubble.is-current,
+	.flow-bubble.is-complete {
+		opacity: 1;
+		transform: translateY(-0.1rem);
+	}
+
+	.flow-bubble.is-system {
+		background: var(--color-accent-soft);
+		color: var(--color-terracotta-active);
+	}
+
+	.flow-bubble.is-outgoing {
+		background: var(--color-navy-soft);
+		color: var(--color-ink);
+	}
+
+	.ai-flow-card,
+	.ai-flow-task {
+		display: grid;
+		align-content: start;
+		gap: 0.75rem;
+		opacity: 0.55;
+		transform: translateY(0.8rem);
+		transition:
+			opacity var(--motion-base) var(--motion-spring),
+			transform var(--motion-base) var(--motion-spring);
+	}
+
+	.ai-flow-card.is-active,
+	.ai-flow-task.is-active {
+		opacity: 1;
+		transform: translateY(0);
+	}
+
+	.ai-flow-task span {
+		color: var(--color-slate);
+	}
+
+	.step-number {
+		font-family: var(--font-mono);
+		font-size: var(--text-label);
+		letter-spacing: 0.08em;
+		text-transform: uppercase;
+		color: var(--color-terracotta);
+	}
+
+	.trust {
+		display: grid;
+		gap: 1.2rem;
+	}
+
+	.trust-grid {
+		display: grid;
+		grid-template-columns: repeat(4, minmax(0, 1fr));
+		gap: 1rem;
+	}
+
+	.trust-card {
+		display: grid;
+		gap: 0.45rem;
+		padding: 1rem;
+		border: 1px solid var(--color-border-sand);
+		border-radius: 1rem;
+		background: var(--surface-card);
+	}
+
+	.trust-card strong {
+		font-family: var(--font-display);
+		font-size: clamp(1.9rem, 4vw, 2.6rem);
+		line-height: 1;
+	}
+
+	.trust-card span {
+		color: var(--color-slate);
+	}
+
+	@media (max-width: 1080px) {
+		.home-hero,
+		.solution-panel,
+		.ai-flow-grid {
+			grid-template-columns: 1fr;
+		}
+
+		.pain-grid,
+		.steps-grid,
+		.trust-grid {
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+		}
+
+		.solution-head {
+			grid-template-columns: 1fr;
+		}
+	}
+
+	@media (max-width: 760px) {
+		.leads-preview,
+		.catalog-preview,
+		.quote-grid {
+			grid-template-columns: 1fr;
+		}
+
+		.inbox-preview {
+			grid-template-columns: 1fr;
+		}
+	}
+
+	@media (max-width: 640px) {
+		.pain-grid,
+		.steps-grid,
+		.trust-grid {
+			grid-template-columns: 1fr;
+		}
+
+		.home-hero {
+			min-height: auto;
+		}
+
+		.home-hero-visual {
+			min-height: 24rem;
+		}
+	}
+
+	html[data-motion="reduce"] .sticky-demo-button {
+		animation: none;
+	}
+</style>
+
+<script is:inline>
+	(() => {
+		const tabRoots = document.querySelectorAll("[data-solution-tabs]");
+		tabRoots.forEach((root) => {
+			const buttons = Array.from(root.querySelectorAll("[data-tab-target]"));
+			const panels = Array.from(root.querySelectorAll("[data-tab-panel]"));
+
+			const activate = (target) => {
+				buttons.forEach((button) => {
+					const selected = button.getAttribute("data-tab-target") === target;
+					button.classList.toggle("is-active", selected);
+					button.setAttribute("aria-selected", selected ? "true" : "false");
+				});
+
+				panels.forEach((panel) => {
+					const selected = panel.getAttribute("data-tab-panel") === target;
+					panel.classList.toggle("is-active", selected);
+					panel.hidden = !selected;
+				});
+			};
+
+			buttons.forEach((button) => {
+				button.addEventListener("click", () => activate(button.getAttribute("data-tab-target")));
+			});
+		});
+
+		const flowRoot = document.querySelector("[data-ai-flow]");
+		if (!(flowRoot instanceof HTMLElement)) return;
+
+		const bubbles = Array.from(flowRoot.querySelectorAll("[data-flow-message]"));
+		const card = flowRoot.querySelector("[data-flow-card]");
+		const task = flowRoot.querySelector("[data-flow-task]");
+		const reduceMotion = document.documentElement.dataset.motion === "reduce";
+
+		const fillImmediately = () => {
+			bubbles.forEach((bubble) => {
+				bubble.textContent = bubble.getAttribute("data-flow-message") ?? "";
+				bubble.classList.add("is-complete");
+			});
+			card?.classList.add("is-active");
+			task?.classList.add("is-active");
+		};
+
+		const typeText = (element, text) =>
+			new Promise((resolve) => {
+				element.textContent = "";
+				let index = 0;
+
+				const tick = () => {
+					element.textContent = text.slice(0, index + 1);
+					index += 1;
+
+					if (index >= text.length) {
+						element.classList.remove("is-current");
+						element.classList.add("is-complete");
+						resolve(undefined);
+						return;
+					}
+
+					window.setTimeout(tick, 22);
+				};
+
+				element.classList.add("is-current");
+				tick();
+			});
+
+		let started = false;
+		const start = async () => {
+			if (started) return;
+			started = true;
+
+			if (reduceMotion) {
+				fillImmediately();
+				return;
+			}
+
+			for (const bubble of bubbles) {
+				const message = bubble.getAttribute("data-flow-message") ?? "";
+				await typeText(bubble, message);
+				await new Promise((resolve) => window.setTimeout(resolve, 220));
+			}
+
+			card?.classList.add("is-active");
+			window.setTimeout(() => task?.classList.add("is-active"), 260);
+		};
+
+		if (!("IntersectionObserver" in window)) {
+			start();
+			return;
+		}
+
+		const observer = new IntersectionObserver(
+			(entries) => {
+				if (!entries[0]?.isIntersecting) return;
+				observer.disconnect();
+				start();
+			},
+			{ threshold: 0.35 },
+		);
+
+		observer.observe(flowRoot);
+	})();
+</script>

@@ -1,0 +1,239 @@
+---
+interface TrustCard {
+	label: string;
+	title: string;
+	meta: string;
+	tone: "terracotta" | "navy" | "success" | "warning";
+}
+
+interface TrustSignal {
+	label: string;
+	value: string;
+}
+
+interface Props {
+	eyebrow?: string;
+	title: string;
+	intro: string;
+	cards: TrustCard[];
+	buyerLabel: string;
+	buyerTitle: string;
+	buyerCopy: string;
+	signals: TrustSignal[];
+}
+
+const { eyebrow, title, intro, cards, buyerLabel, buyerTitle, buyerCopy, signals } = Astro.props;
+---
+
+<section class="trust-section">
+	<header class="trust-head">
+		{eyebrow && <p class="trust-eyebrow type-label">{eyebrow}</p>}
+		<h2 class="type-h2">{title}</h2>
+		<p class="trust-intro text-muted">{intro}</p>
+	</header>
+
+	<div class="trust-grid">
+		<div class="trust-card-stack">
+			{cards.map((card, index) => (
+				<article class={`trust-card tone-${card.tone}`} style={`--trust-index:${index};`}>
+					<p class="trust-card-label type-label">{card.label}</p>
+					<h3>{card.title}</h3>
+					<p class="text-muted">{card.meta}</p>
+				</article>
+			))}
+		</div>
+
+		<aside class="trust-buyer-card">
+			<p class="trust-buyer-label type-label">{buyerLabel}</p>
+			<h3>{buyerTitle}</h3>
+			<p class="trust-buyer-copy text-muted">{buyerCopy}</p>
+			<div class="trust-signal-grid">
+				{signals.map((signal) => (
+					<div class="trust-signal">
+						<p class="trust-signal-value">{signal.value}</p>
+						<p class="trust-signal-label text-muted">{signal.label}</p>
+					</div>
+				))}
+			</div>
+		</aside>
+	</div>
+</section>
+
+<style>
+	.trust-section {
+		background: var(--surface-raised);
+		border: 1px solid var(--color-border-sand);
+		border-radius: var(--radius-xl);
+		padding: var(--space-7);
+		box-shadow: var(--shadow-soft);
+	}
+
+	.trust-head {
+		display: grid;
+		gap: 0.8rem;
+		max-width: 48rem;
+	}
+
+	.trust-eyebrow {
+		color: var(--color-terracotta);
+	}
+
+	.trust-intro {
+		margin-bottom: 0;
+	}
+
+	.trust-grid {
+		display: grid;
+		grid-template-columns: minmax(0, 1.35fr) minmax(18rem, 0.95fr);
+		gap: var(--space-4);
+		margin-top: var(--space-5);
+	}
+
+	.trust-card-stack {
+		position: relative;
+		display: grid;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		gap: 0.95rem;
+	}
+
+	.trust-card-stack::before {
+		content: "";
+		position: absolute;
+		inset: 0.7rem 1rem auto 1rem;
+		height: 1px;
+		background:
+			repeating-linear-gradient(
+				90deg,
+				rgba(201, 106, 58, 0.44) 0,
+				rgba(201, 106, 58, 0.44) 14px,
+				transparent 14px,
+				transparent 24px
+			);
+		pointer-events: none;
+	}
+
+	.trust-card,
+	.trust-buyer-card {
+		padding: 1.1rem;
+		border-radius: var(--radius-xl);
+		border: 1px solid rgba(113, 88, 62, 0.12);
+		background:
+			linear-gradient(180deg, rgba(255, 253, 249, 0.94), rgba(255, 253, 249, 0.84)),
+			var(--surface-card);
+		box-shadow: var(--shadow-card);
+	}
+
+	.trust-card {
+		position: relative;
+		display: grid;
+		align-content: start;
+		gap: 0.8rem;
+		padding-top: 1.45rem;
+	}
+
+	.trust-card::before {
+		content: "";
+		position: absolute;
+		top: 0.55rem;
+		left: 1.1rem;
+		width: 0.75rem;
+		height: 0.75rem;
+		border-radius: 999px;
+		background: rgba(201, 106, 58, 0.68);
+		box-shadow: 0 0 0 5px rgba(201, 106, 58, 0.14);
+	}
+
+	.trust-card-label,
+	.trust-buyer-label {
+		color: var(--color-slate);
+	}
+
+	.trust-card h3,
+	.trust-buyer-card h3 {
+		font-size: var(--text-h3);
+	}
+
+	.trust-card p:last-child,
+	.trust-buyer-copy {
+		margin-bottom: 0;
+		font-size: var(--text-small);
+		line-height: 1.7;
+	}
+
+	.trust-buyer-card {
+		display: grid;
+		align-content: start;
+		gap: 0.9rem;
+		background:
+			linear-gradient(180deg, rgba(40, 71, 102, 0.08), rgba(255, 253, 249, 0.9)),
+			var(--surface-card);
+	}
+
+	.trust-signal-grid {
+		display: grid;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		gap: 0.8rem;
+	}
+
+	.trust-signal {
+		padding: 0.9rem;
+		border-radius: 1rem;
+		border: 1px solid rgba(113, 88, 62, 0.1);
+		background: rgba(255, 253, 249, 0.76);
+	}
+
+	.trust-signal-value {
+		margin: 0;
+		font-family: var(--font-display);
+		font-size: 1.4rem;
+		line-height: 1;
+		letter-spacing: -0.04em;
+	}
+
+	.trust-signal-label {
+		margin: 0.4rem 0 0;
+		font-size: var(--text-small);
+		line-height: 1.5;
+	}
+
+	.tone-terracotta {
+		background:
+			linear-gradient(180deg, rgba(201, 106, 58, 0.08), rgba(255, 253, 249, 0.88)),
+			var(--surface-card);
+	}
+
+	.tone-navy {
+		background:
+			linear-gradient(180deg, rgba(40, 71, 102, 0.08), rgba(255, 253, 249, 0.88)),
+			var(--surface-card);
+	}
+
+	.tone-success {
+		background:
+			linear-gradient(180deg, rgba(47, 138, 98, 0.08), rgba(255, 253, 249, 0.88)),
+			var(--surface-card);
+	}
+
+	.tone-warning {
+		background:
+			linear-gradient(180deg, rgba(173, 106, 39, 0.08), rgba(255, 253, 249, 0.88)),
+			var(--surface-card);
+	}
+
+	@media (max-width: 1024px) {
+		.trust-grid {
+			grid-template-columns: 1fr;
+		}
+	}
+
+	@media (max-width: 640px) {
+		.trust-section {
+			padding: 1.375rem;
+		}
+
+		.trust-card-stack,
+		.trust-signal-grid {
+			grid-template-columns: 1fr;
+		}
+	}
+</style>

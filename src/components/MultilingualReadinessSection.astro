@@ -1,0 +1,252 @@
+---
+interface LanguageCard {
+	code: string;
+	name: string;
+	tagline: string;
+	meta: string;
+}
+
+interface RtlPreviewLine {
+	label: string;
+	value: string;
+}
+
+interface Props {
+	eyebrow?: string;
+	title: string;
+	intro: string;
+	languages: LanguageCard[];
+	disciplineLabel: string;
+	disciplineItems: string[];
+	rtlLabel: string;
+	rtlTitle: string;
+	rtlMeta: string;
+	rtlLines: RtlPreviewLine[];
+}
+
+const {
+	eyebrow,
+	title,
+	intro,
+	languages,
+	disciplineLabel,
+	disciplineItems,
+	rtlLabel,
+	rtlTitle,
+	rtlMeta,
+	rtlLines,
+} = Astro.props;
+---
+
+<section class="multilingual-section">
+	<header class="multilingual-head">
+		{eyebrow && <p class="multilingual-eyebrow type-label">{eyebrow}</p>}
+		<h2 class="type-h2">{title}</h2>
+		<p class="multilingual-intro text-muted">{intro}</p>
+	</header>
+
+	<div class="multilingual-grid">
+		<div class="language-card-stack">
+			{languages.map((language) => (
+				<article class="language-card">
+					<div class="language-card-top">
+						<p class="language-code type-label">{language.code}</p>
+						<h3>{language.name}</h3>
+					</div>
+					<p class="language-tagline">{language.tagline}</p>
+					<p class="language-meta text-muted">{language.meta}</p>
+				</article>
+			))}
+		</div>
+
+		<article class="discipline-card">
+			<p class="discipline-label type-label">{disciplineLabel}</p>
+			<div class="discipline-list">
+				{disciplineItems.map((item) => (
+					<p>{item}</p>
+				))}
+			</div>
+		</article>
+
+		<article class="rtl-preview-card" dir="rtl" lang="ar">
+			<p class="rtl-label type-label">{rtlLabel}</p>
+			<h3>{rtlTitle}</h3>
+			<p class="rtl-meta">{rtlMeta}</p>
+			<div class="rtl-preview-panel">
+				{rtlLines.map((line) => (
+					<div class="rtl-preview-row">
+						<span class="rtl-preview-value">{line.value}</span>
+						<span class="rtl-preview-key">{line.label}</span>
+					</div>
+				))}
+			</div>
+		</article>
+	</div>
+</section>
+
+<style>
+	.multilingual-section {
+		background: var(--surface-raised);
+		border: 1px solid var(--color-border-sand);
+		border-radius: var(--radius-xl);
+		padding: var(--space-7);
+		box-shadow: var(--shadow-soft);
+	}
+
+	.multilingual-head {
+		display: grid;
+		gap: 0.8rem;
+		max-width: 47rem;
+	}
+
+	.multilingual-eyebrow {
+		color: var(--color-terracotta);
+	}
+
+	.multilingual-intro {
+		margin-bottom: 0;
+	}
+
+	.multilingual-grid {
+		display: grid;
+		grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.95fr) minmax(18rem, 1fr);
+		gap: var(--space-4);
+		margin-top: var(--space-5);
+	}
+
+	.language-card-stack {
+		display: grid;
+		gap: 0.85rem;
+	}
+
+	.language-card,
+	.discipline-card,
+	.rtl-preview-card {
+		padding: 1.1rem;
+		border-radius: var(--radius-xl);
+		border: 1px solid rgba(113, 88, 62, 0.12);
+		background:
+			linear-gradient(180deg, rgba(255, 253, 249, 0.94), rgba(255, 253, 249, 0.84)),
+			var(--surface-card);
+		box-shadow: var(--shadow-card);
+	}
+
+	.language-card-top {
+		display: flex;
+		align-items: baseline;
+		justify-content: space-between;
+		gap: 1rem;
+	}
+
+	.language-code,
+	.discipline-label,
+	.rtl-label {
+		color: var(--color-slate);
+	}
+
+	.language-card h3,
+	.rtl-preview-card h3 {
+		font-size: var(--text-h3);
+	}
+
+	.language-tagline {
+		margin: 0.85rem 0 0.35rem;
+		font-weight: 600;
+		line-height: 1.45;
+	}
+
+	.language-meta {
+		margin-bottom: 0;
+		font-size: var(--text-small);
+		line-height: 1.65;
+	}
+
+	.discipline-card {
+		display: grid;
+		align-content: start;
+		gap: 1rem;
+		background:
+			linear-gradient(180deg, rgba(40, 71, 102, 0.08), rgba(255, 253, 249, 0.9)),
+			var(--surface-card);
+	}
+
+	.discipline-list {
+		display: grid;
+		gap: 0.75rem;
+	}
+
+	.discipline-list p {
+		margin: 0;
+		padding: 0.85rem 0.9rem;
+		border-radius: 1rem;
+		background: rgba(255, 253, 249, 0.72);
+		border: 1px solid rgba(113, 88, 62, 0.1);
+		line-height: 1.6;
+	}
+
+	.rtl-preview-card {
+		display: grid;
+		align-content: start;
+		gap: 0.85rem;
+		background:
+			linear-gradient(180deg, rgba(201, 106, 58, 0.1), rgba(255, 253, 249, 0.92)),
+			var(--surface-card);
+	}
+
+	.rtl-meta {
+		margin: 0;
+		font-size: var(--text-small);
+		line-height: 1.7;
+		color: var(--color-slate);
+	}
+
+	.rtl-preview-panel {
+		display: grid;
+		gap: 0.7rem;
+		padding: 0.95rem;
+		border-radius: 1.1rem;
+		border: 1px solid rgba(113, 88, 62, 0.12);
+		background: rgba(255, 253, 249, 0.8);
+	}
+
+	.rtl-preview-row {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 0.75rem;
+		padding: 0.75rem 0.8rem;
+		border-radius: 0.9rem;
+		background: rgba(20, 32, 51, 0.04);
+	}
+
+	.rtl-preview-key {
+		font-family: var(--font-mono);
+		font-size: var(--text-label);
+		letter-spacing: 0.06em;
+		text-transform: uppercase;
+		color: var(--color-slate);
+	}
+
+	.rtl-preview-value {
+		font-size: var(--text-small);
+		line-height: 1.6;
+		color: var(--color-ink);
+	}
+
+	@media (max-width: 1024px) {
+		.multilingual-grid {
+			grid-template-columns: 1fr;
+		}
+	}
+
+	@media (max-width: 640px) {
+		.multilingual-section {
+			padding: 1.375rem;
+		}
+
+		.language-card-top {
+			flex-direction: column;
+			align-items: start;
+		}
+	}
+</style>

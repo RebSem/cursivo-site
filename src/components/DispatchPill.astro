@@ -1,0 +1,65 @@
+---
+interface Props {
+	label: string;
+	tone?: "terracotta" | "navy" | "success" | "warning" | "ink";
+}
+
+const { label, tone = "terracotta" } = Astro.props;
+---
+
+<span class={`dispatch-pill tone-${tone}`}>{label}</span>
+
+<style>
+	.dispatch-pill {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.45rem;
+		padding: 0.5rem 0.75rem;
+		border-radius: var(--radius-pill);
+		border: 1px solid transparent;
+		font-family: var(--font-mono);
+		font-size: var(--text-label);
+		letter-spacing: 0.08em;
+		text-transform: uppercase;
+		white-space: nowrap;
+	}
+
+	.dispatch-pill::before {
+		content: "";
+		width: 0.45rem;
+		height: 0.45rem;
+		border-radius: 999px;
+		background: currentColor;
+		opacity: 0.9;
+	}
+
+	.tone-terracotta {
+		color: var(--color-terracotta-active);
+		background: rgba(201, 106, 58, 0.12);
+		border-color: rgba(201, 106, 58, 0.24);
+	}
+
+	.tone-navy {
+		color: var(--color-navy);
+		background: rgba(40, 71, 102, 0.1);
+		border-color: rgba(40, 71, 102, 0.18);
+	}
+
+	.tone-success {
+		color: var(--color-success);
+		background: rgba(47, 138, 98, 0.1);
+		border-color: rgba(47, 138, 98, 0.18);
+	}
+
+	.tone-warning {
+		color: var(--color-warning);
+		background: rgba(173, 106, 39, 0.1);
+		border-color: rgba(173, 106, 39, 0.18);
+	}
+
+	.tone-ink {
+		color: var(--color-ink);
+		background: rgba(20, 32, 51, 0.06);
+		border-color: rgba(20, 32, 51, 0.12);
+	}
+</style>

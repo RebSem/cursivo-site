@@ -1,0 +1,55 @@
+---
+interface Props {
+	eyebrow?: string;
+	title?: string;
+	intro?: string;
+	class?: string;
+}
+
+const { eyebrow, title, intro, class: className = "" } = Astro.props;
+---
+
+<section class:list={["section-shell", className]} data-reveal="soft">
+	{(eyebrow || title || intro) && (
+		<header class="section-shell-header">
+			{eyebrow && <p class="section-shell-eyebrow type-label">{eyebrow}</p>}
+			{title && <h2 class="type-h2">{title}</h2>}
+			{intro && <p class="section-shell-intro text-muted">{intro}</p>}
+		</header>
+	)}
+	<div class="section-shell-body">
+		<slot />
+	</div>
+</section>
+
+<style>
+	.section-shell {
+		background: var(--surface-raised);
+		border: 1px solid var(--color-border-sand);
+		border-radius: var(--radius-xl);
+		padding: var(--space-7);
+		box-shadow: var(--shadow-soft);
+	}
+
+	.section-shell-header {
+		display: grid;
+		gap: 0.7rem;
+		margin-bottom: var(--space-5);
+	}
+
+	.section-shell-eyebrow {
+		color: var(--color-terracotta);
+	}
+
+	.section-shell-intro {
+		max-width: 46rem;
+		margin-bottom: 0;
+	}
+
+	@media (max-width: 640px) {
+		.section-shell {
+			padding: 1.375rem;
+			border-radius: var(--radius-lg);
+		}
+	}
+</style>

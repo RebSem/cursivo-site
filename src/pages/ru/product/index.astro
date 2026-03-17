@@ -1,0 +1,10 @@
+---
+import ProductPage from "../../../components/ProductPage.astro";
+import { getHomepageInsights } from "../../../data/insights";
+import { getProductContent } from "../../../data/product";
+
+const content = getProductContent("ru");
+const insights = await getHomepageInsights("ru");
+---
+
+<ProductPage content={content} insights={insights} />

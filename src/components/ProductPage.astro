@@ -1,0 +1,390 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import DispatchPill from "./DispatchPill.astro";
+import FinalCtaSection from "./FinalCtaSection.astro";
+import InsightsPreviewSection from "./InsightsPreviewSection.astro";
+import LayeredCardStack from "./LayeredCardStack.astro";
+import MultilingualReadinessSection from "./MultilingualReadinessSection.astro";
+import OperatingLoopSection from "./OperatingLoopSection.astro";
+import OwnershipSplitSection from "./OwnershipSplitSection.astro";
+import RouteDivider from "./RouteDivider.astro";
+import SectionShell from "./SectionShell.astro";
+import SetupOnboardingSection from "./SetupOnboardingSection.astro";
+import { buildBreadcrumbSchema } from "../data/jsonld";
+import { getHomeContent } from "../data/site";
+import type { InsightPreviewItem } from "../data/insights";
+import type { ProductContent } from "../data/product";
+
+interface Props {
+	content: ProductContent;
+	insights: InsightPreviewItem[];
+}
+
+const { content, insights } = Astro.props;
+const structuredData = [buildBreadcrumbSchema(content.locale, content.title, content.path)];
+const homeSupport = getHomeContent(content.locale);
+const isExternalLink = (href: string) => href.startsWith("http://") || href.startsWith("https://");
+---
+
+<BaseLayout
+	title={content.title}
+	description={content.description}
+	lang={content.locale}
+	brandMeta={content.brandMeta}
+	navItems={content.navItems}
+	localeLinks={content.localeLinks}
+	footerTitle={content.footerTitle}
+	footerCopy={content.footerCopy}
+	footerMetaLabel={content.footerMetaLabel}
+	footerMetaValue={content.footerMetaValue}
+	currentLocale={content.locale}
+	structuredData={structuredData}
+	canonicalPath={content.path}
+	alternatePaths={content.alternatePaths}
+>
+	<div class="site-container">
+		<div class="page-stack">
+			<section class="product-hero asym-grid section-card" id="overview" data-reveal="soft">
+				<div class="product-hero-copy asym-main">
+					<p class="product-eyebrow type-label">{content.heroEyebrow}</p>
+					<div class="product-pill-row">
+						{content.heroPills.map((pill) => <DispatchPill label={pill.label} tone={pill.tone} />)}
+					</div>
+					<h1 class="type-display">{content.heroTitle}</h1>
+					<p class="type-body-lg text-muted product-lead">{content.heroLead}</p>
+					<p class="product-subnote">{content.heroSubnote}</p>
+					<div class="product-links">
+						{content.heroActions.map((action, index) => (
+							<a
+								href={action.href}
+								target={isExternalLink(action.href) ? "_blank" : undefined}
+								rel={isExternalLink(action.href) ? "noreferrer" : undefined}
+								class:list={[index === 0 && "is-primary"]}
+							>
+								{action.label}
+							</a>
+						))}
+					</div>
+				</div>
+				<div class="asym-side">
+					<LayeredCardStack cards={content.heroCards} />
+				</div>
+			</section>
+
+			<div class="shell-transition" id="workflow">
+				<RouteDivider label={content.dividerLabel} />
+			</div>
+
+			<OperatingLoopSection
+				eyebrow={content.workflowEyebrow}
+				title={content.workflowTitle}
+				intro={content.workflowIntro}
+				steps={content.workflowSteps.map((step) => ({
+					label: step.label,
+					title: step.title,
+					description: step.meta,
+					tone: step.tone,
+				}))}
+			/>
+
+			<section class="product-capability-section" id="capabilities" data-reveal="soft">
+				<div class="product-capability-grid">
+					{content.capabilitySections.map((section, index) => (
+						<article
+							class="product-capability-card"
+							data-reveal="soft"
+							style={`--reveal-delay:${120 + index * 90}ms;`}
+						>
+							<p class="product-capability-label type-label">{section.title}</p>
+							<p class="product-capability-intro">{section.intro}</p>
+							<ul class="product-list text-muted">
+								{section.items.map((item) => <li>{item}</li>)}
+							</ul>
+						</article>
+					))}
+				</div>
+			</section>
+
+			<div id="ownership">
+				<OwnershipSplitSection
+					eyebrow={content.ownershipEyebrow}
+					title={content.ownershipTitle}
+					ruleLabel={content.ownershipRuleLabel}
+					ruleText={content.ownershipRuleText}
+					leftTitle={content.ownershipLeftTitle}
+					leftMeta={content.ownershipLeftMeta}
+					leftItems={content.ownershipLeftItems}
+					rightTitle={content.ownershipRightTitle}
+					rightMeta={content.ownershipRightMeta}
+					rightItems={content.ownershipRightItems}
+					connectorLabel={content.ownershipConnectorLabel}
+				/>
+			</div>
+
+			<div class="section-grid">
+				<SectionShell title={content.liveTitle} intro={content.liveIntro}>
+					<ul class="product-list text-muted">
+						{content.liveItems.map((item) => <li>{item}</li>)}
+					</ul>
+				</SectionShell>
+
+				<SectionShell title={content.upcomingTitle} intro={content.upcomingIntro}>
+					<ul class="product-list text-muted">
+						{content.upcomingItems.map((item) => <li>{item}</li>)}
+					</ul>
+				</SectionShell>
+			</div>
+
+			<SetupOnboardingSection
+				eyebrow={homeSupport.setupEyebrow}
+				title={homeSupport.setupTitle}
+				intro={homeSupport.setupIntro}
+				sourceLabel={homeSupport.setupSourceLabel}
+				sourceTitle={homeSupport.setupSourceTitle}
+				sourceMeta={homeSupport.setupSourceMeta}
+				steps={homeSupport.setupSteps}
+				workspaceLabel={homeSupport.setupWorkspaceLabel}
+				workspaceTitle={homeSupport.setupWorkspaceTitle}
+				workspaceMeta={homeSupport.setupWorkspaceMeta}
+				workspaceCards={homeSupport.setupWorkspaceCards}
+			/>
+
+			<div id="multilingual">
+				<MultilingualReadinessSection
+					eyebrow={homeSupport.marketEyebrow}
+					title={homeSupport.marketTitle}
+					intro={homeSupport.marketIntro}
+					languages={homeSupport.marketLanguages}
+					disciplineLabel={homeSupport.marketDisciplineLabel}
+					disciplineItems={homeSupport.marketDisciplineItems}
+					rtlLabel={homeSupport.marketRtlLabel}
+					rtlTitle={homeSupport.marketRtlTitle}
+					rtlMeta={homeSupport.marketRtlMeta}
+					rtlLines={homeSupport.marketRtlLines}
+				/>
+			</div>
+
+			<InsightsPreviewSection
+				eyebrow={homeSupport.insightsEyebrow}
+				title={homeSupport.insightsTitle}
+				intro={homeSupport.insightsIntro}
+				items={insights}
+			/>
+
+			<div id="contact">
+				<FinalCtaSection
+					eyebrow={content.finalCtaEyebrow}
+					title={content.finalCtaTitle}
+					intro={content.finalCtaIntro}
+					links={content.finalCtaLinks}
+				/>
+			</div>
+		</div>
+	</div>
+</BaseLayout>
+
+<style>
+	.product-eyebrow {
+		margin-bottom: var(--space-3);
+		color: var(--color-terracotta);
+	}
+
+	.product-hero {
+		position: relative;
+		isolation: isolate;
+		--asym-main-column: 1 / span 7;
+		--asym-side-column: 8 / -1;
+		padding-block: clamp(1.2rem, 1.9vw, 2rem);
+	}
+
+	.product-hero-copy {
+		display: grid;
+		align-content: center;
+		gap: clamp(0.8rem, 1.4vw, 1.15rem);
+		min-width: 0;
+	}
+
+	.product-pill-row {
+		display: flex;
+		flex-wrap: wrap;
+		gap: var(--space-2);
+		margin-bottom: var(--space-4);
+	}
+
+	.product-hero-copy :global(h1) {
+		max-width: 13.1ch;
+		font-size: clamp(2.7rem, 4vw, 4.45rem);
+	}
+
+	.product-lead {
+		max-width: 34.5rem;
+		margin: 0;
+	}
+
+	.product-subnote {
+		margin: 0.1rem 0 0;
+		max-width: 33rem;
+		font-family: var(--font-mono);
+		font-size: var(--text-small);
+		line-height: 1.7;
+		color: var(--color-slate);
+	}
+
+	.product-links {
+		display: flex;
+		flex-wrap: wrap;
+		gap: var(--space-3);
+		margin-top: var(--space-4);
+	}
+
+	.product-links a {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		padding: 0.75rem 1rem;
+		border-radius: var(--radius-pill);
+		border: 1px solid rgba(201, 106, 58, 0.28);
+		background: var(--color-accent-soft);
+		color: var(--color-ink);
+		text-decoration: none;
+		font-weight: 600;
+		transition:
+			transform 160ms ease,
+			background-color 160ms ease,
+			border-color 160ms ease;
+	}
+
+	.product-links a.is-primary {
+		background: var(--color-terracotta);
+		border-color: rgba(147, 72, 34, 0.2);
+		color: var(--color-ivory);
+		box-shadow: 0 12px 30px rgba(201, 106, 58, 0.18);
+	}
+
+	.product-links a:hover {
+		transform: translateY(-1px);
+		background: rgba(201, 106, 58, 0.12);
+		border-color: rgba(201, 106, 58, 0.38);
+	}
+
+	.product-links a.is-primary:hover {
+		background: var(--color-terracotta-active);
+		border-color: rgba(147, 72, 34, 0.26);
+	}
+
+	.product-capability-section {
+		display: grid;
+	}
+
+	.product-capability-grid {
+		display: grid;
+		grid-template-columns: repeat(3, minmax(0, 1fr));
+		gap: 1rem;
+	}
+
+	.product-capability-card {
+		display: grid;
+		align-content: start;
+		gap: 0.8rem;
+		min-height: 100%;
+		padding: 1.1rem 1.15rem;
+		border-radius: var(--radius-lg);
+		border: 1px solid rgba(113, 88, 62, 0.12);
+		background:
+			linear-gradient(180deg, rgba(255, 253, 249, 0.96), rgba(255, 253, 249, 0.88)),
+			var(--surface-card);
+		box-shadow: var(--shadow-card);
+		transition:
+			transform var(--motion-fast) ease,
+			box-shadow var(--motion-fast) ease,
+			border-color var(--motion-fast) ease;
+	}
+
+	.product-capability-card:hover {
+		transform: translateY(-3px);
+		box-shadow: 0 18px 40px rgba(20, 32, 51, 0.11);
+		border-color: rgba(201, 106, 58, 0.22);
+	}
+
+	.product-capability-label {
+		margin: 0;
+		color: var(--color-terracotta-active);
+	}
+
+	.product-capability-intro {
+		margin: 0;
+		font-family: var(--font-display);
+		font-size: clamp(1.08rem, 1.9vw, 1.28rem);
+		line-height: 1.15;
+		letter-spacing: -0.03em;
+		color: var(--color-ink);
+	}
+
+	.product-hero .asym-side {
+		position: relative;
+		z-index: 1;
+		display: flex;
+		align-items: stretch;
+		min-height: 100%;
+	}
+
+	.product-list {
+		display: grid;
+		gap: 0.65rem;
+		padding-left: 1rem;
+		margin-bottom: 0;
+		line-height: 1.65;
+	}
+
+	:global([dir="rtl"]) .product-list {
+		padding-left: 0;
+		padding-right: 1rem;
+	}
+
+	@media (max-width: 640px) {
+		.product-hero-copy :global(h1) {
+			max-width: none;
+		}
+	}
+
+	@media (max-width: 900px) {
+		.product-capability-grid {
+			grid-template-columns: 1fr;
+		}
+	}
+
+	@media (min-width: 900px) {
+		.product-hero {
+			align-items: center;
+			overflow: hidden;
+			min-height: min(26rem, calc(100svh - 8.75rem));
+		}
+
+		.product-hero-copy {
+			padding-inline-end: clamp(0.2rem, 1vw, 0.75rem);
+		}
+	}
+
+	@media (max-height: 860px) and (min-width: 900px) {
+		.product-hero {
+			padding-block: 0.95rem 1.05rem;
+		}
+
+		.product-pill-row {
+			margin-bottom: 0.85rem;
+		}
+
+		.product-hero-copy {
+			gap: 0.58rem;
+		}
+
+		.product-hero-copy :global(h1) {
+			max-width: 13.5ch;
+			font-size: clamp(2.45rem, 3.7vw, 4rem);
+		}
+
+		.product-links {
+			margin-top: 0.8rem;
+		}
+	}
+</style>

@@ -1,0 +1,25 @@
+---
+import ProductDeepDivePage from "../../components/ProductDeepDivePage.astro";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { englishSiteChrome } from "../../data/landing";
+---
+
+<BaseLayout
+	title="Cursivo Product | Operator CRM for car rental companies"
+	description="Explore the Cursivo product: Telegram-first inbox, lead pipeline, fleet catalog, quotes, reservations, and manager workspace built for car rental teams in Dubai."
+	lang="en"
+	brandMeta={englishSiteChrome.brandMeta}
+	navItems={englishSiteChrome.navItems}
+	localeLinks={englishSiteChrome.localeLinks}
+	currentLocale={englishSiteChrome.currentLocale}
+	footerTitle={englishSiteChrome.footerTitle}
+	footerCopy={englishSiteChrome.footerCopy}
+	footerMetaLabel={englishSiteChrome.footerMetaLabel}
+	footerMetaValue={englishSiteChrome.footerMetaValue}
+	canonicalPath="/product/"
+	ctaHref="#contact"
+>
+	<div class="site-container">
+		<ProductDeepDivePage />
+	</div>
+</BaseLayout>

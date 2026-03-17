@@ -1,0 +1,48 @@
+---
+import { getCollection } from "astro:content";
+import BlogIndexPage from "../../components/BlogIndexPage.astro";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { englishSiteChrome } from "../../data/landing";
+
+const entries = (
+	await getCollection(
+		"blog",
+		({ data }) => data.locale === "en" && data.draft === false && data.featuredOnIndex === true,
+	)
+).sort((left, right) => right.data.publishedAt.getTime() - left.data.publishedAt.getTime());
+
+const formatter = new Intl.DateTimeFormat("en-US", {
+	year: "numeric",
+	month: "short",
+	day: "numeric",
+});
+
+const items = entries.map((entry) => ({
+	title: entry.data.title,
+	tag: entry.data.tags[0] ?? entry.data.category,
+	date: formatter.format(entry.data.publishedAt),
+	readTime: entry.data.estimatedReadTime ?? "4 min read",
+	excerpt: entry.data.excerpt ?? entry.data.description,
+	href: `/blog/${entry.data.translationKey}/`,
+}));
+---
+
+<BaseLayout
+	title="Car Rental CRM Dubai Blog | Cursivo"
+	description="SEO-focused insights about car rental CRM workflows in Dubai: WhatsApp lead loss, AI intake, multi-branch coordination, and operator migration from spreadsheets."
+	lang="en"
+	brandMeta={englishSiteChrome.brandMeta}
+	navItems={englishSiteChrome.navItems}
+	localeLinks={englishSiteChrome.localeLinks}
+	currentLocale={englishSiteChrome.currentLocale}
+	footerTitle={englishSiteChrome.footerTitle}
+	footerCopy={englishSiteChrome.footerCopy}
+	footerMetaLabel={englishSiteChrome.footerMetaLabel}
+	footerMetaValue={englishSiteChrome.footerMetaValue}
+	canonicalPath="/blog/"
+	ctaHref="/#contact"
+>
+	<div class="site-container">
+		<BlogIndexPage items={items} />
+	</div>
+</BaseLayout>

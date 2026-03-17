@@ -1,0 +1,402 @@
+---
+import RequestDemoSection from "./RequestDemoSection.astro";
+import StickyDemoButton from "./StickyDemoButton.astro";
+
+const featureGroups = [
+	{
+		id: "messaging",
+		title: "Inbox & Messaging",
+		icon: "01",
+		points: [
+			"Telegram-first conversation intake with AI qualification before human handoff.",
+			"One operator inbox instead of fragmented chats across personal devices.",
+			"Branch assignment, owner visibility, and conversation history in one place.",
+			"Fast transition from AI reply to human follow-up without losing context.",
+		],
+	},
+	{
+		id: "pipeline",
+		title: "Leads & Pipeline",
+		icon: "02",
+		points: [
+			"Kanban and list views tuned for rental lead progression.",
+			"Statuses for new, qualified, quoted, awaiting payment, and reserved leads.",
+			"Lead metadata stores dates, branch, car class, and urgency.",
+			"Managers get a single view of what is stalled and what is close to closing.",
+		],
+	},
+	{
+		id: "catalog",
+		title: "Fleet Catalog",
+		icon: "03",
+		points: [
+			"Vehicle records tied to class, branch, daily pricing, and readiness state.",
+			"Operators can answer availability questions without leaving the CRM.",
+			"Catalog data supports quote generation instead of living in side spreadsheets.",
+			"Useful for premium, standard, and branch-specific fleet inventory.",
+		],
+	},
+	{
+		id: "quotes",
+		title: "Reservations & Quotes",
+		icon: "04",
+		points: [
+			"Quote creation starts from a qualified lead, not from scratch.",
+			"Pickup, dropoff, deposit, and car details stay attached to the same record.",
+			"Reservation workflow moves from quote approval to driver or branch task assignment.",
+			"Teams stop copying final deal data between chat, sheets, and internal notes.",
+		],
+	},
+	{
+		id: "workspace",
+		title: "Manager Workspace",
+		icon: "05",
+		points: [
+			"Task board highlights approvals, callbacks, and handoffs requiring human judgment.",
+			"Multi-branch teams can separate ownership without losing HQ visibility.",
+			"Managers see AI-qualified context instead of replaying the entire conversation.",
+			"Useful for both day shift operations and after-hours follow-up in Dubai.",
+		],
+	},
+];
+
+const roadmap = [
+	{
+		title: "WhatsApp channel",
+		copy: "The same intake and handoff model extended to WhatsApp once the Telegram workflow is stable.",
+	},
+	{
+		title: "Website widget",
+		copy: "Capture direct website demand and route it through the same pipeline rules.",
+	},
+	{
+		title: "Stripe payments",
+		copy: "Move from quote approval to payment confirmation inside the same operator workflow.",
+	},
+];
+---
+
+<div class="page-stack">
+	<section class="product-hero section-card" data-product-hero data-reveal="soft">
+		<div>
+			<p class="type-label product-eyebrow">Product deep dive</p>
+			<h1 class="type-display">One operating system for rental conversations, quotes, and branch execution.</h1>
+		</div>
+		<p class="type-body-lg text-muted">
+			Cursivo is not a generic CRM with custom fields added on top. It is structured around how
+			car rental teams actually work in Dubai: chat-first demand, urgent availability checks,
+			quote prep, branch coordination, and manager approvals.
+		</p>
+	</section>
+
+	{featureGroups.map((group, index) => (
+		<section class="product-group section-card" data-reveal="soft" style={`--reveal-delay:${100 + index * 70}ms;`}>
+			<div class="product-group-copy">
+				<div class="product-group-heading">
+					<span>{group.icon}</span>
+					<h2 class="type-h2">{group.title}</h2>
+				</div>
+				<ul>
+					{group.points.map((point) => (
+						<li>{point}</li>
+					))}
+				</ul>
+			</div>
+
+			<div class:list={["product-group-preview", `preview-${group.id}`]} aria-hidden="true">
+				{group.id === "messaging" && (
+					<>
+						<header>
+							<strong>Shared inbox</strong>
+							<span>4 active conversations</span>
+						</header>
+						<div class="preview-window">
+							<div class="preview-pill">AI handled first reply</div>
+							<div class="preview-message">Need a Mercedes V-Class for airport pickup.</div>
+							<div class="preview-message is-accent">Branch matched: DXB arrivals</div>
+							<div class="preview-message is-soft">Owner: airport desk manager</div>
+						</div>
+					</>
+				)}
+
+				{group.id === "pipeline" && (
+					<div class="preview-kanban">
+						<div><header>Qualified</header><span>4 leads</span></div>
+						<div><header>Quoted</header><span>3 leads</span></div>
+						<div><header>Reserved</header><span>2 leads</span></div>
+					</div>
+				)}
+
+				{group.id === "catalog" && (
+					<div class="preview-catalog">
+						<article><strong>G63</strong><span>Luxury SUV</span><em>Marina branch</em></article>
+						<article><strong>BMW 520i</strong><span>Executive</span><em>Downtown branch</em></article>
+						<article><strong>Toyota Prado</strong><span>Family SUV</span><em>Airport branch</em></article>
+					</div>
+				)}
+
+				{group.id === "quotes" && (
+					<div class="preview-quote">
+						<header>
+							<strong>Quote ready</strong>
+							<span>#MAR-208</span>
+						</header>
+						<div class="preview-quote-grid">
+							<div><span>Vehicle</span><strong>Range Rover Sport</strong></div>
+							<div><span>Period</span><strong>2 days</strong></div>
+							<div><span>Pickup</span><strong>Marina</strong></div>
+							<div><span>Status</span><strong>Awaiting approval</strong></div>
+						</div>
+					</div>
+				)}
+
+				{group.id === "workspace" && (
+					<div class="preview-workspace">
+						<article><strong>Approve VIP quote</strong><span>Due in 5 min</span></article>
+						<article><strong>Confirm driver schedule</strong><span>Downtown branch</span></article>
+						<article><strong>Check airport stock</strong><span>Luxury SUV class</span></article>
+					</div>
+				)}
+			</div>
+		</section>
+	))}
+
+	<section class="under-hood section-card" data-reveal="soft">
+		<div>
+			<p class="type-label product-eyebrow">Under the hood</p>
+			<h2 class="type-h2">Written for technical buyers who care about architecture, not just screens.</h2>
+		</div>
+		<div class="under-hood-grid">
+			<article>
+				<strong>AI layer</strong>
+				<p class="text-muted">
+					LangGraph orchestration can manage intake, qualification, branch routing, and human
+					handoff rules without turning the operator workflow into a black box.
+				</p>
+			</article>
+			<article>
+				<strong>Telegram integration</strong>
+				<p class="text-muted">
+					The first channel is Telegram because that is where many rental teams already live.
+					Cursivo turns those inquiries into structured CRM objects immediately.
+				</p>
+			</article>
+			<article>
+				<strong>Multi-branch architecture</strong>
+				<p class="text-muted">
+					Branch data, ownership, and local availability can stay separated while reporting and
+					manager visibility remain centralized for HQ.
+				</p>
+			</article>
+		</div>
+	</section>
+
+	<section class="roadmap section-card" data-reveal="soft">
+		<div>
+			<p class="type-label product-eyebrow">Coming soon</p>
+			<h2 class="type-h2">Expansion points already in view.</h2>
+		</div>
+		<div class="roadmap-grid">
+			{roadmap.map((item) => (
+				<article class="roadmap-card">
+					<span class="type-label">Coming soon</span>
+					<h3>{item.title}</h3>
+					<p class="text-muted">{item.copy}</p>
+				</article>
+			))}
+		</div>
+	</section>
+
+	<RequestDemoSection />
+</div>
+
+<StickyDemoButton href="#contact" thresholdSelector="[data-product-hero]" />
+
+<style>
+	.product-hero,
+	.under-hood,
+	.roadmap {
+		display: grid;
+		gap: 1rem;
+	}
+
+	.product-eyebrow {
+		margin-bottom: var(--space-3);
+		color: var(--color-terracotta);
+	}
+
+	.product-hero h1,
+	.under-hood h2,
+	.roadmap h2 {
+		max-width: 13ch;
+	}
+
+	.product-hero p {
+		margin: 0;
+		max-width: 48rem;
+	}
+
+	.product-group {
+		display: grid;
+		grid-template-columns: minmax(0, 1fr) minmax(18rem, 26rem);
+		gap: clamp(1.2rem, 2.4vw, 1.8rem);
+		align-items: center;
+	}
+
+	.product-group-heading {
+		display: flex;
+		align-items: center;
+		gap: 0.75rem;
+		margin-bottom: var(--space-4);
+	}
+
+	.product-group-heading span {
+		display: inline-grid;
+		place-items: center;
+		width: 2.4rem;
+		height: 2.4rem;
+		border-radius: 0.9rem;
+		background: var(--color-accent-soft);
+		color: var(--color-terracotta-active);
+		font-family: var(--font-mono);
+	}
+
+	.product-group ul {
+		margin: 0;
+		color: var(--color-slate);
+	}
+
+	.product-group-preview {
+		display: grid;
+		gap: 0.85rem;
+		padding: 1rem;
+		border: 1px solid var(--color-border-sand);
+		border-radius: var(--radius-xl);
+		background: linear-gradient(180deg, var(--surface-card), var(--surface-raised));
+		box-shadow: var(--shadow-card);
+		min-height: 16rem;
+	}
+
+	.product-group-preview header,
+	.preview-quote header {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 0.75rem;
+	}
+
+	.product-group-preview header span,
+	.preview-pill,
+	.preview-message,
+	.preview-kanban span,
+	.preview-catalog span,
+	.preview-catalog em,
+	.preview-quote span,
+	.preview-workspace span {
+		color: var(--color-slate);
+		font-size: var(--text-small);
+	}
+
+	.preview-window,
+	.preview-kanban,
+	.preview-catalog,
+	.preview-workspace,
+	.preview-quote {
+		display: grid;
+		gap: 0.75rem;
+	}
+
+	.preview-pill,
+	.preview-message,
+	.preview-kanban div,
+	.preview-catalog article,
+	.preview-workspace article,
+	.preview-quote-grid div {
+		padding: 0.8rem;
+		border-radius: 1rem;
+		background: var(--surface-page);
+	}
+
+	.preview-message.is-accent {
+		background: var(--color-accent-soft);
+		color: var(--color-terracotta-active);
+	}
+
+	.preview-message.is-soft {
+		background: var(--color-navy-soft);
+		color: var(--color-ink);
+	}
+
+	.preview-kanban {
+		grid-template-columns: repeat(3, minmax(0, 1fr));
+	}
+
+	.preview-kanban div,
+	.preview-catalog article,
+	.preview-workspace article {
+		display: grid;
+		gap: 0.4rem;
+		align-content: start;
+	}
+
+	.preview-catalog {
+		grid-template-columns: repeat(3, minmax(0, 1fr));
+	}
+
+	.preview-catalog em {
+		font-style: normal;
+	}
+
+	.preview-quote-grid {
+		display: grid;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		gap: 0.75rem;
+	}
+
+	.preview-quote-grid div {
+		display: grid;
+		gap: 0.25rem;
+	}
+
+	.under-hood-grid,
+	.roadmap-grid {
+		display: grid;
+		grid-template-columns: repeat(3, minmax(0, 1fr));
+		gap: 1rem;
+	}
+
+	.under-hood-grid article,
+	.roadmap-card {
+		padding: 1rem;
+		border: 1px solid var(--color-border-sand);
+		border-radius: 1rem;
+		background: var(--surface-card);
+	}
+
+	.under-hood-grid article strong,
+	.roadmap-card h3 {
+		display: block;
+		margin-bottom: 0.55rem;
+	}
+
+	.roadmap-card p,
+	.under-hood-grid article p {
+		margin: 0;
+	}
+
+	@media (max-width: 960px) {
+		.product-group,
+		.under-hood-grid,
+		.roadmap-grid {
+			grid-template-columns: 1fr;
+		}
+	}
+
+	@media (max-width: 720px) {
+		.preview-kanban,
+		.preview-catalog,
+		.preview-quote-grid {
+			grid-template-columns: 1fr;
+		}
+	}
+</style>

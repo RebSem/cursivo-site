@@ -1,0 +1,176 @@
+---
+interface Item {
+	title: string;
+	tag: string;
+	date: string;
+	readTime: string;
+	excerpt: string;
+	href: string;
+}
+
+interface Props {
+	items: Item[];
+}
+
+const { items } = Astro.props;
+---
+
+<div class="page-stack">
+	<section class="blog-hero section-card" data-blog-hero data-reveal="soft">
+		<p class="type-label blog-eyebrow">SEO foundation</p>
+		<h1 class="type-display">Insights for operators searching for a car rental CRM in Dubai.</h1>
+		<p class="type-body-lg text-muted">
+			Start with the operational problems car rental companies actually feel: slow lead response,
+			branch coordination, chat chaos, and the limits of generic CRMs.
+		</p>
+	</section>
+
+	<section class="blog-grid" data-reveal="soft">
+		{items.map((item, index) => (
+			<a class="blog-card" href={item.href} style={`--reveal-delay:${90 + index * 50}ms;`}>
+				<div class="blog-card-top">
+					<span class="blog-card-tag">{item.tag}</span>
+					<span class="blog-card-meta">{item.date} · {item.readTime}</span>
+				</div>
+				<h2>{item.title}</h2>
+				<p class="text-muted">{item.excerpt}</p>
+			</a>
+		))}
+	</section>
+
+	<section class="blog-cta section-card" data-reveal="soft">
+		<div>
+			<p class="type-label blog-eyebrow">Next step</p>
+			<h2 class="type-h2">Need the product story, not just the content strategy?</h2>
+		</div>
+		<div class="blog-cta-actions">
+			<a class="blog-cta-primary" href="/product/">Explore the product</a>
+			<a class="blog-cta-secondary" href="/#contact">Request a demo</a>
+		</div>
+	</section>
+</div>
+
+<style>
+	.blog-hero,
+	.blog-cta {
+		display: grid;
+		gap: 1rem;
+	}
+
+	.blog-eyebrow {
+		margin-bottom: var(--space-3);
+		color: var(--color-terracotta);
+	}
+
+	.blog-hero p,
+	.blog-cta p {
+		margin: 0;
+		max-width: 46rem;
+	}
+
+	.blog-grid {
+		display: grid;
+		grid-template-columns: repeat(3, minmax(0, 1fr));
+		gap: clamp(1rem, 2vw, 1.4rem);
+	}
+
+	.blog-card {
+		display: grid;
+		gap: 0.9rem;
+		padding: 1.15rem;
+		border: 1px solid var(--color-border-sand);
+		border-radius: var(--radius-xl);
+		background: linear-gradient(180deg, var(--surface-card), var(--surface-raised));
+		box-shadow: var(--shadow-card);
+		text-decoration: none;
+		transition:
+			transform var(--motion-fast) ease,
+			border-color var(--motion-fast) ease;
+	}
+
+	.blog-card:hover {
+		transform: translateY(-0.2rem);
+		border-color: var(--color-terracotta);
+	}
+
+	.blog-card-top {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		justify-content: space-between;
+		gap: 0.6rem;
+	}
+
+	.blog-card-tag,
+	.blog-card-meta {
+		font-family: var(--font-mono);
+		font-size: var(--text-label);
+		letter-spacing: 0.05em;
+		text-transform: uppercase;
+	}
+
+	.blog-card-tag {
+		color: var(--color-terracotta-active);
+	}
+
+	.blog-card-meta {
+		color: var(--color-slate);
+	}
+
+	.blog-card h2 {
+		font-size: var(--text-h3);
+	}
+
+	.blog-card p {
+		margin: 0;
+	}
+
+	.blog-cta {
+		grid-template-columns: minmax(0, 1fr) auto;
+		align-items: center;
+	}
+
+	.blog-cta-actions {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.75rem;
+	}
+
+	.blog-cta-primary,
+	.blog-cta-secondary {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		padding: 0.85rem 1rem;
+		border-radius: var(--radius-pill);
+		text-decoration: none;
+		font-weight: 700;
+	}
+
+	.blog-cta-primary {
+		background: var(--color-terracotta);
+		color: var(--color-ivory);
+	}
+
+	.blog-cta-secondary {
+		border: 1px solid var(--color-border-sand);
+		background: var(--surface-card);
+		color: var(--color-ink);
+	}
+
+	@media (max-width: 960px) {
+		.blog-grid {
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+		}
+
+		.blog-cta {
+			grid-template-columns: 1fr;
+		}
+	}
+
+	@media (max-width: 640px) {
+		.blog-grid {
+			grid-template-columns: 1fr;
+		}
+	}
+</style>

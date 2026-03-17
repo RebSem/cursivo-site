@@ -1,0 +1,8 @@
+---
+import MarketingHomePage from "../../components/MarketingHomePage.astro";
+import { getHomeContent } from "../../data/site";
+
+const content = getHomeContent("ru");
+---
+
+<MarketingHomePage content={content} />

@@ -1,0 +1,293 @@
+---
+interface Props {
+	eyebrow?: string;
+	title: string;
+	ruleLabel: string;
+	ruleText: string;
+	leftTitle: string;
+	leftMeta: string;
+	leftItems: string[];
+	rightTitle: string;
+	rightMeta: string;
+	rightItems: string[];
+	connectorLabel: string;
+}
+
+const {
+	eyebrow,
+	title,
+	ruleLabel,
+	ruleText,
+	leftTitle,
+	leftMeta,
+	leftItems,
+	rightTitle,
+	rightMeta,
+	rightItems,
+	connectorLabel,
+} = Astro.props;
+---
+
+<section class="ownership-section" data-reveal="soft">
+	{eyebrow && <p class="ownership-eyebrow type-label">{eyebrow}</p>}
+	<div class="ownership-head">
+		<h2 class="type-h2">{title}</h2>
+		<div class="ownership-rule">
+			<p class="ownership-rule-label type-label">{ruleLabel}</p>
+			<p class="ownership-rule-copy">{ruleText}</p>
+		</div>
+	</div>
+	<div class="ownership-grid">
+		<article class="ownership-lane ownership-lane-ai" data-reveal="soft" style="--reveal-delay:120ms;">
+			<header class="ownership-lane-head">
+				<p class="ownership-lane-label type-label">{leftTitle}</p>
+				<p class="ownership-lane-meta text-muted">{leftMeta}</p>
+			</header>
+			<ul class="ownership-list">
+				{leftItems.map((item) => <li>{item}</li>)}
+			</ul>
+		</article>
+		<div class="ownership-rail" aria-hidden="true" data-reveal="line" style="--reveal-delay:180ms;">
+			<span class="ownership-rail-pill type-label">{connectorLabel}</span>
+		</div>
+		<article class="ownership-lane ownership-lane-manager" data-reveal="soft" style="--reveal-delay:240ms;">
+			<header class="ownership-lane-head">
+				<p class="ownership-lane-label type-label">{rightTitle}</p>
+				<p class="ownership-lane-meta text-muted">{rightMeta}</p>
+			</header>
+			<ul class="ownership-list">
+				{rightItems.map((item) => <li>{item}</li>)}
+			</ul>
+		</article>
+	</div>
+</section>
+
+<style>
+	.ownership-section {
+		background: var(--surface-raised);
+		border: 1px solid var(--color-border-sand);
+		border-radius: var(--radius-xl);
+		padding: var(--space-7);
+		box-shadow: var(--shadow-soft);
+	}
+
+	.ownership-eyebrow {
+		margin-bottom: var(--space-3);
+		color: var(--color-terracotta);
+	}
+
+	.ownership-head {
+		display: grid;
+		gap: 1rem;
+	}
+
+	.ownership-rule {
+		display: grid;
+		gap: 0.55rem;
+		padding: 0.95rem 1rem;
+		border-radius: var(--radius-lg);
+		border: 1px solid rgba(201, 106, 58, 0.16);
+		background:
+			linear-gradient(180deg, rgba(201, 106, 58, 0.08), rgba(255, 253, 249, 0.9)),
+			var(--surface-card);
+	}
+
+	.ownership-rule-label {
+		color: var(--color-terracotta-active);
+	}
+
+	.ownership-rule-copy {
+		margin: 0;
+		font-size: var(--text-small);
+		line-height: 1.7;
+		color: var(--color-ink);
+	}
+
+	.ownership-grid {
+		display: grid;
+		grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+		gap: var(--space-4);
+		align-items: stretch;
+		margin-top: var(--space-5);
+	}
+
+	.ownership-lane {
+		display: grid;
+		gap: 1rem;
+		padding: 1.15rem;
+		border-radius: var(--radius-lg);
+		border: 1px solid rgba(113, 88, 62, 0.14);
+		min-height: 100%;
+		transition:
+			transform var(--motion-fast) ease,
+			box-shadow var(--motion-fast) ease;
+	}
+
+	.ownership-lane:hover {
+		transform: translateY(-3px);
+		box-shadow: 0 18px 40px rgba(20, 32, 51, 0.11);
+	}
+
+	.ownership-lane-ai {
+		background:
+			linear-gradient(180deg, rgba(40, 71, 102, 0.12), rgba(255, 253, 249, 0.94)),
+			var(--surface-card);
+	}
+
+	.ownership-lane-manager {
+		background:
+			linear-gradient(180deg, rgba(201, 106, 58, 0.12), rgba(255, 253, 249, 0.94)),
+			var(--surface-card);
+	}
+
+	.ownership-lane-head {
+		display: grid;
+		gap: 0.55rem;
+	}
+
+	.ownership-lane-label {
+		color: var(--color-ink);
+	}
+
+	.ownership-lane-meta {
+		margin: 0;
+		font-size: var(--text-small);
+		line-height: 1.7;
+	}
+
+	.ownership-list {
+		display: grid;
+		gap: 0.75rem;
+		list-style: none;
+		padding: 0;
+		margin: 0;
+	}
+
+	.ownership-list li {
+		display: flex;
+		align-items: flex-start;
+		gap: 0.75rem;
+		padding: 0.8rem 0.9rem;
+		border-radius: 1rem;
+		background: rgba(255, 253, 249, 0.8);
+		border: 1px solid rgba(113, 88, 62, 0.1);
+		line-height: 1.6;
+		transition:
+			transform var(--motion-fast) ease,
+			border-color var(--motion-fast) ease;
+	}
+
+	.ownership-list li:hover {
+		transform: translateY(-2px);
+		border-color: rgba(201, 106, 58, 0.22);
+	}
+
+	.ownership-list li::before {
+		content: "";
+		flex: 0 0 0.6rem;
+		width: 0.6rem;
+		height: 0.6rem;
+		margin-top: 0.45rem;
+		border-radius: 999px;
+		background: var(--color-navy);
+		box-shadow: 0 0 0 4px rgba(40, 71, 102, 0.12);
+	}
+
+	.ownership-lane-manager .ownership-list li::before {
+		background: var(--color-terracotta);
+		box-shadow: 0 0 0 4px rgba(201, 106, 58, 0.12);
+	}
+
+	.ownership-rail {
+		position: relative;
+		display: grid;
+		align-content: center;
+		justify-items: center;
+		min-width: 5.25rem;
+	}
+
+	.ownership-rail::before {
+		content: "";
+		position: absolute;
+		inset: 0;
+		margin: auto;
+		width: 1px;
+		height: 100%;
+		background:
+			repeating-linear-gradient(
+				180deg,
+				rgba(201, 106, 58, 0.48) 0,
+				rgba(201, 106, 58, 0.48) 12px,
+				transparent 12px,
+				transparent 22px
+			);
+		transform: scaleY(0);
+		transform-origin: top center;
+		transition: transform var(--motion-slow) var(--motion-spring);
+	}
+
+	.ownership-rail-pill {
+		position: relative;
+		z-index: 1;
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		padding: 0.65rem 0.7rem;
+		border-radius: var(--radius-pill);
+		background: var(--color-ivory);
+		border: 1px solid rgba(201, 106, 58, 0.16);
+		color: var(--color-terracotta-active);
+		text-align: center;
+		box-shadow: var(--shadow-card);
+		transition:
+			transform var(--motion-fast) ease,
+			box-shadow var(--motion-fast) ease;
+	}
+
+	.ownership-rail.is-visible::before {
+		transform: scaleY(1);
+	}
+
+	.ownership-rail.is-visible .ownership-rail-pill {
+		transform: translateY(-2px);
+		box-shadow: 0 18px 40px rgba(20, 32, 51, 0.11);
+	}
+
+	@media (max-width: 840px) {
+		.ownership-section {
+			padding: 1.375rem;
+		}
+
+		.ownership-grid {
+			grid-template-columns: 1fr;
+		}
+
+		.ownership-rail {
+			min-width: 100%;
+			min-height: 3.5rem;
+		}
+
+		.ownership-rail::before {
+			width: 100%;
+			height: 1px;
+			background:
+				repeating-linear-gradient(
+					90deg,
+					rgba(201, 106, 58, 0.48) 0,
+					rgba(201, 106, 58, 0.48) 12px,
+					transparent 12px,
+					transparent 22px
+				);
+			transform: scaleX(0);
+			transform-origin: left center;
+		}
+
+		:global([dir="rtl"]) .ownership-rail::before {
+			transform-origin: right center;
+		}
+
+		.ownership-rail.is-visible::before {
+			transform: scaleX(1);
+		}
+	}
+</style>

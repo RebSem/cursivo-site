@@ -1,0 +1,462 @@
+---
+interface StripItem {
+	label: string;
+	value: string;
+	meta: string;
+	tone: "terracotta" | "navy" | "success" | "warning";
+}
+
+interface BranchCard {
+	name: string;
+	status: string;
+	meta: string;
+	chips: Array<{
+		label: string;
+		tone: "terracotta" | "navy" | "success" | "warning";
+	}>;
+}
+
+interface InsightMetric {
+	label: string;
+	value: string;
+}
+
+interface ScreenshotAsset {
+	src: string;
+	alt: string;
+}
+
+interface Props {
+	eyebrow?: string;
+	title: string;
+	intro: string;
+	strips: StripItem[];
+	branches: BranchCard[];
+	insightLabel: string;
+	insightTitle: string;
+	insightCopy: string;
+	insightMetrics: InsightMetric[];
+	screenshot?: ScreenshotAsset;
+}
+
+const {
+	eyebrow,
+	title,
+	intro,
+	strips,
+	branches,
+	insightLabel,
+	insightTitle,
+	insightCopy,
+	insightMetrics,
+	screenshot,
+} = Astro.props;
+---
+
+<section class="ops-control" data-reveal="soft">
+	<header class="ops-control-head">
+		{eyebrow && <p class="ops-control-eyebrow type-label">{eyebrow}</p>}
+		<h2 class="type-h2">{title}</h2>
+		<p class="ops-control-intro text-muted">{intro}</p>
+	</header>
+
+	<div class="ops-control-grid">
+		<div class="ops-strip-stack">
+			{strips.map((item, index) => (
+				<article
+					class={`ops-strip tone-${item.tone}`}
+					data-reveal="soft"
+					style={`--reveal-delay:${120 + index * 70}ms;`}
+				>
+					<div class="ops-strip-main">
+						<p class="ops-strip-label type-label">{item.label}</p>
+						<p class="ops-strip-value">{item.value}</p>
+					</div>
+					<p class="ops-strip-meta text-muted">{item.meta}</p>
+				</article>
+			))}
+		</div>
+
+		<div class="ops-board">
+			<div class="ops-board-route" aria-hidden="true"></div>
+			{branches.map((branch, index) => (
+				<article
+					class="ops-branch-card"
+					style={`--branch-index:${index}; --reveal-delay:${200 + index * 90}ms;`}
+					data-reveal="soft"
+				>
+					<header class="ops-branch-head">
+						<div>
+							<p class="ops-branch-name">{branch.name}</p>
+							<p class="ops-branch-meta text-muted">{branch.meta}</p>
+						</div>
+						<span class="ops-branch-status">{branch.status}</span>
+					</header>
+					<div class="ops-chip-list">
+						{branch.chips.map((chip) => (
+							<span class={`ops-chip tone-${chip.tone}`}>{chip.label}</span>
+						))}
+					</div>
+				</article>
+			))}
+		</div>
+
+		<aside class="ops-insight-card" data-reveal="soft" style="--reveal-delay:280ms;">
+			<p class="ops-insight-label type-label">{insightLabel}</p>
+			<h3>{insightTitle}</h3>
+			<p class="ops-insight-copy text-muted">{insightCopy}</p>
+
+			{screenshot && (
+				<div class="ops-screenshot-shell">
+					<img src={screenshot.src} alt={screenshot.alt} class="ops-screenshot" loading="lazy" />
+				</div>
+			)}
+
+			<div class="ops-insight-metrics">
+				{insightMetrics.map((metric) => (
+					<div class="ops-insight-metric">
+						<p class="ops-insight-metric-value">{metric.value}</p>
+						<p class="ops-insight-metric-label text-muted">{metric.label}</p>
+					</div>
+				))}
+			</div>
+		</aside>
+	</div>
+</section>
+
+<style>
+	.ops-control {
+		background: var(--surface-raised);
+		border: 1px solid var(--color-border-sand);
+		border-radius: var(--radius-xl);
+		padding: var(--space-7);
+		box-shadow: var(--shadow-soft);
+	}
+
+	.ops-control-head {
+		display: grid;
+		gap: 0.8rem;
+		max-width: 48rem;
+	}
+
+	.ops-control-eyebrow {
+		color: var(--color-terracotta);
+	}
+
+	.ops-control-intro {
+		margin-bottom: 0;
+	}
+
+	.ops-control-grid {
+		display: grid;
+		grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.35fr) minmax(18rem, 0.95fr);
+		gap: var(--space-4);
+		margin-top: var(--space-5);
+	}
+
+	.ops-strip-stack {
+		display: grid;
+		gap: 0.85rem;
+	}
+
+	.ops-strip {
+		display: grid;
+		gap: 0.85rem;
+		padding: 1rem 1rem 1.05rem;
+		border-radius: var(--radius-lg);
+		border: 1px solid rgba(113, 88, 62, 0.12);
+		background: rgba(255, 253, 249, 0.88);
+		box-shadow: var(--shadow-card);
+		transition:
+			transform var(--motion-fast) ease,
+			box-shadow var(--motion-fast) ease;
+	}
+
+	.ops-strip:hover {
+		transform: translateY(-3px);
+		box-shadow: 0 18px 40px rgba(20, 32, 51, 0.11);
+	}
+
+	.ops-strip-main {
+		display: flex;
+		align-items: end;
+		justify-content: space-between;
+		gap: 1rem;
+	}
+
+	.ops-strip-label {
+		color: var(--color-slate);
+	}
+
+	.ops-strip-value {
+		margin: 0;
+		font-family: var(--font-display);
+		font-size: clamp(1.3rem, 3vw, 1.85rem);
+		line-height: 1;
+		letter-spacing: -0.04em;
+		color: var(--color-ink);
+	}
+
+	.ops-strip-meta {
+		margin: 0;
+		font-size: var(--text-small);
+		line-height: 1.6;
+	}
+
+	.ops-board {
+		position: relative;
+		display: grid;
+		gap: 0.95rem;
+		padding: 1.1rem;
+		border-radius: var(--radius-xl);
+		border: 1px solid rgba(113, 88, 62, 0.12);
+		background:
+			radial-gradient(circle at top left, rgba(201, 106, 58, 0.12), transparent 32%),
+			linear-gradient(180deg, rgba(255, 253, 249, 0.92), rgba(255, 253, 249, 0.8));
+		overflow: hidden;
+	}
+
+	.ops-board-route {
+		position: absolute;
+		inset: 1.3rem auto 1.3rem 1.6rem;
+		width: 1px;
+		background:
+			repeating-linear-gradient(
+				180deg,
+				rgba(201, 106, 58, 0.5) 0,
+				rgba(201, 106, 58, 0.5) 12px,
+				transparent 12px,
+				transparent 22px
+			);
+		transform: scaleY(0);
+		transform-origin: top center;
+		transition: transform var(--motion-slow) var(--motion-spring);
+	}
+
+	.ops-branch-card {
+		position: relative;
+		margin-left: 0.9rem;
+		padding: 1rem 1rem 1rem 1.15rem;
+		border-radius: var(--radius-lg);
+		border: 1px solid rgba(113, 88, 62, 0.12);
+		background: rgba(255, 253, 249, 0.92);
+		box-shadow: var(--shadow-card);
+		transition:
+			transform var(--motion-fast) ease,
+			box-shadow var(--motion-fast) ease;
+	}
+
+	.ops-branch-card:hover {
+		transform: translateX(4px);
+		box-shadow: 0 18px 40px rgba(20, 32, 51, 0.11);
+	}
+
+	.ops-branch-card::before {
+		content: "";
+		position: absolute;
+		left: -0.9rem;
+		top: 1.35rem;
+		width: 0.9rem;
+		height: 1px;
+		background: rgba(201, 106, 58, 0.42);
+	}
+
+	.ops-branch-head {
+		display: flex;
+		align-items: start;
+		justify-content: space-between;
+		gap: 0.8rem;
+		margin-bottom: 0.9rem;
+	}
+
+	.ops-branch-name {
+		margin: 0;
+		font-family: var(--font-display);
+		font-size: var(--text-h3);
+		line-height: 1.1;
+	}
+
+	.ops-branch-meta {
+		margin: 0.35rem 0 0;
+		font-size: var(--text-small);
+		line-height: 1.6;
+	}
+
+	.ops-branch-status {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		padding: 0.4rem 0.6rem;
+		border-radius: var(--radius-pill);
+		background: rgba(20, 32, 51, 0.06);
+		font-family: var(--font-mono);
+		font-size: var(--text-label);
+		letter-spacing: 0.08em;
+		text-transform: uppercase;
+		white-space: nowrap;
+	}
+
+	.ops-chip-list {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.55rem;
+	}
+
+	.ops-chip {
+		display: inline-flex;
+		align-items: center;
+		padding: 0.45rem 0.7rem;
+		border-radius: var(--radius-pill);
+		font-family: var(--font-mono);
+		font-size: var(--text-label);
+		letter-spacing: 0.05em;
+		text-transform: uppercase;
+		border: 1px solid rgba(113, 88, 62, 0.12);
+		background: rgba(255, 253, 249, 0.84);
+	}
+
+	.ops-insight-card {
+		display: grid;
+		align-content: start;
+		gap: 1rem;
+		padding: 1.1rem;
+		border-radius: var(--radius-xl);
+		border: 1px solid rgba(201, 106, 58, 0.16);
+		background:
+			linear-gradient(180deg, rgba(201, 106, 58, 0.1), rgba(255, 253, 249, 0.9)),
+			var(--surface-card);
+		box-shadow: var(--shadow-card);
+		transition:
+			transform var(--motion-fast) ease,
+			box-shadow var(--motion-fast) ease;
+	}
+
+	.ops-insight-card:hover {
+		transform: translateY(-3px);
+		box-shadow: 0 18px 40px rgba(20, 32, 51, 0.11);
+	}
+
+	.ops-insight-label {
+		color: var(--color-terracotta-active);
+	}
+
+	.ops-insight-card h3 {
+		font-size: var(--text-h3);
+	}
+
+	.ops-control.is-visible .ops-board-route {
+		transform: scaleY(1);
+	}
+
+	.ops-insight-copy {
+		margin-bottom: 0;
+		font-size: var(--text-small);
+		line-height: 1.7;
+	}
+
+	.ops-screenshot-shell {
+		overflow: hidden;
+		border-radius: 1.15rem;
+		border: 1px solid rgba(113, 88, 62, 0.12);
+		background: rgba(255, 253, 249, 0.88);
+	}
+
+	.ops-screenshot {
+		display: block;
+		width: 100%;
+		height: auto;
+	}
+
+	.ops-insight-metrics {
+		display: grid;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		gap: 0.75rem;
+	}
+
+	.ops-insight-metric {
+		padding: 0.85rem 0.9rem;
+		border-radius: 1rem;
+		border: 1px solid rgba(113, 88, 62, 0.1);
+		background: rgba(255, 253, 249, 0.75);
+	}
+
+	.ops-insight-metric-value {
+		margin: 0;
+		font-family: var(--font-display);
+		font-size: 1.45rem;
+		line-height: 1;
+		letter-spacing: -0.04em;
+	}
+
+	.ops-insight-metric-label {
+		margin: 0.4rem 0 0;
+		font-size: var(--text-small);
+		line-height: 1.5;
+	}
+
+	.tone-terracotta {
+		background:
+			linear-gradient(180deg, rgba(201, 106, 58, 0.08), rgba(255, 253, 249, 0.88)),
+			var(--surface-card);
+	}
+
+	.tone-navy {
+		background:
+			linear-gradient(180deg, rgba(40, 71, 102, 0.08), rgba(255, 253, 249, 0.88)),
+			var(--surface-card);
+	}
+
+	.tone-success {
+		background:
+			linear-gradient(180deg, rgba(47, 138, 98, 0.08), rgba(255, 253, 249, 0.88)),
+			var(--surface-card);
+	}
+
+	.tone-warning {
+		background:
+			linear-gradient(180deg, rgba(173, 106, 39, 0.08), rgba(255, 253, 249, 0.88)),
+			var(--surface-card);
+	}
+
+	.ops-chip.tone-terracotta {
+		color: var(--color-terracotta-active);
+	}
+
+	.ops-chip.tone-navy {
+		color: var(--color-navy);
+	}
+
+	.ops-chip.tone-success {
+		color: var(--color-success);
+	}
+
+	.ops-chip.tone-warning {
+		color: var(--color-warning);
+	}
+
+	@media (max-width: 1024px) {
+		.ops-control-grid {
+			grid-template-columns: 1fr;
+		}
+
+		.ops-insight-metrics {
+			grid-template-columns: repeat(4, minmax(0, 1fr));
+		}
+	}
+
+	@media (max-width: 640px) {
+		.ops-control {
+			padding: 1.375rem;
+		}
+
+		.ops-strip-main,
+		.ops-branch-head {
+			flex-direction: column;
+			align-items: start;
+		}
+
+		.ops-insight-metrics {
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+		}
+	}
+</style>

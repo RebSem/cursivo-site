@@ -1,0 +1,477 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { buildHomepageJsonLd } from "../data/jsonld";
+import DispatchPill from "./DispatchPill.astro";
+import FinalCtaSection from "./FinalCtaSection.astro";
+import HeroLiveDemo from "./HeroLiveDemo.astro";
+import OperationsControlSection from "./OperationsControlSection.astro";
+import type { HomeContent } from "../data/site";
+
+interface Props {
+	content: HomeContent;
+}
+
+const { content } = Astro.props;
+const structuredData = buildHomepageJsonLd(content);
+const isExternalLink = (href: string) => href.startsWith("http://") || href.startsWith("https://");
+---
+
+<BaseLayout
+	title={content.title}
+	description={content.description}
+	lang={content.locale}
+	brandMeta={content.brandMeta}
+	navItems={content.navItems}
+	localeLinks={content.localeLinks}
+	footerTitle={content.footerTitle}
+	footerCopy={content.footerCopy}
+	footerMetaLabel={content.footerMetaLabel}
+	footerMetaValue={content.footerMetaValue}
+	currentLocale={content.locale}
+	structuredData={structuredData}
+>
+	<div class="site-container">
+		<div class="page-stack">
+			<section class="hero asym-grid section-card" id="overview" data-reveal="soft">
+				<div class="hero-copy asym-main">
+					<p class="eyebrow type-label">{content.heroEyebrow}</p>
+					<div class="pill-row">
+						{content.heroPills.map((pill) => <DispatchPill label={pill.label} tone={pill.tone} />)}
+					</div>
+					<h1 class="type-display">{content.heroTitle}</h1>
+					<p class="lede type-body-lg text-muted">{content.heroLead}</p>
+					<ul class="hero-outcomes" aria-label="Business outcomes">
+						{content.heroOutcomeItems.map((item) => (
+							<li>{item}</li>
+						))}
+					</ul>
+					<p class="hero-subnote">{content.heroSubnote}</p>
+					<div class="links">
+						{content.heroActions.map((action, index) => (
+							<a
+								href={action.href}
+								target={isExternalLink(action.href) ? "_blank" : undefined}
+								rel={isExternalLink(action.href) ? "noreferrer" : undefined}
+								class:list={[index === 0 && "is-primary"]}
+							>
+								{action.label}
+							</a>
+						))}
+					</div>
+				</div>
+				<div class="asym-side">
+					<HeroLiveDemo
+						intakeCard={content.routeCards[0]}
+						qualificationCard={content.routeCards[1]}
+						quoteCard={content.routeCards[2]}
+						handoffCard={content.routeCards[3]}
+						message={content.heroDemoMessage}
+						signals={content.heroDemoSignals}
+						quoteItems={content.heroDemoQuoteItems}
+						managerItems={content.heroDemoManagerItems}
+					/>
+				</div>
+			</section>
+
+			<section class="proof-ribbon" aria-label={content.proofRibbonTitle} data-reveal="soft">
+				<p class="proof-ribbon-title type-label">{content.proofRibbonTitle}</p>
+				<div class="proof-ribbon-list">
+					{content.proofRibbonItems.map((item) => (
+						<span class="proof-ribbon-item">{item}</span>
+					))}
+				</div>
+			</section>
+
+			<section class="value-section section-card" id="benefits" data-reveal="soft">
+				<header class="value-section-head">
+					<p class="value-section-eyebrow type-label">{content.valueSectionEyebrow}</p>
+					<h2 class="type-h2">{content.valueSectionTitle}</h2>
+					<p class="value-section-intro text-muted">{content.valueSectionIntro}</p>
+				</header>
+				<div class="value-grid">
+					{content.valueCards.map((card, index) => (
+						<article
+							class={`value-card tone-${card.tone}`}
+							data-reveal="soft"
+							style={`--reveal-delay:${120 + index * 90}ms;`}
+						>
+							<p class="value-card-label type-label">{card.label}</p>
+							<h3>{card.title}</h3>
+							<p class="text-muted">{card.meta}</p>
+						</article>
+					))}
+				</div>
+			</section>
+
+			<div id="how-it-works">
+				<OperationsControlSection
+					eyebrow={content.controlEyebrow}
+					title={content.controlTitle}
+					intro={content.controlIntro}
+					strips={content.controlStrips}
+					branches={content.controlBranches}
+					insightLabel={content.controlInsightLabel}
+					insightTitle={content.controlInsightTitle}
+					insightCopy={content.controlInsightCopy}
+					insightMetrics={content.controlInsightMetrics}
+					screenshot={content.controlScreenshot}
+				/>
+			</div>
+
+			<div id="contact">
+				<FinalCtaSection
+					eyebrow={content.finalCtaEyebrow}
+					title={content.finalCtaTitle}
+					intro={content.finalCtaIntro}
+					links={content.finalCtaLinks}
+				/>
+			</div>
+		</div>
+	</div>
+</BaseLayout>
+
+<style>
+	.eyebrow,
+	.value-section-eyebrow {
+		margin-bottom: var(--space-3);
+		color: var(--color-terracotta);
+	}
+
+	.hero-copy {
+		display: grid;
+		align-content: center;
+		gap: clamp(0.8rem, 1.4vw, 1.15rem);
+		position: relative;
+		z-index: 1;
+		min-width: 0;
+	}
+
+	.hero {
+		position: relative;
+		isolation: isolate;
+		--asym-main-column: 1 / span 6;
+		--asym-side-column: 8 / -1;
+		padding-block: clamp(1.15rem, 1.8vw, 1.8rem);
+	}
+
+	.pill-row {
+		display: flex;
+		flex-wrap: wrap;
+		gap: var(--space-2);
+		margin-bottom: var(--space-4);
+	}
+
+	.hero-copy :global(h1) {
+		max-width: 12ch;
+		font-size: clamp(3rem, 4.7vw, 4.55rem);
+	}
+
+	.lede {
+		max-width: 39rem;
+		margin: 0;
+	}
+
+	.hero-outcomes {
+		display: grid;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		gap: 0.65rem 0.75rem;
+		max-width: 36rem;
+		padding: 0;
+		margin: 0.1rem 0 0;
+		list-style: none;
+	}
+
+	.hero-outcomes li {
+		display: flex;
+		align-items: center;
+		gap: 0.6rem;
+		padding: 0.7rem 0.8rem;
+		border-radius: 1rem;
+		border: 1px solid rgba(113, 88, 62, 0.12);
+		background: rgba(255, 253, 249, 0.72);
+		font-family: var(--font-mono);
+		font-size: var(--text-label);
+		letter-spacing: 0.04em;
+		text-transform: uppercase;
+		color: var(--color-ink);
+	}
+
+	.hero-outcomes li::before {
+		content: "";
+		flex: 0 0 0.55rem;
+		width: 0.55rem;
+		height: 0.55rem;
+		border-radius: 999px;
+		background: var(--color-terracotta);
+		box-shadow: 0 0 0 4px rgba(201, 106, 58, 0.12);
+	}
+
+	:global([dir="rtl"]) .hero-outcomes li,
+	:global([dir="rtl"]) .proof-ribbon-item {
+		font-family: var(--font-arabic);
+		letter-spacing: 0;
+		text-transform: none;
+	}
+
+	.hero-subnote {
+		margin: 0;
+		max-width: 34rem;
+		font-size: var(--text-small);
+		line-height: 1.7;
+		color: var(--color-slate);
+	}
+
+	.links {
+		display: flex;
+		flex-wrap: wrap;
+		gap: var(--space-3);
+		margin-top: var(--space-4);
+	}
+
+	.links a {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		padding: 0.75rem 1rem;
+		border-radius: var(--radius-pill);
+		border: 1px solid rgba(201, 106, 58, 0.28);
+		background: rgba(255, 253, 249, 0.76);
+		color: var(--color-ink);
+		text-decoration: none;
+		font-weight: 600;
+		transition:
+			transform 160ms ease,
+			background-color 160ms ease,
+			border-color 160ms ease;
+	}
+
+	.links a.is-primary {
+		background: var(--color-terracotta);
+		border-color: rgba(147, 72, 34, 0.2);
+		color: var(--color-ivory);
+		box-shadow: 0 12px 30px rgba(201, 106, 58, 0.18);
+	}
+
+	.links a:hover {
+		transform: translateY(-1px);
+		background: rgba(201, 106, 58, 0.12);
+		border-color: rgba(201, 106, 58, 0.38);
+	}
+
+	.links a.is-primary:hover {
+		background: var(--color-terracotta-active);
+		border-color: rgba(147, 72, 34, 0.26);
+	}
+
+	.asym-side {
+		position: relative;
+		z-index: 1;
+		display: flex;
+		align-items: stretch;
+		min-height: 100%;
+	}
+
+	.proof-ribbon {
+		display: grid;
+		grid-template-columns: auto 1fr;
+		align-items: center;
+		gap: 1rem 1.2rem;
+		padding: 1rem 1.2rem;
+		border: 1px solid rgba(113, 88, 62, 0.16);
+		border-radius: var(--radius-xl);
+		background: rgba(255, 253, 249, 0.7);
+		box-shadow: var(--shadow-card);
+		backdrop-filter: blur(12px);
+	}
+
+	.proof-ribbon-title {
+		margin: 0;
+		color: var(--color-terracotta-active);
+		white-space: nowrap;
+	}
+
+	.proof-ribbon-list {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.75rem 0;
+	}
+
+	.proof-ribbon-item {
+		display: inline-flex;
+		align-items: center;
+		color: var(--color-slate);
+		font-family: var(--font-mono);
+		font-size: var(--text-label);
+		letter-spacing: 0.06em;
+		text-transform: uppercase;
+	}
+
+	.proof-ribbon-item:not(:last-child)::after {
+		content: "";
+		width: 1.4rem;
+		height: 1px;
+		margin: 0 0.8rem;
+		background: rgba(201, 106, 58, 0.28);
+	}
+
+	.value-section {
+		display: grid;
+		gap: var(--space-5);
+	}
+
+	.value-section-head {
+		display: grid;
+		gap: 0.75rem;
+		max-width: 47rem;
+	}
+
+	.value-section-intro {
+		margin: 0;
+	}
+
+	.value-grid {
+		display: grid;
+		grid-template-columns: repeat(3, minmax(0, 1fr));
+		gap: 1rem;
+	}
+
+	.value-card {
+		display: grid;
+		align-content: start;
+		gap: 0.8rem;
+		min-height: 100%;
+		padding: 1.15rem;
+		border-radius: 1.35rem;
+		border: 1px solid rgba(113, 88, 62, 0.12);
+		box-shadow: var(--shadow-card);
+		transition:
+			transform var(--motion-fast) ease,
+			box-shadow var(--motion-fast) ease,
+			border-color var(--motion-fast) ease;
+	}
+
+	.value-card:hover {
+		transform: translateY(-3px);
+		box-shadow: 0 18px 40px rgba(20, 32, 51, 0.11);
+		border-color: rgba(201, 106, 58, 0.24);
+	}
+
+	.value-card-label {
+		margin: 0;
+		color: var(--color-terracotta-active);
+	}
+
+	.value-card h3 {
+		font-size: clamp(1.2rem, 2vw, 1.45rem);
+		line-height: 1.08;
+	}
+
+	.value-card p:last-child {
+		margin-bottom: 0;
+	}
+
+	.tone-terracotta {
+		background:
+			linear-gradient(180deg, rgba(201, 106, 58, 0.08), rgba(255, 253, 249, 0.94)),
+			var(--surface-card);
+	}
+
+	.tone-navy {
+		background:
+			linear-gradient(180deg, rgba(40, 71, 102, 0.09), rgba(255, 253, 249, 0.94)),
+			var(--surface-card);
+	}
+
+	.tone-success {
+		background:
+			linear-gradient(180deg, rgba(47, 138, 98, 0.08), rgba(255, 253, 249, 0.94)),
+			var(--surface-card);
+	}
+
+	@media (max-width: 900px) {
+		.value-grid {
+			grid-template-columns: 1fr;
+		}
+	}
+
+	@media (max-width: 640px) {
+		.hero-copy {
+			order: 1;
+		}
+
+		.hero-copy :global(h1) {
+			max-width: none;
+		}
+
+		.hero-outcomes {
+			grid-template-columns: 1fr;
+		}
+
+		.links {
+			width: 100%;
+		}
+
+		.links a {
+			flex: 1 1 100%;
+		}
+
+		.proof-ribbon {
+			grid-template-columns: 1fr;
+			align-items: start;
+			border-radius: var(--radius-lg);
+		}
+	}
+
+	@media (min-width: 900px) {
+		.hero {
+			align-items: center;
+			overflow: hidden;
+			min-height: min(30rem, calc(100svh - 8.75rem));
+		}
+
+		.hero::after {
+			content: "";
+			position: absolute;
+			inset-inline-start: 2.4rem;
+			inset-inline-end: 3.2rem;
+			bottom: 1.7rem;
+			height: 1px;
+			background:
+				repeating-linear-gradient(
+					90deg,
+					rgba(201, 106, 58, 0.46) 0,
+					rgba(201, 106, 58, 0.46) 16px,
+					transparent 16px,
+					transparent 24px
+				);
+			pointer-events: none;
+		}
+
+		.hero-copy {
+			padding-inline-end: clamp(0.25rem, 1vw, 0.8rem);
+		}
+	}
+
+	@media (max-height: 860px) and (min-width: 900px) {
+		.hero {
+			padding-block: 1rem 1.1rem;
+		}
+
+		.pill-row {
+			margin-bottom: 0.8rem;
+		}
+
+		.hero-copy {
+			gap: 0.7rem;
+		}
+
+		.hero-copy :global(h1) {
+			max-width: 12.4ch;
+			font-size: clamp(2.7rem, 4.15vw, 4.15rem);
+		}
+
+		.links {
+			margin-top: 0.9rem;
+		}
+	}
+</style>

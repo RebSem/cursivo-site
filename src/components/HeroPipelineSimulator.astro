@@ -1,0 +1,937 @@
+---
+const stages = ["New request", "Quote sent", "Reserved"];
+
+const snapshotCards = [
+	{
+		id: "snapshot-new",
+		stage: 0,
+		source: "WhatsApp",
+		title: "G63 request",
+		client: "Ahmad M.",
+		meta: "Dubai Marina · 3 days",
+		amount: "AED 6,400",
+	},
+	{
+		id: "snapshot-quote",
+		stage: 1,
+		source: "Telegram",
+		title: "BMW 520i",
+		client: "Alexey V.",
+		meta: "DXB Terminal 3 · 5 days",
+		amount: "AED 2,800",
+		bubble: "Quote sent · AED 2,800",
+	},
+	{
+		id: "snapshot-reserved",
+		stage: 2,
+		source: "Website",
+		title: "Range Rover Sport",
+		client: "Michael S.",
+		meta: "Downtown Dubai · 4 days",
+		amount: "AED 5,600",
+	},
+];
+
+const fallbackTask = {
+	title: "Verify docs for Range Rover Sport",
+	meta: "Michael S. · English translation required",
+};
+---
+
+<div class="crm-hero-sim" data-crm-hero-sim data-enhanced="false" aria-hidden="true">
+	<div class="crm-hero-sim-board">
+		<div class="crm-hero-sim-board-glow"></div>
+
+		<div class="crm-hero-sim-header">
+			<div>
+				<strong>Live rental pipeline</strong>
+				<span>Conveyor-style CRM movement</span>
+			</div>
+			<p>One deal moves at a time, keeping the board clean and focused.</p>
+		</div>
+
+		<div class="crm-hero-sim-stage-grid">
+			{stages.map((stage, stageIndex) => (
+				<section class="crm-hero-sim-stage">
+					<header>
+						<span>{stage}</span>
+					</header>
+					<div class="crm-hero-sim-stage-body" data-stage-body>
+						<div class="crm-hero-sim-slot"></div>
+						<div class="crm-hero-sim-fallback-stack">
+							{snapshotCards
+								.filter((card) => card.stage === stageIndex)
+								.map((card) => (
+									<article class="crm-hero-sim-card crm-hero-sim-card-fallback">
+										<div class="crm-hero-sim-card-topline">
+											<span class="crm-hero-sim-chip">{card.source}</span>
+										</div>
+										{card.bubble && <div class="crm-hero-sim-bubble is-visible">{card.bubble}</div>}
+										<div class="crm-hero-sim-card-core">
+											<strong>{card.title}</strong>
+											<span class="crm-hero-sim-card-client">{card.client}</span>
+											<span class="crm-hero-sim-card-meta">{card.meta}</span>
+										</div>
+										<div class="crm-hero-sim-card-footer">
+																				<span class="crm-hero-sim-card-amount">{card.amount}</span>
+																			</div>
+									</article>
+								))}
+						</div>
+					</div>
+				</section>
+			))}
+
+			<div class="crm-hero-sim-card-layer" data-card-layer></div>
+		</div>
+
+		<div class="crm-hero-sim-footer">
+			<div class="crm-hero-sim-task">
+				<p class="crm-hero-sim-task-label">Manager task</p>
+				<strong data-task-title>{fallbackTask.title}</strong>
+				<span data-task-meta>{fallbackTask.meta}</span>
+			</div>
+		</div>
+	</div>
+</div>
+
+<style is:global>
+	.crm-hero-sim {
+		position: relative;
+		min-height: 100%;
+	}
+
+	.crm-hero-sim-board {
+		position: relative;
+		display: grid;
+		gap: 1.5rem;
+		min-height: 34rem;
+		padding: 1.5rem;
+		border: 1px solid rgba(113, 88, 62, 0.16);
+		border-radius: var(--radius-2xl);
+		background:
+			linear-gradient(180deg, rgba(255, 253, 249, 0.98), rgba(246, 240, 233, 0.96)),
+			var(--surface-card);
+		box-shadow: var(--shadow-soft);
+		overflow: hidden;
+		isolation: isolate;
+	}
+
+	.crm-hero-sim-board::before {
+		content: "";
+		position: absolute;
+		inset: 0;
+		background:
+			linear-gradient(rgba(113, 88, 62, 0.04) 1px, transparent 1px, 0),
+			linear-gradient(90deg, rgba(113, 88, 62, 0.04) 1px, transparent 1px, 0);
+		background-size: 100% 5rem, 5rem 100%;
+		mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.35), transparent 92%);
+		pointer-events: none;
+	}
+
+	.crm-hero-sim-board-glow {
+		position: absolute;
+		right: -10%;
+		bottom: -22%;
+		width: 24rem;
+		height: 24rem;
+		background: radial-gradient(circle, rgba(201, 106, 58, 0.16), transparent 72%);
+		pointer-events: none;
+	}
+
+	.crm-hero-sim-header,
+	.crm-hero-sim-stage header {
+		position: relative;
+		z-index: 1;
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 0.75rem;
+	}
+
+	.crm-hero-sim-header strong {
+		display: block;
+		font-size: 1.1rem;
+		color: var(--color-ink);
+	}
+
+	.crm-hero-sim-header span,
+	.crm-hero-sim-stage header span,
+	.crm-hero-sim-task-label {
+		font-family: var(--font-mono);
+		font-size: var(--text-label);
+		letter-spacing: 0.06em;
+		text-transform: uppercase;
+		color: var(--color-slate);
+	}
+	
+	.crm-hero-sim-stage header span {
+		background: rgba(201, 106, 58, 0.08);
+		color: var(--color-terracotta-active);
+		padding: 0.35rem 0.75rem;
+		border-radius: 999px;
+		font-weight: 600;
+		letter-spacing: 0.08em;
+	}
+
+	.crm-hero-sim-header p {
+		margin: 0;
+		max-width: 14rem;
+		color: var(--color-slate);
+		font-size: 0.88rem;
+		line-height: 1.4;
+		text-align: right;
+	}
+
+	.crm-hero-sim-stage-grid {
+		position: relative;
+		z-index: 1;
+		display: grid;
+		grid-template-columns: repeat(3, minmax(0, 1fr));
+		gap: 0.5rem;
+	}
+
+	.crm-hero-sim-stage {
+		display: grid;
+		grid-template-rows: auto 1fr;
+		gap: 0.85rem;
+		padding: 1.1rem 0.5rem;
+		border-radius: 1.4rem;
+		background:
+			linear-gradient(180deg, rgba(255, 253, 249, 0.96), rgba(244, 236, 228, 0.92)),
+			var(--surface-page);
+		box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.72);
+	}
+
+	.crm-hero-sim-stage-body {
+		position: relative;
+		min-height: 12.5rem;
+		padding: 3.2rem 0.25rem 0.8rem;
+		border-radius: 1.1rem;
+		background:
+			linear-gradient(180deg, rgba(255, 255, 255, 0.38), rgba(255, 255, 255, 0.12)),
+			rgba(216, 198, 176, 0.12);
+	}
+
+	.crm-hero-sim-slot {
+		position: absolute;
+		inset: 3.2rem 0.25rem 0.8rem;
+		border: 1px dashed rgba(113, 88, 62, 0.12);
+		border-radius: 1rem;
+	}
+
+	.crm-hero-sim-fallback-stack {
+		position: relative;
+		display: grid;
+		min-height: 100%;
+	}
+
+	.crm-hero-sim-card-layer {
+		position: absolute;
+		inset: 0;
+		pointer-events: none;
+	}
+
+	.crm-hero-sim-card {
+		position: relative;
+		display: grid;
+		gap: 0.35rem;
+		padding: 0.85rem;
+		border: 1px solid rgba(113, 88, 62, 0.16);
+		border-radius: 1.1rem;
+		background:
+			linear-gradient(180deg, rgba(255, 253, 249, 0.99), rgba(255, 253, 249, 0.95)),
+			var(--surface-card);
+		box-shadow: 0 18px 34px rgba(20, 32, 51, 0.08);
+		will-change: transform, opacity;
+	}
+
+	.crm-hero-sim-card-layer .crm-hero-sim-card {
+		position: absolute;
+		top: 0;
+		left: 0;
+		transition:
+			transform 720ms var(--motion-spring),
+			opacity 320ms ease,
+			box-shadow 220ms ease,
+			border-color 220ms ease;
+	}
+
+	.crm-hero-sim-card-layer .crm-hero-sim-card.no-transition {
+		transition: none !important;
+	}
+
+	.crm-hero-sim-card-layer .crm-hero-sim-card[data-card-state="active"] {
+		border-color: rgba(201, 106, 58, 0.3);
+		box-shadow:
+			0 20px 38px rgba(20, 32, 51, 0.12),
+			0 0 0 1px rgba(201, 106, 58, 0.08);
+	}
+
+	.crm-hero-sim-card-topline {
+		display: flex;
+		align-items: center;
+		justify-content: flex-start;
+		gap: 0.5rem;
+		min-width: 0;
+		margin-bottom: 0.2rem;
+	}
+
+	.crm-hero-sim-chip {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		padding: 0.34rem 0.58rem;
+		border-radius: 999px;
+		font-family: var(--font-mono);
+		font-size: 0.58rem;
+		letter-spacing: 0.05em;
+		text-transform: uppercase;
+		background: rgba(40, 71, 102, 0.08);
+		color: var(--color-ink);
+	}
+	
+	.crm-hero-sim-card-core {
+		display: grid;
+		gap: 0.15rem;
+	}
+
+	.crm-hero-sim-card strong {
+		font-size: 1rem;
+		line-height: 1.3;
+	}
+
+	.crm-hero-sim-card-meta,
+	.crm-hero-sim-card-client,
+	
+	.crm-hero-sim-task span {
+		color: var(--color-slate);
+		font-size: 0.86rem;
+		line-height: 1.35;
+	}
+
+	.crm-hero-sim-card-footer {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		gap: 0;
+		padding-top: 0.65rem;
+		margin-top: 0.25rem;
+		border-top: 1px solid rgba(113, 88, 62, 0.1);
+	}
+	
+	.crm-hero-sim-card-amount {
+		flex: 0 0 auto;
+		font-family: var(--font-mono);
+		font-size: 0.82rem;
+		font-weight: 600;
+		color: var(--color-ink);
+		letter-spacing: 0.02em;
+		background: rgba(201, 106, 58, 0.06);
+		padding: 0.2rem 0.45rem;
+		border-radius: 0.4rem;
+	}
+
+	.crm-hero-sim-bubble {
+		position: absolute;
+		bottom: calc(100% + 0.6rem);
+		left: 50%;
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		width: max-content;
+		max-width: 13rem;
+		padding: 0.5rem 0.8rem;
+		border: 1px solid rgba(201, 106, 58, 0.22);
+		border-radius: 0.8rem;
+		background:
+			linear-gradient(180deg, rgba(255, 246, 237, 0.98), rgba(255, 250, 244, 0.96)),
+			var(--surface-card);
+		box-shadow: 0 12px 20px rgba(201, 106, 58, 0.12);
+		color: var(--color-terracotta-active);
+		font-size: 0.72rem;
+		line-height: 1.35;
+		white-space: normal;
+		text-align: center;
+		pointer-events: none;
+		z-index: 10;
+		opacity: 0;
+		transform: translate3d(-50%, 0.4rem, 0) scale(0.95);
+		transition:
+			opacity 220ms ease,
+			transform 320ms var(--motion-spring);
+	}
+
+	.crm-hero-sim-bubble::after {
+		content: "";
+		position: absolute;
+		top: 100%;
+		left: 50%;
+		margin-left: -0.3rem;
+		width: 0.6rem;
+		height: 0.6rem;
+		border-right: 1px solid rgba(201, 106, 58, 0.22);
+		border-bottom: 1px solid rgba(201, 106, 58, 0.22);
+		background: rgba(255, 248, 242, 0.98);
+		transform: translateY(-55%) rotate(45deg);
+	}
+
+	.crm-hero-sim-bubble.is-visible {
+		opacity: 1;
+		transform: translate3d(-50%, 0, 0) scale(1);
+	}
+
+	.crm-hero-sim-footer {
+		position: relative;
+		z-index: 1;
+		display: flex;
+		justify-content: flex-end;
+	}
+
+	.crm-hero-sim-task {
+		display: grid;
+		gap: 0.38rem;
+		max-width: 20rem;
+		padding: 1rem 1.1rem;
+		border: 1px solid rgba(113, 88, 62, 0.16);
+		border-radius: 1.1rem;
+		background:
+			linear-gradient(180deg, rgba(255, 253, 249, 0.98), rgba(252, 245, 239, 0.96)),
+			var(--surface-card);
+		box-shadow: var(--shadow-card);
+		transition:
+			transform 360ms var(--motion-spring),
+			box-shadow 220ms ease;
+	}
+
+	.crm-hero-sim[data-enhanced="true"] .crm-hero-sim-task.is-updating {
+		transform: translate3d(0, -0.18rem, 0);
+		box-shadow: 0 16px 26px rgba(20, 32, 51, 0.1);
+	}
+
+	.crm-hero-sim[data-enhanced="true"] .crm-hero-sim-fallback-stack {
+		opacity: 0;
+	}
+
+	.crm-hero-sim[data-enhanced="true"] .crm-hero-sim-card-fallback {
+		visibility: hidden;
+	}
+
+	@media (max-width: 760px) {
+		.crm-hero-sim-board {
+			min-height: auto;
+			padding: 1rem;
+		}
+
+		.crm-hero-sim-header {
+			display: grid;
+			align-items: start;
+		}
+
+		.crm-hero-sim-header p {
+			max-width: none;
+			text-align: left;
+		}
+
+		.crm-hero-sim-stage-grid {
+			grid-template-columns: 1fr;
+		}
+
+		.crm-hero-sim-stage-body {
+			min-height: 11.5rem;
+			padding: 3.2rem 0.75rem 0.75rem;
+		}
+
+		.crm-hero-sim-footer {
+			justify-content: stretch;
+		}
+
+		.crm-hero-sim-task {
+			max-width: none;
+			width: 100%;
+		}
+	}
+</style>
+
+<script is:inline>
+	(() => {
+		const roots = document.querySelectorAll("[data-crm-hero-sim]");
+
+		const stageLabels = ["New request", "Quote sent", "Reserved"];
+		const stageStatuses = ["Source landed", "Quote sent", "Reservation confirmed"];
+
+		const sources = [
+			{ label: "Telegram", capture: "Captured from Telegram" },
+			{ label: "WhatsApp", capture: "Captured from WhatsApp" },
+			{ label: "Website", capture: "Captured from Website" },
+			{ label: "Instagram", capture: "Captured from Instagram" },
+		];
+		
+		const clients = [
+			"Michael S.", "Alexey V.", "Ahmad M.", "Sarah L.", "Dmitry K.", 
+			"Hassan A.", "Emma J.", "Igor T.", "Omar F.", "Elena B."
+		];
+
+		const vehicles = [
+			{ key: "g63", name: "Mercedes G63", request: "G63 request", daily: [2200, 2550] },
+			{ key: "rr-sport", name: "Range Rover Sport", request: "Range Rover request", daily: [1350, 1620] },
+			{ key: "rr-vogue", name: "Range Rover Vogue", request: "Range Rover Vogue", daily: [1800, 2150] },
+			{ key: "x7", name: "BMW X7", request: "BMW X7 request", daily: [1120, 1380] },
+			{ key: "x5", name: "BMW X5", request: "BMW X5 request", daily: [880, 1040] },
+			{ key: "bmw520", name: "BMW 520i", request: "BMW 520i request", daily: [440, 520] },
+			{ key: "s500", name: "Mercedes S500", request: "S-Class request", daily: [1550, 1880] },
+			{ key: "e200", name: "Mercedes E200", request: "E-Class request", daily: [520, 640] },
+			{ key: "es300h", name: "Lexus ES 300h", request: "Lexus ES request", daily: [420, 510] },
+			{ key: "gls600", name: "Mercedes Maybach GLS", request: "Maybach SUV", daily: [2600, 3100] },
+		];
+
+		const scenarios = [
+			{ branch: "Dubai Marina", hint: "Marina pickup", days: [2, 3, 4], vehicles: ["g63", "rr-sport", "x7", "x5"], delivery: 140 },
+			{ branch: "DXB Terminal 3", hint: "Airport arrival", days: [3, 5, 7], vehicles: ["e200", "bmw520", "es300h", "x5"], delivery: 110 },
+			{ branch: "Palm Jumeirah", hint: "Hotel valet drop", days: [1, 2, 3], vehicles: ["g63", "rr-vogue", "gls600", "s500"], delivery: 180 },
+			{ branch: "Downtown Dubai", hint: "Burj area handoff", days: [2, 4, 6], vehicles: ["bmw520", "e200", "s500", "es300h"], delivery: 90 },
+			{ branch: "Business Bay", hint: "Executive commute", days: [5, 7, 10], vehicles: ["bmw520", "e200", "es300h", "x5"], delivery: 70 },
+			{ branch: "JBR", hint: "Beachfront stay", days: [2, 3, 5], vehicles: ["rr-sport", "x5", "g63", "x7"], delivery: 130 },
+			{ branch: "Dubai Hills", hint: "Villa delivery", days: [4, 7, 14], vehicles: ["x7", "rr-vogue", "s500", "gls600"], delivery: 160 },
+			{ branch: "Abu Dhabi Corniche", hint: "Intercity transfer", days: [3, 4, 7], vehicles: ["e200", "bmw520", "s500", "es300h"], delivery: 220 },
+			{ branch: "Yas Island", hint: "Weekend package", days: [2, 3, 4], vehicles: ["x5", "rr-sport", "g63", "bmw520"], delivery: 200 },
+			{ branch: "Expo City", hint: "Corporate visit", days: [5, 7, 14], vehicles: ["bmw520", "e200", "es300h", "x5"], delivery: 80 },
+		];
+
+		const formatCurrency = (value) =>
+			new Intl.NumberFormat("en-US", {
+				style: "currency",
+				currency: "AED",
+				maximumFractionDigits: 0,
+			}).format(value);
+
+		const randomFrom = (items) => items[Math.floor(Math.random() * items.length)];
+		const sampleBetween = ([min, max]) => min + Math.round(Math.random() * (max - min));
+		const roundToFifty = (value) => Math.round(value / 50) * 50;
+
+		const shortVehicleName = (vehicle) =>
+			(vehicle || "")
+				.replace(/^Mercedes\s+/u, "")
+				.replace(/^BMW\s+/u, "")
+				.replace(/^Lexus\s+/u, "")
+				.replace(/^Range Rover\s+/u, "Range Rover ");
+
+		const createLeadFactory = () => {
+			let counter = 0;
+			return (excludeVehicles = []) => {
+				let scenario, vehicle;
+				let attempts = 0;
+				
+				// Ensure random vehicle is not currently active on the board to avoid confusing duplicates
+				do {
+					scenario = randomFrom(scenarios);
+					const key = randomFrom(scenario.vehicles);
+					vehicle = vehicles.find((item) => item.key === key);
+					attempts++;
+				} while (excludeVehicles.includes(vehicle.name) && attempts < 20);
+
+				const source = randomFrom(sources);
+				const client = randomFrom(clients);
+				const days = randomFrom(scenario.days);
+				const dailyRate = sampleBetween(vehicle.daily);
+				const amount = roundToFifty(days * dailyRate + scenario.delivery);
+				counter += 1;
+
+				return {
+					id: `lead-${counter}`,
+					source: source.label,
+					entryBubble: source.capture,
+					vehicle: vehicle.name,
+					request: vehicle.request,
+					client,
+					days,
+					amount,
+					branch: scenario.branch,
+					hint: scenario.hint,
+					stage: 0,
+					stageLabel: stageLabels[0],
+					bubble: "",
+					bubbleVisible: false,
+					isEntering: false,
+					isLeaving: false,
+				};
+			};
+		};
+
+		const createLead = createLeadFactory();
+
+		const applyStage = (lead, stage) => {
+			lead.stage = stage;
+			lead.stageLabel = stageLabels[stage];
+		};
+
+		const buildSeedPipeline = () => {
+			const leadNew = createLead();
+			leadNew.source = "WhatsApp";
+			leadNew.request = "G63 request";
+			leadNew.vehicle = "Mercedes G63";
+			leadNew.client = "Ahmad M.";
+			leadNew.days = 3;
+			leadNew.amount = 6400;
+			leadNew.branch = "Dubai Marina";
+			leadNew.hint = "Marina pickup";
+			applyStage(leadNew, 0);
+
+			const leadQuote = createLead();
+			leadQuote.source = "Telegram";
+			leadQuote.request = "BMW 520i request";
+			leadQuote.vehicle = "BMW 520i";
+			leadQuote.client = "Alexey V.";
+			leadQuote.days = 5;
+			leadQuote.amount = 2800;
+			leadQuote.branch = "DXB Terminal 3";
+			leadQuote.hint = "Airport arrival";
+			applyStage(leadQuote, 1);
+
+			const leadReserved = createLead();
+			leadReserved.source = "Website";
+			leadReserved.request = "Range Rover request";
+			leadReserved.vehicle = "Range Rover Sport";
+			leadReserved.client = "Michael S.";
+			leadReserved.days = 4;
+			leadReserved.amount = 5600;
+			leadReserved.branch = "Downtown Dubai";
+			leadReserved.hint = "Burj area handoff";
+			applyStage(leadReserved, 2);
+
+			return [leadNew, leadQuote, leadReserved];
+		};
+
+		const createCardElement = (lead) => {
+			const card = document.createElement("article");
+			card.className = "crm-hero-sim-card";
+			card.dataset.leadId = lead.id;
+			card.innerHTML = `
+				<div class="crm-hero-sim-card-topline">
+					<span class="crm-hero-sim-chip"></span>
+				</div>
+				<div class="crm-hero-sim-bubble"></div>
+				<div class="crm-hero-sim-card-core">
+					<strong></strong>
+					<span class="crm-hero-sim-card-client"></span>
+					<span class="crm-hero-sim-card-meta"></span>
+				</div>
+				<div class="crm-hero-sim-card-footer">
+					<span class="crm-hero-sim-card-amount"></span>
+				</div>
+			`;
+			return card;
+		};
+
+		const renderTask = (root, titleText, metaText) => {
+			const task = root.querySelector(".crm-hero-sim-task");
+			const title = root.querySelector("[data-task-title]");
+			const meta = root.querySelector("[data-task-meta]");
+			if (!(task instanceof HTMLElement) || !(title instanceof HTMLElement) || !(meta instanceof HTMLElement)) {
+				return;
+			}
+
+			title.textContent = titleText;
+			meta.textContent = metaText;
+			task.classList.add("is-updating");
+			window.setTimeout(() => task.classList.remove("is-updating"), 420);
+		};
+
+		const updateCardContent = (card, lead) => {
+			const source = card.querySelector(".crm-hero-sim-chip");
+			const bubble = card.querySelector(".crm-hero-sim-bubble");
+			const title = card.querySelector("strong");
+			const client = card.querySelector(".crm-hero-sim-card-client");
+			const meta = card.querySelector(".crm-hero-sim-card-meta");
+			const amount = card.querySelector(".crm-hero-sim-card-amount");
+
+			if (
+				!(source instanceof HTMLElement) ||
+				!(bubble instanceof HTMLElement) ||
+				!(title instanceof HTMLElement) ||
+				!(client instanceof HTMLElement) ||
+				!(meta instanceof HTMLElement) ||
+				!(amount instanceof HTMLElement)
+			) {
+				return;
+			}
+
+			source.textContent = lead.source || "";
+			title.textContent = lead.stage === 0 ? lead.request : lead.vehicle;
+			client.textContent = lead.client || "";
+			meta.textContent = `${lead.branch} · ${lead.days} days`;
+			amount.textContent = formatCurrency(lead.amount);
+			bubble.textContent = lead.bubble || "";
+			
+			if (lead.bubbleVisible && lead.bubble) {
+				bubble.classList.add("is-visible");
+			} else {
+				bubble.classList.remove("is-visible");
+			}
+			
+			card.dataset.cardState = lead.bubbleVisible ? "active" : lead.isLeaving ? "exiting" : "idle";
+		};
+
+		roots.forEach((root) => {
+			if (!(root instanceof HTMLElement)) return;
+
+			const stageBodies = Array.from(root.querySelectorAll("[data-stage-body]")).filter(
+				(node) => node instanceof HTMLElement,
+			);
+			const layer = root.querySelector("[data-card-layer]");
+			if (!(layer instanceof HTMLElement) || stageBodies.length !== 3) return;
+
+			const state = {
+				pipeline: [],
+				pendingLead: null,
+				exitingLead: null,
+				cardMap: new Map(),
+				started: false,
+				phaseIndex: 0,
+			};
+
+			const phases = [
+				{ key: "quote-to-reserved", from: 1, to: 2 },
+				{ key: "new-to-quote", from: 0, to: 1 },
+				{ key: "incoming-to-new" },
+			];
+
+			const getActiveVehicles = () => {
+				return [...state.pipeline, state.pendingLead, state.exitingLead]
+					.filter(Boolean)
+					.map(l => l.vehicle);
+			};
+
+			// Initialize
+			state.pipeline = buildSeedPipeline();
+			state.pendingLead = createLead(getActiveVehicles());
+
+			const schedule = (callback, delay) => {
+				return window.setTimeout(callback, delay);
+			};
+
+			const ensureCard = (lead) => {
+				if (state.cardMap.has(lead.id)) return state.cardMap.get(lead.id);
+				const card = createCardElement(lead);
+				layer.appendChild(card);
+				state.cardMap.set(lead.id, card);
+				return card;
+			};
+
+			const removeCard = (lead) => {
+				const card = state.cardMap.get(lead.id);
+				if (!(card instanceof HTMLElement)) return;
+				card.remove();
+				state.cardMap.delete(lead.id);
+			};
+
+			const getStageRect = (index) => {
+				const body = stageBodies[index];
+				const bodyRect = body.getBoundingClientRect();
+				const layerRect = layer.getBoundingClientRect();
+				
+				const cs = window.getComputedStyle(body);
+				const pl = parseFloat(cs.paddingLeft) || 12;
+				const pr = parseFloat(cs.paddingRight) || 12;
+				const pt = parseFloat(cs.paddingTop) || 48;
+				
+				return {
+					x: bodyRect.left - layerRect.left + pl,
+					y: bodyRect.top - layerRect.top + pt,
+					width: bodyRect.width - pl - pr,
+				};
+			};
+
+			const visibleLeads = () =>
+				[...state.pipeline.filter(Boolean), state.exitingLead].filter(Boolean);
+
+			const positionCards = ({ immediate = false, entryLeadId = "" } = {}) => {
+				const activeIds = new Set(visibleLeads().map((lead) => lead.id));
+
+				visibleLeads().forEach((lead) => {
+					const card = ensureCard(lead);
+					const rect = getStageRect(lead.stage);
+					updateCardContent(card, lead);
+
+					card.style.width = `${rect.width}px`;
+
+					if (immediate) {
+						card.classList.add("no-transition");
+						card.style.transform = `translate3d(${rect.x}px, ${rect.y}px, 0)`;
+						card.style.opacity = "1";
+						return;
+					}
+
+					if (lead.isLeaving) {
+						card.classList.remove("no-transition");
+						card.style.transform = `translate3d(${rect.x}px, ${rect.y + 32}px, 0)`;
+						card.style.opacity = "0";
+						return;
+					}
+
+					if (lead.isEntering && lead.id === entryLeadId) {
+						card.classList.add("no-transition");
+						card.style.transform = `translate3d(${rect.x - rect.width - 64}px, ${rect.y}px, 0)`;
+						card.style.opacity = "0";
+						
+						// Double RAF to safely guarantee transition applies correctly even in backgrounded Safari tabs
+						window.requestAnimationFrame(() => {
+							window.requestAnimationFrame(() => {
+								card.classList.remove("no-transition");
+								card.style.transform = `translate3d(${rect.x}px, ${rect.y}px, 0)`;
+								card.style.opacity = "1";
+							});
+						});
+						return;
+					}
+
+					card.classList.remove("no-transition");
+					card.style.transform = `translate3d(${rect.x}px, ${rect.y}px, 0)`;
+					card.style.opacity = "1";
+				});
+
+				// Cleanup cards that are no longer active
+				Array.from(state.cardMap.entries()).forEach(([id, card]) => {
+					if (activeIds.has(id)) return;
+					card.remove();
+					state.cardMap.delete(id);
+				});
+			};
+
+			
+
+			
+
+			const bubbleForStage = (lead, stage) => {
+				if (stage === 1) {
+					return `Quote sent · ${formatCurrency(lead.amount)}`;
+				}
+
+				return "Deposit received";
+			};
+
+			const clearLeadBubble = (lead) => {
+				lead.bubbleVisible = false;
+				lead.bubble = "";
+				positionCards();
+			};
+
+			const runMovePhase = (from, to) => {
+				const lead = state.pipeline[from];
+				if (!lead) {
+					schedule(runNextPhase, 100);
+					return;
+				}
+
+				const targetLead = to === 2 ? state.pipeline[2] : null;
+				lead.bubble = bubbleForStage(lead, to);
+				lead.bubbleVisible = true;
+				positionCards();
+
+				schedule(() => {
+					let delayBeforeMove = 0;
+
+					if (targetLead) {
+						state.pipeline[2] = null;
+						targetLead.isLeaving = true;
+						state.exitingLead = targetLead;
+						
+						// Manager task strictly only for leaving vehicles
+						renderTask(root, `Verify docs for ${shortVehicleName(targetLead.vehicle)}`, `${targetLead.client} · English translation required`);
+						
+						// Manager task strictly only for leaving vehicles
+												
+						// Manager task strictly only for leaving vehicles
+												
+						// Manager task specifically for the leaving vehicle and client
+						
+						
+						positionCards();
+						delayBeforeMove = 600;
+					}
+
+					schedule(() => {
+						state.pipeline[from] = null;
+						state.pipeline[to] = lead;
+						applyStage(lead, to);
+						positionCards();
+
+						schedule(() => {
+							clearLeadBubble(lead);
+
+							if (state.exitingLead) {
+								const currentExiting = state.exitingLead;
+								schedule(() => {
+									removeCard(currentExiting);
+									if (state.exitingLead === currentExiting) {
+										state.exitingLead = null;
+									}
+								}, 300);
+							}
+
+							schedule(runNextPhase, 600);
+						}, 800);
+					}, delayBeforeMove);
+				}, 1400);
+			};
+
+			const runEntryPhase = () => {
+				const incoming = state.pendingLead;
+				
+				state.pendingLead = createLead(getActiveVehicles());
+				
+				applyStage(incoming, 0);
+				incoming.isEntering = true;
+				incoming.bubble = incoming.entryBubble;
+				incoming.bubbleVisible = true;
+				state.pipeline[0] = incoming;
+
+				
+				
+				positionCards({ entryLeadId: incoming.id });
+
+				schedule(() => {
+					incoming.isEntering = false;
+				}, 800);
+
+				schedule(() => {
+					clearLeadBubble(incoming);
+					schedule(runNextPhase, 600);
+				}, 1800);
+			};
+
+			const runNextPhase = () => {
+				const phase = phases[state.phaseIndex];
+				state.phaseIndex = (state.phaseIndex + 1) % phases.length;
+
+				if (!phase) {
+					schedule(runNextPhase, 100);
+					return;
+				}
+
+				if (phase.key === "incoming-to-new") {
+					runEntryPhase();
+					return;
+				}
+
+				runMovePhase(phase.from, phase.to);
+			};
+
+			const start = () => {
+				if (state.started) return;
+				state.started = true;
+				root.dataset.enhanced = "true";
+				
+				
+				positionCards({ immediate: true });
+				
+				schedule(runNextPhase, 1000);
+			};
+
+			const handleResize = () => positionCards({ immediate: true });
+			window.addEventListener("resize", handleResize);
+			
+			schedule(start, 100);
+		});
+	})();
+</script>

@@ -1,0 +1,56 @@
+---
+import { render } from "astro:content";
+import BlogEntryPage from "../../components/BlogEntryPage.astro";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { englishSiteChrome } from "../../data/landing";
+import {
+	formatPublishDate,
+	getEntryByTranslationKey,
+	getLocalizedEntries,
+} from "../../data/content";
+
+export async function getStaticPaths() {
+	const entries = await getLocalizedEntries("blog", "en");
+	return entries.map((entry) => ({
+		params: { translationKey: entry.data.translationKey },
+	}));
+}
+
+const { translationKey } = Astro.params;
+const entry = translationKey ? await getEntryByTranslationKey("blog", "en", translationKey) : null;
+
+if (!entry) {
+	throw new Error("Blog entry not found");
+}
+
+const { Content } = await render(entry);
+---
+
+<BaseLayout
+	title={`${entry.data.title} | Cursivo`}
+	description={entry.data.description}
+	lang="en"
+	brandMeta={englishSiteChrome.brandMeta}
+	navItems={englishSiteChrome.navItems}
+	localeLinks={englishSiteChrome.localeLinks}
+	currentLocale={englishSiteChrome.currentLocale}
+	footerTitle={englishSiteChrome.footerTitle}
+	footerCopy={englishSiteChrome.footerCopy}
+	footerMetaLabel={englishSiteChrome.footerMetaLabel}
+	footerMetaValue={englishSiteChrome.footerMetaValue}
+	canonicalPath={`/blog/${entry.data.translationKey}/`}
+	ctaHref="/#contact"
+	openGraphType="article"
+>
+	<div class="site-container">
+		<BlogEntryPage
+			title={entry.data.title}
+			description={entry.data.description}
+			date={formatPublishDate(entry.data.publishedAt, "en")}
+			readTime={entry.data.estimatedReadTime}
+			tags={entry.data.tags}
+			backHref="/blog/"
+			Content={Content}
+		/>
+	</div>
+</BaseLayout>

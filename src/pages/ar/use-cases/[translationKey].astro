@@ -1,0 +1,67 @@
+---
+import { render } from "astro:content";
+import UseCaseEntryPage from "../../../components/UseCaseEntryPage.astro";
+import {
+	getLocalizedUseCases,
+	getUseCaseByTranslationKey,
+	getUseCaseTranslations,
+} from "../../../data/content";
+import { getHomeContent } from "../../../data/site";
+import {
+	buildUseCaseLocaleLinks,
+	getUseCaseEntryPath,
+	getUseCaseNav,
+	useCaseEntryCopyByLocale,
+	useCaseIndexCopyByLocale,
+	useCaseIndexPaths,
+} from "../../../data/use-cases";
+
+export async function getStaticPaths() {
+	const entries = await getLocalizedUseCases("ar");
+	return entries.map((entry) => ({
+		params: { translationKey: entry.data.translationKey },
+	}));
+}
+
+const locale = "ar" as const;
+const { translationKey } = Astro.params;
+const entry = translationKey ? await getUseCaseByTranslationKey(locale, translationKey) : null;
+
+if (!entry) {
+	throw new Error("Use case not found");
+}
+
+const translations = await getUseCaseTranslations(entry.data.translationKey);
+const localeLinks = buildUseCaseLocaleLinks(
+	Object.fromEntries(
+		translations.map((item) => [
+			item.data.locale,
+			getUseCaseEntryPath(item.data.locale, item.data.translationKey),
+		]),
+	),
+);
+const { Content } = await render(entry);
+const home = getHomeContent(locale);
+---
+
+<UseCaseEntryPage
+	currentLocale={locale}
+	brandMeta={home.brandMeta}
+	navItems={getUseCaseNav(locale)}
+	localeLinks={localeLinks}
+	footerTitle={home.footerTitle}
+	footerCopy={home.footerCopy}
+	footerMetaLabel={home.footerMetaLabel}
+	footerMetaValue={home.footerMetaValue}
+	entryMeta={{
+		title: entry.data.title,
+		description: entry.data.description,
+		industry: entry.data.industry,
+		audience: entry.data.audience,
+	}}
+	copy={useCaseEntryCopyByLocale[locale]}
+	indexCopy={useCaseIndexCopyByLocale[locale]}
+	backHref={useCaseIndexPaths[locale]}
+	entryPath={getUseCaseEntryPath(locale, entry.data.translationKey)}
+	Content={Content}
+/>

@@ -1,0 +1,17 @@
+---
+import type { AnalyticsConfig } from "../data/analytics";
+
+interface Props {
+	config: AnalyticsConfig;
+}
+
+const { config } = Astro.props;
+---
+
+<script
+	is:inline
+	defer
+	data-domain={config.domain}
+	data-api={config.apiHost}
+	src={config.scriptUrl}
+></script>

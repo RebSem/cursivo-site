@@ -13,9 +13,16 @@
     "build": "astro build",
     "preview": "astro preview",
     "check": "astro check",
+    "qa:links": "node scripts/check-links.mjs",
+    "qa:prelaunch": "npm run build && npm run check && npm run qa:links",
     "astro": "astro"
   },
   "dependencies": {
+    "@astrojs/mdx": "^4.3.14",
+    "@fontsource/ibm-plex-mono": "^5.2.7",
+    "@fontsource/manrope": "^5.2.8",
+    "@fontsource/noto-sans-arabic": "^5.2.10",
+    "@fontsource/space-grotesk": "^5.2.10",
     "astro": "^5.18.1"
   },
   "devDependencies": {

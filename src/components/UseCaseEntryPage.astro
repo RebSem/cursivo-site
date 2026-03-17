@@ -1,0 +1,221 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import FinalCtaSection from "./FinalCtaSection.astro";
+import { buildArticleSchema, buildBreadcrumbSchema } from "../data/jsonld";
+import type { UseCaseEntryCopy, UseCaseIndexCopy } from "../data/use-cases";
+import type { Locale, LocaleLink, NavItem } from "../data/site";
+
+interface EntryMeta {
+	title: string;
+	description: string;
+	industry: string;
+	audience: string;
+}
+
+interface Props {
+	currentLocale: Locale;
+	brandMeta: string;
+	navItems: NavItem[];
+	localeLinks: LocaleLink[];
+	footerTitle: string;
+	footerCopy: string;
+	footerMetaLabel: string;
+	footerMetaValue: string;
+	entryMeta: EntryMeta;
+	copy: UseCaseEntryCopy;
+	indexCopy: UseCaseIndexCopy;
+	backHref: string;
+	entryPath: string;
+	Content: any;
+}
+
+const {
+	currentLocale,
+	brandMeta,
+	navItems,
+	localeLinks,
+	footerTitle,
+	footerCopy,
+	footerMetaLabel,
+	footerMetaValue,
+	entryMeta,
+	copy,
+	indexCopy,
+	backHref,
+	entryPath,
+	Content,
+} = Astro.props;
+
+const structuredData = [
+	buildBreadcrumbSchema(currentLocale, entryMeta.title, entryPath),
+	buildArticleSchema({
+		locale: currentLocale,
+		title: entryMeta.title,
+		description: entryMeta.description,
+		path: entryPath,
+	}),
+];
+const alternatePaths = localeLinks.reduce(
+	(accumulator, link) => {
+		accumulator[link.code] = link.href;
+		return accumulator;
+	},
+	{} as Record<Locale, string>,
+);
+---
+
+<BaseLayout
+	title={entryMeta.title}
+	description={entryMeta.description}
+	lang={currentLocale}
+	brandMeta={brandMeta}
+	navItems={navItems}
+	localeLinks={localeLinks}
+	footerTitle={footerTitle}
+	footerCopy={footerCopy}
+	footerMetaLabel={footerMetaLabel}
+	footerMetaValue={footerMetaValue}
+	currentLocale={currentLocale}
+	structuredData={structuredData}
+	canonicalPath={entryPath}
+	alternatePaths={alternatePaths}
+>
+	<div class="site-container">
+		<div class="page-stack">
+			<section class="use-case-entry-hero section-card" data-reveal="soft">
+				<a class="use-case-back type-label" href={backHref}>{copy.backLabel}</a>
+				<h1 class="type-display">{entryMeta.title}</h1>
+				<p class="type-body-lg text-muted use-case-description">{entryMeta.description}</p>
+				<div class="use-case-meta-grid">
+					<div class="use-case-meta-item">
+						<p class="type-label">{copy.industryLabel}</p>
+						<p>{entryMeta.industry}</p>
+					</div>
+					<div class="use-case-meta-item">
+						<p class="type-label">{copy.audienceLabel}</p>
+						<p>{entryMeta.audience}</p>
+					</div>
+					<div class="use-case-meta-item">
+						<p class="type-label">{copy.translationLabel}</p>
+						<p class="use-case-translation-links">
+							{localeLinks.map((link) => (
+								<a href={link.href}>{link.label}</a>
+							))}
+						</p>
+					</div>
+				</div>
+			</section>
+
+			<article class="use-case-body section-card prose-shell" data-reveal="soft" style="--reveal-delay:120ms;">
+				<Content />
+			</article>
+
+			<FinalCtaSection
+				eyebrow={indexCopy.finalCtaEyebrow}
+				title={indexCopy.finalCtaTitle}
+				intro={indexCopy.finalCtaIntro}
+				links={indexCopy.finalCtaLinks}
+			/>
+		</div>
+	</div>
+</BaseLayout>
+
+<style>
+	.use-case-entry-hero {
+		display: grid;
+		gap: 1rem;
+	}
+
+	.use-case-back {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.4rem;
+		color: var(--color-terracotta);
+		text-decoration: none;
+	}
+
+	.use-case-description {
+		max-width: 44rem;
+		margin-bottom: 0;
+	}
+
+	.use-case-meta-grid {
+		display: grid;
+		grid-template-columns: repeat(3, minmax(0, 1fr));
+		gap: 0.95rem;
+		margin-top: var(--space-5);
+	}
+
+	.use-case-meta-item {
+		padding: 0.95rem;
+		border-radius: 1rem;
+		border: 1px solid rgba(113, 88, 62, 0.1);
+		background:
+			linear-gradient(180deg, rgba(255, 253, 249, 0.9), rgba(255, 253, 249, 0.76)),
+			rgba(255, 253, 249, 0.72);
+	}
+
+	.use-case-meta-item p {
+		margin: 0;
+	}
+
+	.use-case-meta-item p:last-child {
+		margin-top: 0.45rem;
+		color: var(--color-slate);
+	}
+
+	.use-case-translation-links {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.6rem;
+	}
+
+	.use-case-translation-links a {
+		color: var(--color-slate);
+		text-decoration: none;
+	}
+
+	.use-case-translation-links a:hover {
+		color: var(--color-ink);
+	}
+
+	.prose-shell :global(p),
+	.prose-shell :global(ul),
+	.prose-shell :global(ol),
+	.prose-shell :global(h2),
+	.prose-shell :global(h3) {
+		max-width: 46rem;
+	}
+
+	.prose-shell :global(ul),
+	.prose-shell :global(ol) {
+		padding-inline-start: 1.1rem;
+	}
+
+	.prose-shell :global(h2) {
+		font-size: var(--text-h2);
+		margin: 2rem 0 0.8rem;
+	}
+
+	.prose-shell :global(h3) {
+		font-size: var(--text-h3);
+		margin: 1.4rem 0 0.55rem;
+	}
+
+	.prose-shell :global(p) {
+		margin: 0 0 1rem;
+		color: var(--color-slate);
+	}
+
+	.prose-shell :global(ul),
+	.prose-shell :global(ol) {
+		line-height: 1.8;
+		color: var(--color-slate);
+	}
+
+	@media (max-width: 900px) {
+		.use-case-meta-grid {
+			grid-template-columns: 1fr;
+		}
+	}
+</style>

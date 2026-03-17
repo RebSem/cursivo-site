@@ -1,0 +1,442 @@
+---
+import type { RouteCard } from "../data/site";
+
+interface Props {
+	intakeCard: RouteCard;
+	qualificationCard: RouteCard;
+	quoteCard: RouteCard;
+	handoffCard: RouteCard;
+	message: string;
+	signals: string[];
+	quoteItems: string[];
+	managerItems: string[];
+}
+
+const {
+	intakeCard,
+	qualificationCard,
+	quoteCard,
+	handoffCard,
+	message,
+	signals,
+	quoteItems,
+	managerItems,
+} = Astro.props;
+---
+
+<div class="hero-demo" data-hero-demo data-stage="0" aria-label="Live product preview">
+	<div class="hero-demo-shell">
+		<div class="hero-demo-grid">
+			<article class="demo-card demo-card-chat" data-demo-card="0" tabindex="0">
+				<p class="demo-card-label type-label">{intakeCard.label}</p>
+				<h3>{intakeCard.title}</h3>
+				<div class="chat-bubble">
+					<p>{message}</p>
+				</div>
+				<p class="demo-card-note text-muted">{intakeCard.meta}</p>
+			</article>
+
+			<article class="demo-card demo-card-ai" data-demo-card="1" tabindex="0">
+				<p class="demo-card-label type-label">{qualificationCard.label}</p>
+				<h3>{qualificationCard.title}</h3>
+				<p class="demo-card-note text-muted">{qualificationCard.meta}</p>
+				<div class="demo-chip-list">
+					{signals.map((signal) => (
+						<span class="demo-chip">{signal}</span>
+					))}
+				</div>
+			</article>
+
+			<article class="demo-card demo-card-quote" data-demo-card="2" tabindex="0">
+				<p class="demo-card-label type-label">{quoteCard.label}</p>
+				<h3>{quoteCard.title}</h3>
+				<ul class="demo-list">
+					{quoteItems.map((item) => <li>{item}</li>)}
+				</ul>
+			</article>
+
+			<article class="demo-card demo-card-handoff" data-demo-card="3" tabindex="0">
+				<p class="demo-card-label type-label">{handoffCard.label}</p>
+				<h3>{handoffCard.title}</h3>
+				<ul class="demo-list">
+					{managerItems.map((item) => <li>{item}</li>)}
+				</ul>
+				<div class="handoff-status">
+					<span class="handoff-dot"></span>
+					<span>{handoffCard.meta}</span>
+				</div>
+			</article>
+		</div>
+	</div>
+</div>
+
+<style>
+	.hero-demo {
+		position: relative;
+		width: 100%;
+		min-height: clamp(23rem, 31vw, 27rem);
+	}
+
+	.hero-demo-shell {
+		position: relative;
+		height: 100%;
+		padding: 1rem;
+		border-radius: clamp(1.4rem, 2vw, 2rem);
+		border: 1px solid rgba(113, 88, 62, 0.14);
+		background:
+			radial-gradient(circle at 20% 10%, rgba(201, 106, 58, 0.14), transparent 22rem),
+			radial-gradient(circle at 85% 20%, rgba(40, 71, 102, 0.12), transparent 18rem),
+			linear-gradient(180deg, rgba(255, 253, 249, 0.96), rgba(255, 253, 249, 0.84));
+		box-shadow: var(--shadow-soft);
+		overflow: hidden;
+		isolation: isolate;
+	}
+
+	.hero-demo-shell::before,
+	.hero-demo-shell::after {
+		content: "";
+		position: absolute;
+		inset: auto;
+		border-radius: 999px;
+		pointer-events: none;
+	}
+
+	.hero-demo-shell::before {
+		width: 14rem;
+		height: 14rem;
+		right: -4rem;
+		top: -4rem;
+		background: radial-gradient(circle, rgba(201, 106, 58, 0.18), transparent 70%);
+	}
+
+	.hero-demo-shell::after {
+		left: -4rem;
+		bottom: -5rem;
+		width: 15rem;
+		height: 15rem;
+		background: radial-gradient(circle, rgba(40, 71, 102, 0.12), transparent 68%);
+	}
+
+	.hero-demo-grid {
+		position: relative;
+		z-index: 1;
+		display: grid;
+		grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.95fr);
+		grid-template-rows: auto auto;
+		gap: 0.95rem;
+		height: 100%;
+	}
+
+	.demo-card {
+		position: relative;
+		display: grid;
+		align-content: start;
+		gap: 0.72rem;
+		padding: 1rem;
+		border-radius: 1.3rem;
+		border: 1px solid rgba(113, 88, 62, 0.14);
+		background: rgba(255, 253, 249, 0.86);
+		box-shadow: 0 16px 34px rgba(20, 32, 51, 0.08);
+		backdrop-filter: blur(12px);
+		transition:
+			transform var(--motion-base) var(--motion-spring),
+			box-shadow var(--motion-fast) ease,
+			border-color var(--motion-fast) ease,
+			opacity var(--motion-fast) ease;
+	}
+
+	.demo-card::before {
+		content: "";
+		position: absolute;
+		inset: 0 0 auto 0;
+		height: 1px;
+		background: linear-gradient(90deg, transparent, rgba(201, 106, 58, 0.28), transparent);
+		pointer-events: none;
+	}
+
+	.demo-card:focus-visible {
+		outline: 2px solid rgba(201, 106, 58, 0.38);
+		outline-offset: 4px;
+	}
+
+	.demo-card h3 {
+		font-size: clamp(1.02rem, 1.6vw, 1.24rem);
+		line-height: 1.1;
+	}
+
+	.demo-card-label {
+		margin: 0;
+		color: var(--color-terracotta-active);
+	}
+
+	.demo-card-note,
+	.demo-list {
+		margin: 0;
+	}
+
+	.demo-card-chat {
+		grid-column: 1;
+		grid-row: 1 / span 2;
+		min-height: 100%;
+	}
+
+	.demo-card-ai {
+		grid-column: 2;
+		grid-row: 1;
+	}
+
+	.demo-card-quote {
+		grid-column: 1;
+		grid-row: 2;
+		max-width: 88%;
+		align-self: end;
+	}
+
+	.demo-card-handoff {
+		grid-column: 2;
+		grid-row: 2;
+		align-self: end;
+	}
+
+	.chat-bubble {
+		position: relative;
+		padding: 0.9rem 1rem;
+		border-radius: 1.15rem 1.15rem 1.15rem 0.45rem;
+		background: linear-gradient(135deg, rgba(201, 106, 58, 0.12), rgba(255, 253, 249, 0.96));
+		border: 1px solid rgba(201, 106, 58, 0.16);
+	}
+
+	.chat-bubble p {
+		margin: 0;
+		line-height: 1.65;
+	}
+
+	.demo-chip-list {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.5rem;
+	}
+
+	.demo-chip {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		padding: 0.48rem 0.7rem;
+		border-radius: 999px;
+		background: rgba(40, 71, 102, 0.08);
+		border: 1px solid rgba(40, 71, 102, 0.1);
+		font-family: var(--font-mono);
+		font-size: var(--text-label);
+		letter-spacing: 0.04em;
+		color: var(--color-ink);
+	}
+
+	.demo-list {
+		display: grid;
+		gap: 0.6rem;
+		padding: 0;
+		list-style: none;
+	}
+
+	.demo-list li {
+		display: flex;
+		align-items: flex-start;
+		gap: 0.55rem;
+		line-height: 1.5;
+		color: var(--color-slate);
+	}
+
+	.demo-list li::before {
+		content: "";
+		flex: 0 0 0.52rem;
+		width: 0.52rem;
+		height: 0.52rem;
+		margin-top: 0.35rem;
+		border-radius: 999px;
+		background: var(--color-success);
+		box-shadow: 0 0 0 4px rgba(47, 138, 98, 0.12);
+	}
+
+	.handoff-status {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.5rem;
+		margin-top: 0.15rem;
+		padding: 0.48rem 0.68rem;
+		border-radius: 999px;
+		background: rgba(47, 138, 98, 0.08);
+		border: 1px solid rgba(47, 138, 98, 0.16);
+		font-size: var(--text-small);
+		color: var(--color-ink);
+	}
+
+	.handoff-dot {
+		width: 0.52rem;
+		height: 0.52rem;
+		border-radius: 999px;
+		background: var(--color-success);
+		box-shadow: 0 0 0 5px rgba(47, 138, 98, 0.16);
+	}
+
+	.hero-demo[data-stage="0"] .demo-card-chat,
+	.hero-demo[data-stage="1"] .demo-card-ai,
+	.hero-demo[data-stage="2"] .demo-card-quote,
+	.hero-demo[data-stage="3"] .demo-card-handoff {
+		transform: translateY(-0.35rem);
+		box-shadow: 0 26px 54px rgba(20, 32, 51, 0.16);
+		border-color: rgba(201, 106, 58, 0.24);
+	}
+
+	.hero-demo[data-stage="0"] .demo-card-ai,
+	.hero-demo[data-stage="1"] .demo-card-quote,
+	.hero-demo[data-stage="2"] .demo-card-handoff,
+	.hero-demo[data-stage="3"] .demo-card-chat {
+		transform: translateY(0.15rem);
+	}
+
+	.hero-demo:hover .demo-card,
+	.hero-demo:focus-within .demo-card {
+		animation-play-state: paused;
+	}
+
+	.demo-card-chat {
+		animation: demoFloatA 7.4s ease-in-out infinite;
+	}
+
+	.demo-card-ai {
+		animation: demoFloatB 6.2s ease-in-out infinite;
+	}
+
+	.demo-card-quote {
+		animation: demoFloatC 7s ease-in-out infinite;
+	}
+
+	.demo-card-handoff {
+		animation: demoFloatB 6.8s ease-in-out infinite reverse;
+	}
+
+	:global([dir="rtl"]) .chat-bubble {
+		border-radius: 1.15rem 1.15rem 0.45rem 1.15rem;
+	}
+
+	:global([dir="rtl"]) .demo-chip {
+		font-family: var(--font-arabic);
+		letter-spacing: 0;
+	}
+
+	@keyframes demoFloatA {
+		0%,
+		100% {
+			transform: translateY(0);
+		}
+		50% {
+			transform: translateY(-0.2rem);
+		}
+	}
+
+	@keyframes demoFloatB {
+		0%,
+		100% {
+			transform: translateY(0.08rem);
+		}
+		50% {
+			transform: translateY(-0.18rem);
+		}
+	}
+
+	@keyframes demoFloatC {
+		0%,
+		100% {
+			transform: translateY(0.16rem);
+		}
+		50% {
+			transform: translateY(-0.14rem);
+		}
+	}
+
+	@media (max-width: 900px) {
+		.hero-demo {
+			min-height: auto;
+		}
+
+		.hero-demo-grid {
+			grid-template-columns: 1fr;
+			grid-template-rows: auto;
+		}
+
+		.demo-card-chat,
+		.demo-card-ai,
+		.demo-card-quote,
+		.demo-card-handoff {
+			grid-column: auto;
+			grid-row: auto;
+			max-width: none;
+		}
+	}
+</style>
+
+<script is:inline>
+	(() => {
+		const setupDemo = (root) => {
+			if (!(root instanceof HTMLElement) || root.dataset.demoReady === "true") return;
+			root.dataset.demoReady = "true";
+
+			const prefersReducedMotion =
+				window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+			const cards = Array.from(root.querySelectorAll("[data-demo-card]"));
+			let stage = 0;
+			let timerId = null;
+
+			const setStage = (nextStage) => {
+				stage = (nextStage + cards.length) % cards.length;
+				root.dataset.stage = String(stage);
+			};
+
+			const stop = () => {
+				if (timerId !== null) {
+					window.clearInterval(timerId);
+					timerId = null;
+				}
+			};
+
+			const start = () => {
+				if (prefersReducedMotion || timerId !== null) return;
+				timerId = window.setInterval(() => setStage(stage + 1), 2600);
+			};
+
+			cards.forEach((card, index) => {
+				card.addEventListener("pointerenter", () => {
+					setStage(index);
+					stop();
+				});
+				card.addEventListener("focus", () => {
+					setStage(index);
+					stop();
+				});
+			});
+
+			root.addEventListener("pointerleave", start);
+			root.addEventListener("focusin", stop);
+			root.addEventListener("focusout", () => {
+				window.setTimeout(() => {
+					if (!root.contains(document.activeElement)) {
+						start();
+					}
+				}, 0);
+			});
+
+			setStage(0);
+			start();
+		};
+
+		const init = () => {
+			document.querySelectorAll("[data-hero-demo]").forEach(setupDemo);
+		};
+
+		if (document.readyState === "loading") {
+			document.addEventListener("DOMContentLoaded", init, { once: true });
+		} else {
+			init();
+		}
+	})();
+</script>

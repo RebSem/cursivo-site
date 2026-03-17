@@ -1,0 +1,153 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import FinalCtaSection from "./FinalCtaSection.astro";
+import RouteDivider from "./RouteDivider.astro";
+import { buildBreadcrumbSchema } from "../data/jsonld";
+import type { LegalPageContent } from "../data/legal";
+
+interface Props {
+	content: LegalPageContent;
+}
+
+const { content } = Astro.props;
+const structuredData = [buildBreadcrumbSchema(content.locale, content.title, content.path)];
+---
+
+<BaseLayout
+	title={content.title}
+	description={content.description}
+	lang={content.locale}
+	brandMeta={content.brandMeta}
+	navItems={content.navItems}
+	localeLinks={content.localeLinks}
+	footerTitle={content.footerTitle}
+	footerCopy={content.footerCopy}
+	footerMetaLabel={content.footerMetaLabel}
+	footerMetaValue={content.footerMetaValue}
+	currentLocale={content.locale}
+	structuredData={structuredData}
+	canonicalPath={content.path}
+	alternatePaths={content.alternatePaths}
+>
+	<div class="site-container">
+		<div class="page-stack">
+			<section class="legal-hero section-card" id="overview" data-reveal="soft">
+				<div class="legal-hero-top">
+					<p class="legal-eyebrow type-label">{content.heroEyebrow}</p>
+					<div class="legal-updated">
+						<span class="type-label">{content.updatedLabel}</span>
+						<span>{content.updatedValue}</span>
+					</div>
+				</div>
+				<h1 class="type-display">{content.heroTitle}</h1>
+				<p class="type-body-lg text-muted legal-lead">{content.heroLead}</p>
+				<p class="legal-subnote">{content.heroSubnote}</p>
+			</section>
+
+			<div class="shell-transition">
+				<RouteDivider label={content.dividerLabel} />
+			</div>
+
+			<section class="legal-sections">
+				{content.sections.map((section) => (
+					<article class="legal-section section-card">
+						<h2>{section.title}</h2>
+						<div class="legal-copy">
+							{section.paragraphs.map((paragraph) => (
+								<p class="text-muted">{paragraph}</p>
+							))}
+						</div>
+					</article>
+				))}
+			</section>
+
+			<div id="contact">
+				<FinalCtaSection
+					eyebrow={content.finalCtaEyebrow}
+					title={content.finalCtaTitle}
+					intro={content.finalCtaIntro}
+					links={content.finalCtaLinks}
+				/>
+			</div>
+		</div>
+	</div>
+</BaseLayout>
+
+<style>
+	.legal-hero {
+		display: grid;
+		gap: 1rem;
+	}
+
+	.legal-hero-top {
+		display: flex;
+		align-items: start;
+		justify-content: space-between;
+		gap: 1rem;
+	}
+
+	.legal-eyebrow {
+		margin-bottom: var(--space-3);
+		color: var(--color-terracotta);
+	}
+
+	.legal-updated {
+		display: grid;
+		gap: 0.2rem;
+		justify-items: end;
+		padding: 0.75rem 0.85rem;
+		border-radius: 1rem;
+		border: 1px solid rgba(113, 88, 62, 0.1);
+		background:
+			linear-gradient(180deg, rgba(255, 253, 249, 0.88), rgba(255, 253, 249, 0.74)),
+			rgba(255, 253, 249, 0.72);
+		font-family: var(--font-mono);
+		font-size: var(--text-small);
+		color: var(--color-slate);
+	}
+
+	.legal-lead {
+		max-width: 46rem;
+		margin: 0;
+	}
+
+	.legal-subnote {
+		margin: 1rem 0 0;
+		max-width: 42rem;
+		font-family: var(--font-mono);
+		font-size: var(--text-small);
+		line-height: 1.7;
+		color: var(--color-slate);
+	}
+
+	.legal-sections {
+		display: grid;
+		gap: clamp(1rem, 2vw, 1.35rem);
+	}
+
+	.legal-section h2 {
+		font-size: var(--text-h2);
+		margin-bottom: 1rem;
+	}
+
+	.legal-copy {
+		display: grid;
+		gap: 0.9rem;
+		max-width: 48rem;
+	}
+
+	.legal-copy p {
+		margin: 0;
+		line-height: 1.8;
+	}
+
+	@media (max-width: 720px) {
+		.legal-hero-top {
+			flex-direction: column;
+		}
+
+		.legal-updated {
+			justify-items: start;
+		}
+	}
+</style>

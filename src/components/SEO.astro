@@ -1,0 +1,45 @@
+---
+interface AlternateUrl {
+	locale: string;
+	href: string | null;
+}
+
+interface Props {
+	title: string;
+	description: string;
+	lang: string;
+	canonicalUrl?: string | null;
+	alternateUrls?: AlternateUrl[];
+	siteUrl?: string | null;
+	openGraphType?: "website" | "article";
+}
+
+const {
+	title,
+	description,
+	lang,
+	canonicalUrl = null,
+	alternateUrls = [],
+	siteUrl = null,
+	openGraphType = "website",
+} = Astro.props;
+---
+
+<title>{title}</title>
+<meta name="description" content={description} />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:type" content={openGraphType} />
+<meta property="og:locale" content={lang} />
+<meta property="og:site_name" content="Cursivo" />
+{canonicalUrl && <meta property="og:url" content={canonicalUrl} />}
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={title} />
+<meta name="twitter:description" content={description} />
+{canonicalUrl && <link rel="canonical" href={canonicalUrl} />}
+{
+	alternateUrls.map(
+		(item) => item.href && <link rel="alternate" hreflang={item.locale} href={item.href} />
+	)
+}
+{siteUrl && <link rel="alternate" hreflang="x-default" href={siteUrl} />}

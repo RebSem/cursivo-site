@@ -1,0 +1,87 @@
+---
+interface Props {
+	label: string;
+}
+
+const { label } = Astro.props;
+---
+
+<div class="route-divider" aria-label={label} data-reveal="line">
+	<span class="route-node route-node-start"></span>
+	<span class="route-line route-line-wide"></span>
+	<span class="route-label type-label">{label}</span>
+	<span class="route-line route-line-short"></span>
+	<span class="route-node route-node-end"></span>
+</div>
+
+<style>
+	.route-divider {
+		display: grid;
+		grid-template-columns: auto minmax(2rem, 1fr) auto minmax(1rem, 0.5fr) auto;
+		align-items: center;
+		gap: 0.875rem;
+		color: var(--color-terracotta-active);
+	}
+
+	.route-line {
+		display: block;
+		height: 1px;
+		background:
+			repeating-linear-gradient(
+				90deg,
+				rgba(201, 106, 58, 0.68) 0,
+				rgba(201, 106, 58, 0.68) 12px,
+				transparent 12px,
+				transparent 18px
+			);
+		transform: scaleX(0);
+		transform-origin: left center;
+		transition: transform var(--motion-slow) var(--motion-spring);
+	}
+
+	.route-node {
+		width: 0.9rem;
+		height: 0.9rem;
+		border-radius: 999px;
+		border: 1px solid rgba(201, 106, 58, 0.28);
+		background: rgba(255, 253, 249, 0.9);
+		box-shadow: 0 0 0 6px rgba(201, 106, 58, 0.06);
+		transform: scale(0.8);
+		opacity: 0.5;
+		transition:
+			transform var(--motion-base) var(--motion-spring),
+			opacity var(--motion-base) var(--motion-spring);
+	}
+
+	.route-node-end {
+		background: rgba(201, 106, 58, 0.18);
+	}
+
+	.route-label {
+		color: var(--color-terracotta-active);
+	}
+
+	.route-divider.is-visible .route-line {
+		transform: scaleX(1);
+	}
+
+	.route-divider.is-visible .route-node {
+		transform: scale(1);
+		opacity: 1;
+	}
+
+	:global([dir="rtl"]) .route-line {
+		transform-origin: right center;
+	}
+
+	@media (max-width: 640px) {
+		.route-divider {
+			grid-template-columns: auto minmax(1rem, 1fr) auto;
+		}
+
+		.route-line-short,
+		.route-node-end {
+			display: none;
+		}
+	}
+</style>

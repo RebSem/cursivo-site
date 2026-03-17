@@ -1,0 +1,204 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import FinalCtaSection from "./FinalCtaSection.astro";
+import { buildBreadcrumbSchema } from "../data/jsonld";
+import type { PublishIndexCopy, PublishCollection } from "../data/publishing";
+import type { LocaleLink, NavItem } from "../data/site";
+
+interface Item {
+	title: string;
+	description: string;
+	href: string;
+	meta: string;
+	status: string;
+}
+
+interface Props {
+	collection: PublishCollection;
+	currentLocale: "en" | "ru" | "ar";
+	brandMeta: string;
+	navItems: NavItem[];
+	localeLinks: LocaleLink[];
+	footerTitle: string;
+	footerCopy: string;
+	footerMetaLabel: string;
+	footerMetaValue: string;
+	copy: PublishIndexCopy;
+	items: Item[];
+}
+
+const {
+	collection: _collection,
+	currentLocale,
+	brandMeta,
+	navItems,
+	localeLinks,
+	footerTitle,
+	footerCopy,
+	footerMetaLabel,
+	footerMetaValue,
+	copy,
+	items,
+} = Astro.props;
+
+const structuredData = [buildBreadcrumbSchema(currentLocale, copy.title, copy.path)];
+---
+
+<BaseLayout
+	title={copy.title}
+	description={copy.description}
+	lang={currentLocale}
+	brandMeta={brandMeta}
+	navItems={navItems}
+	localeLinks={localeLinks}
+	footerTitle={footerTitle}
+	footerCopy={footerCopy}
+	footerMetaLabel={footerMetaLabel}
+	footerMetaValue={footerMetaValue}
+	currentLocale={currentLocale}
+	structuredData={structuredData}
+	canonicalPath={copy.path}
+	alternatePaths={copy.alternatePaths}
+>
+	<div class="site-container">
+		<div class="page-stack">
+			<section class="publishing-hero section-card" data-reveal="soft">
+				<p class="publishing-eyebrow type-label">{copy.eyebrow}</p>
+				<h1 class="type-display">{copy.heroTitle}</h1>
+				<p class="type-body-lg text-muted publishing-intro">{copy.intro}</p>
+			</section>
+
+			<section class="publishing-list">
+				{items.length === 0 ? (
+					<p class="publishing-empty text-muted">{copy.emptyLabel}</p>
+				) : (
+					items.map((item, index) => (
+						<a
+							class:list={["publishing-item", index === 0 && "is-lead"]}
+							href={item.href}
+							data-reveal="soft"
+							style={`--reveal-delay:${100 + index * 70}ms;`}
+						>
+							<div class="publishing-item-top">
+								<span class="publishing-item-status">{item.status}</span>
+								<span class="publishing-item-meta">{item.meta}</span>
+							</div>
+							<h2>{item.title}</h2>
+							<p class="text-muted">{item.description}</p>
+						</a>
+					))
+				)}
+			</section>
+
+			<FinalCtaSection
+				eyebrow={copy.finalCtaEyebrow}
+				title={copy.finalCtaTitle}
+				intro={copy.finalCtaIntro}
+				links={copy.finalCtaLinks}
+			/>
+		</div>
+	</div>
+</BaseLayout>
+
+<style>
+	.publishing-hero {
+		display: grid;
+		gap: 1rem;
+	}
+
+	.publishing-eyebrow {
+		margin-bottom: var(--space-3);
+		color: var(--color-terracotta);
+	}
+
+	.publishing-intro {
+		max-width: 44rem;
+		margin-bottom: 0;
+	}
+
+	.publishing-list {
+		display: grid;
+		gap: clamp(1rem, 2vw, 1.35rem);
+	}
+
+	.publishing-item {
+		display: grid;
+		gap: 0.85rem;
+		height: 100%;
+		padding: clamp(1.2rem, 2vw, 1.45rem);
+		border-radius: var(--radius-xl);
+		border: 1px solid rgba(113, 88, 62, 0.12);
+		background:
+			linear-gradient(180deg, rgba(255, 253, 249, 0.94), rgba(255, 253, 249, 0.84)),
+			var(--surface-card);
+		box-shadow: var(--shadow-card);
+		text-decoration: none;
+		transition:
+			transform var(--motion-fast) ease,
+			box-shadow var(--motion-fast) ease,
+			border-color var(--motion-fast) ease;
+	}
+
+	.publishing-item:hover {
+		transform: translateY(-3px);
+		box-shadow: 0 18px 40px rgba(20, 32, 51, 0.11);
+		border-color: rgba(201, 106, 58, 0.26);
+	}
+
+	.publishing-item.is-lead {
+		background:
+			radial-gradient(circle at top left, rgba(201, 106, 58, 0.11), transparent 42%),
+			linear-gradient(180deg, rgba(255, 253, 249, 0.95), rgba(255, 253, 249, 0.84)),
+			var(--surface-card);
+	}
+
+	.publishing-item-top {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 1rem;
+	}
+
+	.publishing-item-status,
+	.publishing-item-meta {
+		font-family: var(--font-mono);
+		font-size: var(--text-label);
+		letter-spacing: 0.05em;
+		text-transform: uppercase;
+	}
+
+	.publishing-item-status {
+		color: var(--color-terracotta-active);
+	}
+
+	.publishing-item-meta {
+		color: var(--color-slate);
+	}
+
+	.publishing-item h2 {
+		font-size: var(--text-h2);
+		line-height: 1.02;
+	}
+
+	.publishing-item p,
+	.publishing-empty {
+		margin: 0;
+	}
+
+	@media (min-width: 900px) {
+		.publishing-list {
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+		}
+
+		.publishing-item.is-lead {
+			grid-column: 1 / -1;
+		}
+	}
+
+	@media (max-width: 640px) {
+		.publishing-item-top {
+			flex-direction: column;
+			align-items: start;
+		}
+	}
+</style>

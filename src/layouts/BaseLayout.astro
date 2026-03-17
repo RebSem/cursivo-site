@@ -1,0 +1,145 @@
+---
+import "../styles/global.css";
+import AnalyticsScript from "../components/AnalyticsScript.astro";
+import JsonLd from "../components/JsonLd.astro";
+import SEO from "../components/SEO.astro";
+import SiteFooter from "../components/SiteFooter.astro";
+import SiteHeader from "../components/SiteHeader.astro";
+import { getAnalyticsConfig } from "../data/analytics";
+import type { Locale, LocaleLink, NavItem } from "../data/site";
+import {
+	getAlternateUrls,
+	getAlternateUrlsForPaths,
+	getCanonicalUrl,
+	getCanonicalUrlForPath,
+	getSiteUrl,
+} from "../data/seo";
+
+interface Props {
+	title: string;
+	description?: string;
+	lang?: Locale;
+	brandMeta: string;
+	navItems: NavItem[];
+	localeLinks: LocaleLink[];
+	currentLocale: Locale;
+	footerTitle: string;
+	footerCopy: string;
+	footerMetaLabel: string;
+	footerMetaValue: string;
+	structuredData?: Array<Record<string, unknown>>;
+	canonicalPath?: string;
+	alternatePaths?: Record<Locale, string>;
+	ctaHref?: string;
+	openGraphType?: "website" | "article";
+}
+
+const {
+	title,
+	description = "Public multilingual Astro marketing site for Cursivo, the AI CRM and operations layer for car rental teams.",
+	lang = "en",
+	brandMeta,
+	navItems,
+	localeLinks,
+	currentLocale,
+	footerTitle,
+	footerCopy,
+	footerMetaLabel,
+	footerMetaValue,
+	structuredData = [],
+	canonicalPath,
+	alternatePaths,
+	ctaHref,
+	openGraphType = "website",
+} = Astro.props;
+
+const dir = lang === "ar" ? "rtl" : "ltr";
+const siteUrl = getSiteUrl();
+const canonicalUrl = canonicalPath
+	? getCanonicalUrlForPath(canonicalPath, siteUrl)
+	: getCanonicalUrl(lang, siteUrl);
+const alternateUrls = alternatePaths
+	? getAlternateUrlsForPaths(alternatePaths, siteUrl)
+	: getAlternateUrls(siteUrl);
+const analytics = getAnalyticsConfig();
+---
+
+<html lang={lang} dir={dir}>
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<link rel="icon" href="/favicon.ico" />
+		<meta name="viewport" content="width=device-width" />
+		<script is:inline>
+			(() => {
+				const root = document.documentElement;
+				const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+				root.dataset.motion = prefersReduced ? "reduce" : "enabled";
+			})();
+		</script>
+		<meta name="generator" content={Astro.generator} />
+		<SEO
+			title={title}
+			description={description}
+			lang={lang}
+			canonicalUrl={canonicalUrl}
+			alternateUrls={alternateUrls}
+			siteUrl={siteUrl?.toString()}
+			openGraphType={openGraphType}
+		/>
+		{structuredData.map((item) => <JsonLd data={item} />)}
+		{analytics && <AnalyticsScript config={analytics} />}
+	</head>
+	<body>
+		<div class="site-shell">
+			<SiteHeader
+				brandMeta={brandMeta}
+				navItems={navItems}
+				localeLinks={localeLinks}
+				currentLocale={currentLocale}
+				ctaHref={ctaHref}
+			/>
+			<main class="site-main">
+				<slot />
+			</main>
+			<SiteFooter
+				footerTitle={footerTitle}
+				footerCopy={footerCopy}
+				footerMetaLabel={footerMetaLabel}
+				footerMetaValue={footerMetaValue}
+				currentLocale={currentLocale}
+			/>
+		</div>
+		<script is:inline>
+			(() => {
+				if (document.documentElement.dataset.motion !== "enabled") return;
+
+				const revealNodes = Array.from(document.querySelectorAll("[data-reveal]"));
+				if (revealNodes.length === 0) return;
+
+				if (!("IntersectionObserver" in window)) {
+					revealNodes.forEach((node) => node.classList.add("is-visible"));
+					return;
+				}
+
+				const observer = new IntersectionObserver(
+					(entries) => {
+						entries.forEach((entry) => {
+							if (!entry.isIntersecting) return;
+							entry.target.classList.add("is-visible");
+							observer.unobserve(entry.target);
+						});
+					},
+					{ threshold: 0.18, rootMargin: "0px 0px -8% 0px" },
+				);
+
+				revealNodes.forEach((node, index) => {
+					if (!node.style.getPropertyValue("--reveal-delay")) {
+						node.style.setProperty("--reveal-delay", `${Math.min(index * 35, 240)}ms`);
+					}
+					observer.observe(node);
+				});
+			})();
+		</script>
+	</body>
+</html>

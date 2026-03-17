@@ -1,0 +1,63 @@
+---
+import { render } from "astro:content";
+import PublishingEntryPage from "../../../components/PublishingEntryPage.astro";
+import {
+	buildLocaleLinksForEntry,
+	formatPublishDate,
+	getEntryByTranslationKey,
+	getEntryTranslations,
+	getLocalizedEntries,
+} from "../../../data/content";
+import {
+	getCollectionIndexPath,
+	publishEntryCopyByLocale,
+	publishIndexCopyByLocale,
+	getPublishingNav,
+} from "../../../data/publishing";
+import { getHomeContent } from "../../../data/site";
+
+export async function getStaticPaths() {
+	const entries = await getLocalizedEntries("changelog", "ar");
+	return entries.map((entry) => ({
+		params: { translationKey: entry.data.translationKey },
+	}));
+}
+
+const locale = "ar" as const;
+const { translationKey } = Astro.params;
+const entry = translationKey ? await getEntryByTranslationKey("changelog", locale, translationKey) : null;
+
+if (!entry) {
+	throw new Error("Changelog entry not found");
+}
+
+const translations = await getEntryTranslations("changelog", entry.data.translationKey);
+const localeLinks = buildLocaleLinksForEntry("changelog", translations);
+const { Content } = await render(entry);
+const home = getHomeContent(locale);
+---
+
+<PublishingEntryPage
+	collection="changelog"
+	currentLocale={locale}
+	brandMeta={home.brandMeta}
+	navItems={getPublishingNav(locale)}
+	localeLinks={localeLinks}
+	footerTitle={home.footerTitle}
+	footerCopy={home.footerCopy}
+	footerMetaLabel={home.footerMetaLabel}
+	footerMetaValue={home.footerMetaValue}
+	entryMeta={{
+		title: entry.data.title,
+		description: entry.data.description,
+		publishedAt: entry.data.publishedAt,
+		version: entry.data.version,
+		translationKey: entry.data.translationKey,
+	}}
+	copy={publishEntryCopyByLocale[locale]}
+	indexCopy={publishIndexCopyByLocale[locale].changelog}
+	backHref={getCollectionIndexPath("changelog", locale)}
+	entryPath={`/ar/changelog/${entry.data.translationKey}/`}
+	Content={Content}
+	formattedDate={formatPublishDate(entry.data.publishedAt, locale)}
+/>

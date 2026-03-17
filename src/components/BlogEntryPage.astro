@@ -1,0 +1,148 @@
+---
+interface Props {
+	title: string;
+	description: string;
+	date: string;
+	readTime?: string;
+	tags?: string[];
+	backHref: string;
+	Content: any;
+}
+
+const { title, description, date, readTime, tags = [], backHref, Content } = Astro.props;
+---
+
+<div class="page-stack">
+	<section class="blog-entry-hero section-card" data-reveal="soft">
+		<a class="blog-entry-back type-label" href={backHref}>Back to blog</a>
+		<div class="blog-entry-meta">
+			<span>{date}</span>
+			{readTime && <span>{readTime}</span>}
+		</div>
+		<h1 class="type-display">{title}</h1>
+		<p class="type-body-lg text-muted">{description}</p>
+		{tags.length > 0 && (
+			<div class="blog-entry-tags">
+				{tags.map((tag) => (
+					<span>{tag}</span>
+				))}
+			</div>
+		)}
+	</section>
+
+	<article class="blog-entry-body section-card prose-shell" data-reveal="soft" style="--reveal-delay:120ms;">
+		<Content />
+	</article>
+
+	<section class="blog-entry-cta section-card" data-reveal="soft">
+		<div>
+			<p class="type-label blog-entry-eyebrow">See the product</p>
+			<h2 class="type-h2">Turn these operating problems into a working CRM process.</h2>
+		</div>
+		<div class="blog-entry-actions">
+			<a class="blog-entry-primary" href="/product/">Product page</a>
+			<a class="blog-entry-secondary" href="/#contact">Request a demo</a>
+		</div>
+	</section>
+</div>
+
+<style>
+	.blog-entry-hero,
+	.blog-entry-cta {
+		display: grid;
+		gap: 1rem;
+	}
+
+	.blog-entry-back,
+	.blog-entry-eyebrow {
+		color: var(--color-terracotta);
+		text-decoration: none;
+	}
+
+	.blog-entry-meta,
+	.blog-entry-tags {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.6rem;
+	}
+
+	.blog-entry-meta span,
+	.blog-entry-tags span {
+		font-family: var(--font-mono);
+		font-size: var(--text-label);
+		letter-spacing: 0.05em;
+		text-transform: uppercase;
+	}
+
+	.blog-entry-meta span {
+		color: var(--color-slate);
+	}
+
+	.blog-entry-tags span {
+		padding: 0.5rem 0.7rem;
+		border-radius: var(--radius-pill);
+		background: var(--color-accent-soft);
+		color: var(--color-terracotta-active);
+	}
+
+	.prose-shell :global(h2),
+	.prose-shell :global(h3) {
+		margin-top: 1.8rem;
+	}
+
+	.prose-shell :global(h2) {
+		font-size: var(--text-h2);
+	}
+
+	.prose-shell :global(h3) {
+		font-size: var(--text-h3);
+	}
+
+	.prose-shell :global(p),
+	.prose-shell :global(li) {
+		color: var(--color-slate);
+	}
+
+	.prose-shell :global(p:last-child) {
+		margin-bottom: 0;
+	}
+
+	.blog-entry-cta {
+		grid-template-columns: minmax(0, 1fr) auto;
+		align-items: center;
+	}
+
+	.blog-entry-actions {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.75rem;
+	}
+
+	.blog-entry-primary,
+	.blog-entry-secondary {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		padding: 0.85rem 1rem;
+		border-radius: var(--radius-pill);
+		text-decoration: none;
+		font-weight: 700;
+	}
+
+	.blog-entry-primary {
+		background: var(--color-terracotta);
+		color: var(--color-ivory);
+	}
+
+	.blog-entry-secondary {
+		border: 1px solid var(--color-border-sand);
+		background: var(--surface-card);
+		color: var(--color-ink);
+	}
+
+	@media (max-width: 720px) {
+		.blog-entry-cta {
+			grid-template-columns: 1fr;
+		}
+	}
+</style>

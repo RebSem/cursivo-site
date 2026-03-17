@@ -1,0 +1,181 @@
+---
+interface InsightPreviewItem {
+	category: string;
+	title: string;
+	description: string;
+	statusLabel: string;
+	meta: string;
+	href?: string;
+}
+
+interface Props {
+	eyebrow?: string;
+	title: string;
+	intro: string;
+	items: InsightPreviewItem[];
+}
+
+const { eyebrow, title, intro, items } = Astro.props;
+const [lead, ...rest] = items;
+---
+
+{lead && (
+	<section class="insights-section">
+		<header class="insights-head">
+			{eyebrow && <p class="insights-eyebrow type-label">{eyebrow}</p>}
+			<h2 class="type-h2">{title}</h2>
+			<p class="insights-intro text-muted">{intro}</p>
+		</header>
+
+		<div class="insights-grid">
+			<article class="insight-lead-card">
+				<div class="insight-topline">
+					<span class="insight-category type-label">{lead.category}</span>
+					<span class="insight-status">{lead.statusLabel}</span>
+				</div>
+				<h3>{lead.title}</h3>
+				<p class="insight-description text-muted">{lead.description}</p>
+				<p class="insight-meta">{lead.meta}</p>
+			</article>
+
+			<div class="insight-list">
+				{rest.map((item) => (
+					<article class="insight-list-item">
+						<div class="insight-topline">
+							<span class="insight-category type-label">{item.category}</span>
+							<span class="insight-status">{item.statusLabel}</span>
+						</div>
+						<h3>{item.title}</h3>
+						<p class="insight-description text-muted">{item.description}</p>
+						<p class="insight-meta">{item.meta}</p>
+					</article>
+				))}
+			</div>
+		</div>
+	</section>
+)}
+
+<style>
+	.insights-section {
+		background: var(--surface-raised);
+		border: 1px solid var(--color-border-sand);
+		border-radius: var(--radius-xl);
+		padding: var(--space-7);
+		box-shadow: var(--shadow-soft);
+	}
+
+	.insights-head {
+		display: grid;
+		gap: 0.8rem;
+		max-width: 47rem;
+	}
+
+	.insights-eyebrow {
+		color: var(--color-terracotta);
+	}
+
+	.insights-intro {
+		margin-bottom: 0;
+	}
+
+	.insights-grid {
+		display: grid;
+		grid-template-columns: minmax(0, 1.2fr) minmax(18rem, 0.95fr);
+		gap: var(--space-4);
+		margin-top: var(--space-5);
+	}
+
+	.insight-lead-card,
+	.insight-list-item {
+		padding: 1.15rem;
+		border-radius: var(--radius-xl);
+		border: 1px solid rgba(113, 88, 62, 0.12);
+		background:
+			linear-gradient(180deg, rgba(255, 253, 249, 0.94), rgba(255, 253, 249, 0.84)),
+			var(--surface-card);
+		box-shadow: var(--shadow-card);
+	}
+
+	.insight-lead-card {
+		display: grid;
+		align-content: start;
+		gap: 1rem;
+		background:
+			radial-gradient(circle at top left, rgba(201, 106, 58, 0.11), transparent 42%),
+			linear-gradient(180deg, rgba(255, 253, 249, 0.95), rgba(255, 253, 249, 0.84)),
+			var(--surface-card);
+	}
+
+	.insight-list {
+		display: grid;
+		gap: 0.9rem;
+	}
+
+	.insight-list-item {
+		display: grid;
+		gap: 0.75rem;
+	}
+
+	.insight-topline {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 1rem;
+	}
+
+	.insight-category {
+		color: var(--color-slate);
+	}
+
+	.insight-status {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		padding: 0.38rem 0.55rem;
+		border-radius: var(--radius-pill);
+		background: rgba(20, 32, 51, 0.06);
+		font-family: var(--font-mono);
+		font-size: var(--text-label);
+		letter-spacing: 0.06em;
+		text-transform: uppercase;
+		color: var(--color-slate);
+	}
+
+	.insight-lead-card h3,
+	.insight-list-item h3 {
+		font-size: var(--text-h3);
+		line-height: 1.12;
+	}
+
+	.insight-description {
+		margin: 0;
+		font-size: var(--text-small);
+		line-height: 1.7;
+	}
+
+	.insight-meta {
+		margin: 0;
+		font-family: var(--font-mono);
+		font-size: var(--text-label);
+		letter-spacing: 0.05em;
+		text-transform: uppercase;
+		color: var(--color-terracotta-active);
+	}
+
+	@media (max-width: 1024px) {
+		.insights-grid {
+			grid-template-columns: 1fr;
+		}
+	}
+
+	@media (max-width: 640px) {
+		.insights-section {
+			padding: 1.375rem;
+		}
+
+		.insight-topline {
+			flex-direction: column;
+			align-items: start;
+		}
+	}
+</style>
