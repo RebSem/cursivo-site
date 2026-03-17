@@ -7,8 +7,8 @@ export interface FooterLinkGroup {
 
 export const localeLinks: LocaleLink[] = [
 	{ code: "en", label: "EN", href: "/" },
-	{ code: "ru", label: "RU", href: "/ru/" },
-	{ code: "ar", label: "AR", href: "/ar/" },
+	// { code: "ru", label: "RU", href: "/ru/" },
+	// { code: "ar", label: "AR", href: "/ar/" },
 ];
 
 export const navigationByLocale: Record<Locale, NavItem[]> = {

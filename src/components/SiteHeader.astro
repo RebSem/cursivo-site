@@ -30,6 +30,7 @@ const requestDemoHref = ctaHref ?? `${currentLocaleHome}#contact`;
 			))}
 		</nav>
 
+		{/* 
 		<nav class="locale-nav" aria-label="Locales">
 			{localeLinks.map((item) => (
 				<a class:list={["locale-link", item.code === currentLocale && "is-active"]} href={item.href}>
@@ -37,6 +38,7 @@ const requestDemoHref = ctaHref ?? `${currentLocaleHome}#contact`;
 				</a>
 			))}
 		</nav>
+		*/}
 
 		<a class="site-header-cta" href={requestDemoHref}>Request demo</a>
 	</div>
@@ -56,7 +58,7 @@ const requestDemoHref = ctaHref ?? `${currentLocaleHome}#contact`;
 	.site-header-inner {
 		position: relative;
 		display: grid;
-		grid-template-columns: auto minmax(0, 1fr) auto auto;
+		grid-template-columns: auto minmax(0, 1fr) auto;
 		align-items: center;
 		gap: clamp(0.85rem, 1.8vw, 1.5rem);
 		padding: 0.92rem clamp(0.95rem, 1.8vw, 1.3rem);

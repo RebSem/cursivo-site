@@ -582,7 +582,7 @@ export const homeContentByLocale: Record<Locale, HomeContent> = {
 		footerTitle: "Cursivo",
 		footerCopy: "Multilingual AI CRM for car rental operators.",
 		footerMetaLabel: "Locales",
-		footerMetaValue: "English, Russian, and Arabic with route-first structure",
+		footerMetaValue: "English",
 		finalCtaEyebrow: "Final CTA",
 		finalCtaTitle: "Keep the next step simple: inspect the public build or start the conversation directly.",
 		finalCtaIntro:

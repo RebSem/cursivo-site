@@ -7,17 +7,7 @@ export const localePaths: Record<Locale, string> = {
 };
 
 export function getSiteUrl(): URL | null {
-	const value = import.meta.env.PUBLIC_SITE_URL?.trim();
-
-	if (!value) {
-		return null;
-	}
-
-	try {
-		return new URL(value.endsWith("/") ? value : `${value}/`);
-	} catch {
-		return null;
-	}
+	return new URL("https://cursivo.xyz/");
 }
 
 export function getLocalePath(locale: Locale): string {
