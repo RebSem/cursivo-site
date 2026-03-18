@@ -38,13 +38,17 @@ const fallbackTask = {
 };
 ---
 
-<div class="crm-hero-sim" data-crm-hero-sim data-enhanced="false" aria-hidden="true">
+<div class="crm-hero-sim" data-crm-hero-sim data-enhanced="false">
+	<div class="sr-only">
+		Live rental pipeline simulation showing incoming requests from WhatsApp, Telegram, and Website moving through stages: New request, Quote sent, and Reserved.
+	</div>
 	<div class="crm-hero-sim-board">
 		<div class="crm-hero-sim-board-glow"></div>
 
 		<div class="crm-hero-sim-header">
 			<div>
 				<strong>Live rental pipeline</strong>
+				<span class="sr-only">Status:</span>
 				<span>Conveyor-style CRM movement</span>
 			</div>
 			<p>One deal moves at a time, keeping the board clean and focused.</p>
@@ -52,12 +56,12 @@ const fallbackTask = {
 
 		<div class="crm-hero-sim-stage-grid">
 			{stages.map((stage, stageIndex) => (
-				<section class="crm-hero-sim-stage">
+				<section class="crm-hero-sim-stage" aria-label={`Pipeline stage: ${stage}`}>
 					<header>
 						<span>{stage}</span>
 					</header>
 					<div class="crm-hero-sim-stage-body" data-stage-body>
-						<div class="crm-hero-sim-slot"></div>
+						<div class="crm-hero-sim-slot" aria-hidden="true"></div>
 						<div class="crm-hero-sim-fallback-stack">
 							{snapshotCards
 								.filter((card) => card.stage === stageIndex)
@@ -82,12 +86,12 @@ const fallbackTask = {
 				</section>
 			))}
 
-			<div class="crm-hero-sim-card-layer" data-card-layer></div>
+			<div class="crm-hero-sim-card-layer" data-card-layer aria-hidden="true"></div>
 		</div>
 
 		<div class="crm-hero-sim-footer">
-			<div class="crm-hero-sim-task">
-				<p class="crm-hero-sim-task-label">Manager task</p>
+			<div class="crm-hero-sim-task" aria-live="polite">
+				<p class="crm-hero-sim-task-label">Current Manager task</p>
 				<strong data-task-title>{fallbackTask.title}</strong>
 				<span data-task-meta>{fallbackTask.meta}</span>
 			</div>
@@ -458,7 +462,6 @@ const fallbackTask = {
 		const roots = document.querySelectorAll("[data-crm-hero-sim]");
 
 		const stageLabels = ["New request", "Quote sent", "Reserved"];
-		const stageStatuses = ["Source landed", "Quote sent", "Reservation confirmed"];
 
 		const sources = [
 			{ label: "Telegram", capture: "Captured from Telegram" },

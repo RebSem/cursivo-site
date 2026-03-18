@@ -15,15 +15,15 @@ export interface FinalCtaLink extends CtaLink {
 export const heroCtasByLocale: Record<Locale, CtaLink[]> = {
 	en: [
 		{ label: "Request pilot or demo", href: telegramHref },
-		{ label: "See how it works", href: "#how-it-works" },
+		{ label: "See how it works", href: "/#how-it-works" },
 	],
 	ru: [
 		{ label: "Запросить pilot или demo", href: telegramHref },
-		{ label: "Смотреть как это работает", href: "#how-it-works" },
+		{ label: "Смотреть как это работает", href: "/ru/#how-it-works" },
 	],
 	ar: [
 		{ label: "اطلب pilot أو demo", href: telegramHref },
-		{ label: "اعرض كيف يعمل", href: "#how-it-works" },
+		{ label: "اعرض كيف يعمل", href: "/ar/#how-it-works" },
 	],
 };
 
@@ -70,7 +70,7 @@ export const finalCtasByLocale: Record<Locale, FinalCtaLink[]> = {
 	],
 	ar: [
 		{
-			label: "اطلب pilot أو demo",
+			label: "اطلب pilot или demo",
 			href: telegramHref,
 			meta: "تواصل عبر تيليجرام",
 			tone: "primary",

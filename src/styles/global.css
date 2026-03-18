@@ -1,13 +1,24 @@
-@import "@fontsource/space-grotesk/500.css";
-@import "@fontsource/space-grotesk/700.css";
-@import "@fontsource/manrope/400.css";
-@import "@fontsource/manrope/500.css";
-@import "@fontsource/manrope/600.css";
-@import "@fontsource/manrope/700.css";
-@import "@fontsource/ibm-plex-mono/500.css";
-@import "@fontsource/noto-sans-arabic/400.css";
-@import "@fontsource/noto-sans-arabic/500.css";
-@import "@fontsource/noto-sans-arabic/700.css";
+/* Fonts: Specific subsets for performance */
+@import "@fontsource/space-grotesk/latin-500.css";
+@import "@fontsource/space-grotesk/latin-700.css";
+
+@import "@fontsource/manrope/latin-400.css";
+@import "@fontsource/manrope/cyrillic-400.css";
+@import "@fontsource/manrope/latin-500.css";
+@import "@fontsource/manrope/cyrillic-500.css";
+@import "@fontsource/manrope/latin-600.css";
+@import "@fontsource/manrope/cyrillic-600.css";
+@import "@fontsource/manrope/latin-700.css";
+@import "@fontsource/manrope/cyrillic-700.css";
+
+@import "@fontsource/ibm-plex-mono/latin-500.css";
+
+@import "@fontsource/noto-sans-arabic/arabic-400.css";
+@import "@fontsource/noto-sans-arabic/latin-400.css";
+@import "@fontsource/noto-sans-arabic/arabic-500.css";
+@import "@fontsource/noto-sans-arabic/latin-500.css";
+@import "@fontsource/noto-sans-arabic/arabic-700.css";
+@import "@fontsource/noto-sans-arabic/latin-700.css";
 
 :root {
 	color-scheme: light;
@@ -15,9 +26,9 @@
 	--color-sand: #f5efe6;
 	--color-ivory: #fffdf9;
 	--color-ink: #142033;
-	--color-slate: #5f6d80;
-	--color-terracotta: #c96a3a;
-	--color-terracotta-active: #934822;
+	--color-slate: #4b596a;
+	--color-terracotta: #a64d25;
+	--color-terracotta-active: #823a1a;
 	--color-navy: #284766;
 	--color-success: #2f8a62;
 	--color-warning: #ad6a27;
@@ -193,6 +204,18 @@ select {
 
 .text-muted {
 	color: var(--color-slate);
+}
+
+.sr-only {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	padding: 0;
+	margin: -1px;
+	overflow: hidden;
+	clip: rect(0, 0, 0, 0);
+	white-space: nowrap;
+	border-width: 0;
 }
 
 .site-shell {

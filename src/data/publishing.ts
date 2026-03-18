@@ -73,7 +73,8 @@ export function getCollectionLocaleLinks(
 	collection: PublishCollection,
 	overridePaths?: Partial<Record<Locale, string>>,
 ): LocaleLink[] {
-	return (["en", "ru", "ar"] as Locale[]).map((locale) => ({
+	// Only return English for now
+	return (["en"] as Locale[]).map((locale) => ({
 		code: locale,
 		label: locale.toUpperCase(),
 		href: overridePaths?.[locale] ?? getCollectionIndexPath(collection, locale),
@@ -164,7 +165,7 @@ export const publishIndexCopyByLocale: Record<
 		blog: {
 			path: blogIndexPaths.ar,
 			alternatePaths: blogIndexPaths,
-			title: "Cursivo Blog | مقالات تشغيلية لفرق التأجير",
+			title: "Cursivo Blog | مقالات تحريرية لفرق التأجير",
 			description:
 				"مقالات تحريرية عن طلبات الدردشة وحدود الذكاء الاصطناعي والتشغيل متعدد اللغات والواقع العملي لتحويل الطلب إلى سير عمل قابل للتنفيذ.",
 			eyebrow: "مجلة تحريرية",

@@ -23,15 +23,11 @@ export const navigationByLocale: Record<Locale, NavItem[]> = {
 		{ label: "Главная", href: "/ru/" },
 		{ label: "Продукт", href: "/ru/product/" },
 		{ label: "Блог", href: "/ru/blog/" },
-		// TODO: uncomment when cases are ready.
-		// { label: "Кейсы", href: "/cases/" },
 	],
 	ar: [
 		{ label: "الرئيسية", href: "/ar/" },
-		{ label: "المنتج", href: "/ar/product/" },
+		{ label: "المنتг", href: "/ar/product/" },
 		{ label: "المدونة", href: "/ar/blog/" },
-		// TODO: uncomment when cases are ready.
-		// { label: "دراسات الحالة", href: "/cases/" },
 	],
 };
 

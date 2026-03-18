@@ -1,3 +1,4 @@
+import type { ImageMetadata } from "astro";
 import type { FinalCtaLink } from "./ctas";
 
 export type Locale = "en" | "ru" | "ar";
@@ -52,7 +53,7 @@ export interface InsightMetric {
 }
 
 export interface ScreenshotAsset {
-	src: string;
+	src: string | ImageMetadata;
 	alt: string;
 }
 

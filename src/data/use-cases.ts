@@ -37,7 +37,8 @@ export function getUseCaseEntryPath(locale: Locale, translationKey: string) {
 export function getUseCaseLocaleLinks(
 	overridePaths?: Partial<Record<Locale, string>>,
 ): LocaleLink[] {
-	return (["en", "ru", "ar"] as Locale[]).map((locale) => ({
+	// Only return English for now
+	return (["en"] as Locale[]).map((locale) => ({
 		code: locale,
 		label: locale.toUpperCase(),
 		href: overridePaths?.[locale] ?? useCaseIndexPaths[locale],
@@ -119,7 +120,7 @@ export const useCaseIndexCopyByLocale: Record<Locale, UseCaseIndexCopy> = {
 		eyebrow: "مكتبة الحالات",
 		heroTitle: "صفحات تشغيلية للمشترين الذين يريدون رؤية المنتج ضمن سير العمل الحقيقي لديهم.",
 		intro:
-			"تركز هذه الصفحات على سياقات تشغيلية محددة في التأجير بدلا من تكرار قصة الصفحة الرئيسية. كل صفحة تبقى مرتبطة بسير العمل الفعلي: الطلب الوارد والتأهيل وسياق الفرع وhandoff الجاهز للمدير.",
+			"تركز هذه الصفحات على سياقات تشغيلية محددة في التأجير بدلا من تكرار قصة الصفحة الرئيسية. كل صفحة تبقى مرتبطة بسير العمل الفعلي: الطلб الوارد والتأهيل وسياق الفرع وhandoff الجاهز للمدير.",
 		emptyLabel: "لا توجد حالات منشورة لهذه اللغة بعد.",
 		finalCtaEyebrow: "الخطوة التالية",
 		finalCtaTitle: "انتقل من الحالة إلى صفحة المنتج أو واصل التواصل مباشرة.",

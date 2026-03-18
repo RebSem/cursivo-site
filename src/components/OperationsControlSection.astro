@@ -1,4 +1,6 @@
 ---
+import { Image } from "astro:assets";
+
 interface StripItem {
 	label: string;
 	value: string;
@@ -22,7 +24,7 @@ interface InsightMetric {
 }
 
 interface ScreenshotAsset {
-	src: string;
+	src: any; // Using any to avoid complex ImageMetadata vs string conflicts in Astro's Image component
 	alt: string;
 }
 
@@ -108,7 +110,16 @@ const {
 
 			{screenshot && (
 				<div class="ops-screenshot-shell">
-					<img src={screenshot.src} alt={screenshot.alt} class="ops-screenshot" loading="lazy" />
+					<Image
+						src={screenshot.src}
+						alt={screenshot.alt}
+						class="ops-screenshot"
+						width={800}
+						height={500}
+						quality="mid"
+						loading="lazy"
+						decoding="async"
+					/>
 				</div>
 			)}
 
