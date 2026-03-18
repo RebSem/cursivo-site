@@ -1,7 +1,9 @@
 export interface AnalyticsConfig {
-	scriptUrl: string;
-	domain: string;
-	apiHost?: string;
+	posthogToken?: string;
+	posthogHost?: string;
+	scriptUrl?: string; // Legacy / Plausible
+	domain?: string;    // Legacy / Plausible
+	apiHost?: string;   // Legacy / Plausible
 }
 
 function normalizeUrl(value: string) {
@@ -23,17 +25,29 @@ export function getAnalyticsConfig(): AnalyticsConfig | null {
 		return null;
 	}
 
+	const posthogToken = import.meta.env.PUBLIC_POSTHOG_TOKEN?.trim();
+	const posthogHost = import.meta.env.PUBLIC_POSTHOG_HOST?.trim() || "https://eu.i.posthog.com";
+
+	// If PostHog is configured, prioritize it
+	if (posthogToken) {
+		return {
+			posthogToken,
+			posthogHost,
+		};
+	}
+
+	// Legacy config check (Plausible etc)
 	const scriptUrl = normalizeUrl(import.meta.env.PUBLIC_ANALYTICS_SCRIPT_URL ?? "");
 	const domain = import.meta.env.PUBLIC_ANALYTICS_DOMAIN?.trim();
 	const apiHost = normalizeUrl(import.meta.env.PUBLIC_ANALYTICS_API_HOST ?? "");
 
-	if (!scriptUrl || !domain) {
-		return null;
+	if (scriptUrl && domain) {
+		return {
+			scriptUrl,
+			domain,
+			apiHost: apiHost ?? undefined,
+		};
 	}
 
-	return {
-		scriptUrl,
-		domain,
-		apiHost: apiHost ?? undefined,
-	};
+	return null;
 }

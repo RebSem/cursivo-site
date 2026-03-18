@@ -28,6 +28,10 @@ jobs:
 
       - name: Build Astro
         run: npm run build
+        env:
+          PUBLIC_POSTHOG_TOKEN: ${{ vars.PUBLIC_POSTHOG_TOKEN }}
+          PUBLIC_POSTHOG_HOST: ${{ vars.PUBLIC_POSTHOG_HOST }}
+          PUBLIC_ANALYTICS_ENABLED: "true"
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
