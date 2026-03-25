@@ -67,50 +67,67 @@ const { href, thresholdSelector } = Astro.props;
 
 <script is:inline>
 	(() => {
-		const button = document.querySelector("[data-sticky-demo-button]");
-		if (!(button instanceof HTMLElement)) return;
+		const boot = () => {
+			const button = document.querySelector("[data-sticky-demo-button]");
+			if (!(button instanceof HTMLElement)) return;
 
-		const selector = button.dataset.thresholdSelector;
-		const thresholdNode = selector ? document.querySelector(selector) : null;
-		const footerNode = document.querySelector(".site-footer");
-		let pastThreshold = false;
-		let footerVisible = false;
+			const selector = button.dataset.thresholdSelector;
+			const thresholdNode = selector ? document.querySelector(selector) : null;
+			const footerNode = document.querySelector(".site-footer");
+			let pastThreshold = false;
+			let footerVisible = false;
 
-		const sync = () => {
-			button.classList.toggle("is-visible", pastThreshold && !footerVisible);
-		};
-
-		if (!(thresholdNode instanceof HTMLElement) || !("IntersectionObserver" in window)) {
-			const fallbackSync = () => {
-				pastThreshold = window.scrollY > window.innerHeight * 0.6;
-				sync();
+			const sync = () => {
+				if (footerNode instanceof HTMLElement) {
+					const footerRect = footerNode.getBoundingClientRect();
+					footerVisible = footerRect.top < window.innerHeight - 24;
+				}
+				button.classList.toggle("is-visible", pastThreshold && !footerVisible);
 			};
-			fallbackSync();
-			window.addEventListener("scroll", fallbackSync, { passive: true });
-			return;
-		}
 
-		const observer = new IntersectionObserver(
-			(entries) => {
-				const entry = entries[0];
-				pastThreshold = !entry.isIntersecting;
-				sync();
-			},
-			{ threshold: 0.15 },
-		);
+			if (!(thresholdNode instanceof HTMLElement) || !("IntersectionObserver" in window)) {
+				const fallbackSync = () => {
+					pastThreshold = window.scrollY > window.innerHeight * 0.6;
+					sync();
+				};
+				fallbackSync();
+				window.addEventListener("scroll", fallbackSync, { passive: true });
+				window.addEventListener("resize", fallbackSync);
+				return;
+			}
 
-		observer.observe(thresholdNode);
-
-		if (footerNode instanceof HTMLElement) {
-			const footerObserver = new IntersectionObserver(
+			const observer = new IntersectionObserver(
 				(entries) => {
-					footerVisible = entries[0]?.isIntersecting ?? false;
+					const entry = entries[0];
+					pastThreshold = !entry.isIntersecting;
 					sync();
 				},
-				{ threshold: 0.05, rootMargin: "0px 0px 72px 0px" },
+				{ threshold: 0.15 },
 			);
 
-			footerObserver.observe(footerNode);
+			observer.observe(thresholdNode);
+
+			if (footerNode instanceof HTMLElement) {
+				const footerObserver = new IntersectionObserver(
+					(entries) => {
+						footerVisible = entries[0]?.isIntersecting ?? false;
+						sync();
+					},
+					{ threshold: 0.05, rootMargin: "0px 0px 72px 0px" },
+				);
+
+				footerObserver.observe(footerNode);
+			}
+
+			window.addEventListener("scroll", sync, { passive: true });
+			window.addEventListener("resize", sync);
+			sync();
+		};
+
+		if (document.readyState === "loading") {
+			document.addEventListener("DOMContentLoaded", boot, { once: true });
+		} else {
+			boot();
 		}
 	})();
 </script>
