@@ -7,8 +7,8 @@ export interface FooterLinkGroup {
 
 export const localeLinks: LocaleLink[] = [
 	{ code: "en", label: "EN", href: "/" },
-	// { code: "ru", label: "RU", href: "/ru/" },
-	// { code: "ar", label: "AR", href: "/ar/" },
+	{ code: "ru", label: "RU", href: "/ru/" },
+	{ code: "ar", label: "AR", href: "/ar/" },
 ];
 
 export const navigationByLocale: Record<Locale, NavItem[]> = {
@@ -26,7 +26,7 @@ export const navigationByLocale: Record<Locale, NavItem[]> = {
 	],
 	ar: [
 		{ label: "الرئيسية", href: "/ar/" },
-		{ label: "المنتг", href: "/ar/product/" },
+		{ label: "المنتج", href: "/ar/product/" },
 		{ label: "المدونة", href: "/ar/blog/" },
 	],
 };

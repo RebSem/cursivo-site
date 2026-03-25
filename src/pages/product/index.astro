@@ -2,6 +2,9 @@
 import ProductDeepDivePage from "../../components/ProductDeepDivePage.astro";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import { englishSiteChrome } from "../../data/landing";
+import { getProductContent } from "../../data/product";
+
+const product = getProductContent("en");
 ---
 
 <BaseLayout
@@ -10,13 +13,14 @@ import { englishSiteChrome } from "../../data/landing";
 	lang="en"
 	brandMeta={englishSiteChrome.brandMeta}
 	navItems={englishSiteChrome.navItems}
-	localeLinks={englishSiteChrome.localeLinks}
+	localeLinks={product.localeLinks}
 	currentLocale={englishSiteChrome.currentLocale}
 	footerTitle={englishSiteChrome.footerTitle}
 	footerCopy={englishSiteChrome.footerCopy}
 	footerMetaLabel={englishSiteChrome.footerMetaLabel}
 	footerMetaValue={englishSiteChrome.footerMetaValue}
-	canonicalPath="/product/"
+	canonicalPath={product.path}
+	alternatePaths={product.alternatePaths}
 	ctaHref="#contact"
 >
 	<div class="site-container">

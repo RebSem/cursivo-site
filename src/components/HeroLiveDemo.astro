@@ -360,8 +360,8 @@ const {
 		}
 
 		.hero-demo-grid {
-			grid-template-columns: 1fr;
-			grid-template-rows: auto;
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+			grid-template-rows: auto auto;
 		}
 
 		.demo-card-chat,
@@ -371,6 +371,31 @@ const {
 			grid-column: auto;
 			grid-row: auto;
 			max-width: none;
+		}
+	}
+
+	@media (max-width: 640px) {
+		.hero-demo {
+			min-height: 19rem;
+		}
+
+		.hero-demo-shell {
+			padding: 0.8rem;
+		}
+
+		.hero-demo-grid {
+			grid-template-columns: 1fr;
+			grid-template-rows: auto;
+			gap: 0.75rem;
+		}
+
+		.demo-card {
+			padding: 0.85rem;
+			gap: 0.62rem;
+		}
+
+		.demo-card h3 {
+			font-size: 1rem;
 		}
 	}
 </style>

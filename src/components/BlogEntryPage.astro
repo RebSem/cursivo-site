@@ -141,8 +141,23 @@ const { title, description, date, readTime, tags = [], backHref, Content } = Ast
 	}
 
 	@media (max-width: 720px) {
+		.blog-entry-hero h1 {
+			font-size: clamp(2rem, 9.9vw, 3rem);
+		}
+
 		.blog-entry-cta {
 			grid-template-columns: 1fr;
+		}
+	}
+
+	@media (max-width: 640px) {
+		.blog-entry-actions {
+			width: 100%;
+		}
+
+		.blog-entry-primary,
+		.blog-entry-secondary {
+			flex: 1 1 100%;
 		}
 	}
 </style>

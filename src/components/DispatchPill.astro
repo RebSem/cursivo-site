@@ -24,6 +24,13 @@ const { label, tone = "terracotta" } = Astro.props;
 		white-space: nowrap;
 	}
 
+	:global([dir="rtl"]) .dispatch-pill {
+		font-family: var(--font-arabic);
+		letter-spacing: 0;
+		text-transform: none;
+		white-space: normal;
+	}
+
 	.dispatch-pill::before {
 		content: "";
 		width: 0.45rem;
@@ -61,5 +68,13 @@ const { label, tone = "terracotta" } = Astro.props;
 		color: var(--color-ink);
 		background: rgba(20, 32, 51, 0.06);
 		border-color: rgba(20, 32, 51, 0.12);
+	}
+
+	@media (max-width: 640px) {
+		.dispatch-pill {
+			max-width: 100%;
+			white-space: normal;
+			text-align: start;
+		}
 	}
 </style>

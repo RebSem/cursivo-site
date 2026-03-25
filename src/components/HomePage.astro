@@ -103,11 +103,11 @@ const steps = [
 			</div>
 		</div>
 
-		<div class="home-hero-visual" aria-hidden="true">
-			<div class="hero-grid"></div>
-			<HeroPipelineSimulator />
-		</div>
-	</section>
+			<div class="home-hero-visual" aria-hidden="true">
+				<div class="hero-grid"></div>
+				<HeroPipelineSimulator locale="en" />
+			</div>
+		</section>
 
 	<section class="pain-grid" id="benefits">
 		{painPoints.map((item, index) => (
@@ -803,6 +803,16 @@ const steps = [
 			grid-template-columns: 1fr;
 		}
 
+		.home-hero {
+			min-height: auto;
+			gap: 1.25rem;
+		}
+
+		.home-hero-visual {
+			transform: none;
+			min-height: 22rem;
+		}
+
 		.pain-grid,
 		.steps-grid,
 		.trust-grid {
@@ -815,6 +825,32 @@ const steps = [
 	}
 
 	@media (max-width: 760px) {
+		.home-hero-copy {
+			gap: 0.75rem;
+		}
+
+		.home-hero-copy h1 {
+			max-width: none;
+			font-size: clamp(2.2rem, 10.8vw, 3.25rem);
+		}
+
+		.home-hero-actions {
+			margin-top: 1rem;
+		}
+
+		.home-hero-primary,
+		.home-hero-secondary {
+			padding: 0.82rem 0.95rem;
+		}
+
+		.home-hero-notes {
+			display: none;
+		}
+
+		.home-hero-visual {
+			min-height: auto;
+		}
+
 		.leads-preview,
 		.catalog-preview,
 		.quote-grid {
@@ -834,11 +870,15 @@ const steps = [
 		}
 
 		.home-hero {
-			min-height: auto;
+			gap: 1rem;
 		}
 
 		.home-hero-visual {
-			min-height: 24rem;
+			min-height: auto;
+		}
+
+		.home-hero::after {
+			display: none;
 		}
 	}
 

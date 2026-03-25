@@ -159,6 +159,10 @@ const { items } = Astro.props;
 	}
 
 	@media (max-width: 960px) {
+		.blog-hero h1 {
+			font-size: clamp(2.1rem, 7vw, 3.4rem);
+		}
+
 		.blog-grid {
 			grid-template-columns: repeat(2, minmax(0, 1fr));
 		}
@@ -169,8 +173,21 @@ const { items } = Astro.props;
 	}
 
 	@media (max-width: 640px) {
+		.blog-hero h1 {
+			font-size: clamp(2rem, 9.8vw, 3rem);
+		}
+
 		.blog-grid {
 			grid-template-columns: 1fr;
+		}
+
+		.blog-cta-actions {
+			width: 100%;
+		}
+
+		.blog-cta-primary,
+		.blog-cta-secondary {
+			flex: 1 1 100%;
 		}
 	}
 </style>

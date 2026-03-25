@@ -3,6 +3,7 @@ import { getCollection } from "astro:content";
 import BlogIndexPage from "../../components/BlogIndexPage.astro";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import { englishSiteChrome } from "../../data/landing";
+import { getCollectionLocaleLinks, publishIndexCopyByLocale } from "../../data/publishing";
 
 const entries = (
 	await getCollection(
@@ -25,6 +26,8 @@ const items = entries.map((entry) => ({
 	excerpt: entry.data.excerpt ?? entry.data.description,
 	href: `/blog/${entry.data.translationKey}/`,
 }));
+
+const blogIndexCopy = publishIndexCopyByLocale.en.blog;
 ---
 
 <BaseLayout
@@ -33,13 +36,14 @@ const items = entries.map((entry) => ({
 	lang="en"
 	brandMeta={englishSiteChrome.brandMeta}
 	navItems={englishSiteChrome.navItems}
-	localeLinks={englishSiteChrome.localeLinks}
+	localeLinks={getCollectionLocaleLinks("blog")}
 	currentLocale={englishSiteChrome.currentLocale}
 	footerTitle={englishSiteChrome.footerTitle}
 	footerCopy={englishSiteChrome.footerCopy}
 	footerMetaLabel={englishSiteChrome.footerMetaLabel}
 	footerMetaValue={englishSiteChrome.footerMetaValue}
 	canonicalPath="/blog/"
+	alternatePaths={blogIndexCopy.alternatePaths}
 	ctaHref="/#contact"
 >
 	<div class="site-container">

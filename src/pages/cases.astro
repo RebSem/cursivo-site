@@ -1,4 +1,126 @@
 ---
-// TODO: uncomment when cases are ready.
-return Astro.redirect("/");
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { englishSiteChrome } from "../data/landing";
+import { getUseCaseLocaleLinks, useCaseIndexPaths } from "../data/use-cases";
 ---
+
+<BaseLayout
+	title="Cursivo Use Cases | Route moved"
+	description="Legacy alias for the Cursivo use cases section. Continue to the current use cases index for multilingual rental workflow examples."
+	lang="en"
+	brandMeta={englishSiteChrome.brandMeta}
+	navItems={englishSiteChrome.navItems}
+	localeLinks={getUseCaseLocaleLinks()}
+	currentLocale="en"
+	footerTitle={englishSiteChrome.footerTitle}
+	footerCopy={englishSiteChrome.footerCopy}
+	footerMetaLabel={englishSiteChrome.footerMetaLabel}
+	footerMetaValue={englishSiteChrome.footerMetaValue}
+	canonicalPath={useCaseIndexPaths.en}
+	alternatePaths={useCaseIndexPaths}
+	ctaHref="/#contact"
+>
+	<div class="site-container">
+		<section class="cases-redirect section-card">
+			<p class="type-label cases-eyebrow">Route moved</p>
+			<h1 class="type-display">Use cases now live at <span>/use-cases/</span>.</h1>
+			<p class="type-body-lg text-muted cases-copy">
+				This legacy route is kept only as an alias. You are being redirected to the current use
+				cases index.
+			</p>
+			<div class="cases-actions">
+				<a class="cases-link is-primary" href="/use-cases/">Open use cases</a>
+				<a class="cases-link" href="/ru/use-cases/">RU</a>
+				<a class="cases-link" href="/ar/use-cases/">AR</a>
+			</div>
+		</section>
+	</div>
+
+	<script is:inline>
+		if (typeof window !== "undefined") {
+			window.location.replace("/use-cases/");
+		}
+	</script>
+</BaseLayout>
+
+<style>
+	.cases-redirect {
+		display: grid;
+		gap: 1rem;
+		min-height: min(56vh, 34rem);
+		place-content: center;
+	}
+
+	.cases-eyebrow {
+		margin-bottom: 0.25rem;
+		color: var(--color-terracotta);
+	}
+
+	.cases-redirect h1 {
+		max-width: 12ch;
+	}
+
+	.cases-redirect h1 span {
+		color: var(--color-terracotta-active);
+	}
+
+	.cases-copy {
+		max-width: 38rem;
+		margin: 0;
+	}
+
+	.cases-actions {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.75rem;
+		margin-top: 0.5rem;
+	}
+
+	.cases-link {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		padding: 0.8rem 1.05rem;
+		border-radius: var(--radius-pill);
+		border: 1px solid rgba(113, 88, 62, 0.14);
+		background: rgba(255, 253, 249, 0.8);
+		color: var(--color-ink);
+		font-weight: 600;
+		text-decoration: none;
+		transition:
+			transform 160ms ease,
+			border-color 160ms ease,
+			background-color 160ms ease;
+	}
+
+	.cases-link:hover {
+		transform: translateY(-1px);
+		border-color: rgba(201, 106, 58, 0.28);
+		background: rgba(255, 253, 249, 0.96);
+	}
+
+	.cases-link.is-primary {
+		background: var(--color-terracotta);
+		border-color: rgba(147, 72, 34, 0.2);
+		color: var(--color-ivory);
+	}
+
+	@media (max-width: 640px) {
+		.cases-redirect {
+			min-height: auto;
+			padding-block: 0.4rem;
+		}
+
+		.cases-redirect h1 {
+			font-size: clamp(2rem, 10vw, 3rem);
+		}
+
+		.cases-actions {
+			flex-direction: column;
+		}
+
+		.cases-link {
+			width: 100%;
+		}
+	}
+</style>
