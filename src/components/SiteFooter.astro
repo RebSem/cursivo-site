@@ -1,16 +1,18 @@
 ---
+import LocaleSwitcher from "./LocaleSwitcher.astro";
 import { footerLinkGroupsByLocale } from "../data/navigation";
-import type { Locale } from "../data/site";
+import type { Locale, LocaleLink } from "../data/site";
 
 interface Props {
 	footerTitle: string;
 	footerCopy: string;
 	footerMetaLabel: string;
 	footerMetaValue: string;
+	localeLinks: LocaleLink[];
 	currentLocale: Locale;
 }
 
-const { footerTitle, footerCopy, footerMetaLabel, footerMetaValue, currentLocale } = Astro.props;
+const { footerTitle, footerCopy, footerMetaLabel, footerMetaValue, localeLinks, currentLocale } = Astro.props;
 const linkGroups = footerLinkGroupsByLocale[currentLocale];
 ---
 
@@ -45,6 +47,14 @@ const linkGroups = footerLinkGroupsByLocale[currentLocale];
 		<div class="site-footer-meta">
 			<p class="type-label">{footerMetaLabel}</p>
 			<p class="text-muted">{footerMetaValue}</p>
+			<div class="site-footer-locale">
+				<LocaleSwitcher
+					localeLinks={localeLinks}
+					currentLocale={currentLocale}
+					label="Footer language switcher"
+					mode="footer"
+				/>
+			</div>
 		</div>
 	</div>
 </footer>
@@ -137,9 +147,27 @@ const linkGroups = footerLinkGroupsByLocale[currentLocale];
 	}
 
 	.site-footer-meta {
+		display: grid;
+		gap: 0.75rem;
 		text-align: right;
 		max-width: 16rem;
 		justify-self: end;
+	}
+
+	.site-footer-locale {
+		justify-self: end;
+	}
+
+	:global([dir="rtl"]) .site-footer-brand {
+		text-align: right;
+	}
+
+	:global([dir="rtl"]) .site-footer-brand-row {
+		flex-direction: row-reverse;
+	}
+
+	:global([dir="rtl"]) .site-footer-meta {
+		text-align: right;
 	}
 
 	@media (max-width: 720px) {
@@ -153,6 +181,20 @@ const linkGroups = footerLinkGroupsByLocale[currentLocale];
 
 		.site-footer-meta {
 			text-align: left;
+			justify-self: start;
+		}
+
+		.site-footer-locale {
+			justify-self: start;
+		}
+
+		:global([dir="rtl"]) .site-footer-meta {
+			text-align: right;
+			justify-self: end;
+		}
+
+		:global([dir="rtl"]) .site-footer-locale {
+			justify-self: end;
 		}
 	}
 </style>

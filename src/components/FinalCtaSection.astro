@@ -111,6 +111,12 @@ const isExternalLink = (href: string) => href.startsWith("http://") || href.star
 		color: var(--color-slate);
 	}
 
+	:global([dir="rtl"]) .final-cta-link-meta {
+		font-family: var(--font-arabic);
+		letter-spacing: 0;
+		text-transform: none;
+	}
+
 	.tone-primary {
 		background: var(--color-terracotta);
 		border-color: rgba(147, 72, 34, 0.18);
@@ -143,7 +149,15 @@ const isExternalLink = (href: string) => href.startsWith("http://") || href.star
 
 	@media (max-width: 640px) {
 		.final-cta-section {
-			padding: 1.375rem;
+			padding: 1.25rem;
+		}
+
+		.final-cta-shell {
+			gap: 1rem;
+		}
+
+		.final-cta-link {
+			padding: 0.95rem 0.95rem 1rem;
 		}
 	}
 </style>

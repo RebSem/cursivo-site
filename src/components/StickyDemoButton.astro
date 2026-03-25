@@ -15,7 +15,7 @@ const { href, thresholdSelector } = Astro.props;
 	.sticky-demo-button {
 		position: fixed;
 		right: var(--page-gutter);
-		bottom: var(--page-gutter);
+		bottom: calc(var(--page-gutter) + env(safe-area-inset-bottom, 0px));
 		z-index: 40;
 		display: inline-flex;
 		align-items: center;
@@ -60,6 +60,7 @@ const { href, thresholdSelector } = Astro.props;
 		.sticky-demo-button {
 			left: var(--page-gutter);
 			right: var(--page-gutter);
+			padding: 0.95rem 1.25rem;
 		}
 	}
 </style>
@@ -71,23 +72,45 @@ const { href, thresholdSelector } = Astro.props;
 
 		const selector = button.dataset.thresholdSelector;
 		const thresholdNode = selector ? document.querySelector(selector) : null;
-		const toggle = (visible) => button.classList.toggle("is-visible", visible);
+		const footerNode = document.querySelector(".site-footer");
+		let pastThreshold = false;
+		let footerVisible = false;
+
+		const sync = () => {
+			button.classList.toggle("is-visible", pastThreshold && !footerVisible);
+		};
 
 		if (!(thresholdNode instanceof HTMLElement) || !("IntersectionObserver" in window)) {
-			const sync = () => toggle(window.scrollY > window.innerHeight * 0.6);
-			sync();
-			window.addEventListener("scroll", sync, { passive: true });
+			const fallbackSync = () => {
+				pastThreshold = window.scrollY > window.innerHeight * 0.6;
+				sync();
+			};
+			fallbackSync();
+			window.addEventListener("scroll", fallbackSync, { passive: true });
 			return;
 		}
 
 		const observer = new IntersectionObserver(
 			(entries) => {
 				const entry = entries[0];
-				toggle(!entry.isIntersecting);
+				pastThreshold = !entry.isIntersecting;
+				sync();
 			},
 			{ threshold: 0.15 },
 		);
 
 		observer.observe(thresholdNode);
+
+		if (footerNode instanceof HTMLElement) {
+			const footerObserver = new IntersectionObserver(
+				(entries) => {
+					footerVisible = entries[0]?.isIntersecting ?? false;
+					sync();
+				},
+				{ threshold: 0.05, rootMargin: "0px 0px 72px 0px" },
+			);
+
+			footerObserver.observe(footerNode);
+		}
 	})();
 </script>

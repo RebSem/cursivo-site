@@ -241,12 +241,24 @@ const {
 
 	@media (max-width: 640px) {
 		.multilingual-section {
-			padding: 1.375rem;
+			padding: 1.25rem;
 		}
 
 		.language-card-top {
 			flex-direction: column;
 			align-items: start;
+		}
+
+		.rtl-preview-row {
+			flex-direction: column;
+			align-items: stretch;
+			gap: 0.35rem;
+		}
+
+		.rtl-preview-key {
+			font-family: var(--font-arabic);
+			letter-spacing: 0;
+			text-transform: none;
 		}
 	}
 </style>

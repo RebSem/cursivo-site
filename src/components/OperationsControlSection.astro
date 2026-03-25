@@ -326,6 +326,13 @@ const {
 		background: rgba(255, 253, 249, 0.84);
 	}
 
+	:global([dir="rtl"]) .ops-branch-status,
+	:global([dir="rtl"]) .ops-chip {
+		font-family: var(--font-arabic);
+		letter-spacing: 0;
+		text-transform: none;
+	}
+
 	.ops-insight-card {
 		display: grid;
 		align-content: start;
@@ -451,7 +458,7 @@ const {
 		}
 
 		.ops-insight-metrics {
-			grid-template-columns: repeat(4, minmax(0, 1fr));
+			grid-template-columns: repeat(2, minmax(0, 1fr));
 		}
 	}
 
@@ -464,6 +471,11 @@ const {
 		.ops-branch-head {
 			flex-direction: column;
 			align-items: start;
+		}
+
+		.ops-branch-status,
+		.ops-chip {
+			white-space: normal;
 		}
 
 		.ops-insight-metrics {

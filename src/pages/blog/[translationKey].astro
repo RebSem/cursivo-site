@@ -4,8 +4,10 @@ import BlogEntryPage from "../../components/BlogEntryPage.astro";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import { englishSiteChrome } from "../../data/landing";
 import {
+	buildLocaleLinksForEntry,
 	formatPublishDate,
 	getEntryByTranslationKey,
+	getEntryTranslations,
 	getLocalizedEntries,
 } from "../../data/content";
 
@@ -23,6 +25,15 @@ if (!entry) {
 	throw new Error("Blog entry not found");
 }
 
+const translations = await getEntryTranslations("blog", entry.data.translationKey);
+const localeLinks = buildLocaleLinksForEntry("blog", translations);
+const alternatePaths = localeLinks.reduce(
+	(accumulator, link) => {
+		accumulator[link.code] = link.href;
+		return accumulator;
+	},
+	{} as Record<"en" | "ru" | "ar", string>,
+);
 const { Content } = await render(entry);
 ---
 
@@ -32,13 +43,14 @@ const { Content } = await render(entry);
 	lang="en"
 	brandMeta={englishSiteChrome.brandMeta}
 	navItems={englishSiteChrome.navItems}
-	localeLinks={englishSiteChrome.localeLinks}
+	localeLinks={localeLinks}
 	currentLocale={englishSiteChrome.currentLocale}
 	footerTitle={englishSiteChrome.footerTitle}
 	footerCopy={englishSiteChrome.footerCopy}
 	footerMetaLabel={englishSiteChrome.footerMetaLabel}
 	footerMetaValue={englishSiteChrome.footerMetaValue}
 	canonicalPath={`/blog/${entry.data.translationKey}/`}
+	alternatePaths={alternatePaths}
 	ctaHref="/#contact"
 	openGraphType="article"
 >

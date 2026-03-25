@@ -73,8 +73,7 @@ export function getCollectionLocaleLinks(
 	collection: PublishCollection,
 	overridePaths?: Partial<Record<Locale, string>>,
 ): LocaleLink[] {
-	// Only return English for now
-	return (["en"] as Locale[]).map((locale) => ({
+	return (["en", "ru", "ar"] as Locale[]).map((locale) => ({
 		code: locale,
 		label: locale.toUpperCase(),
 		href: overridePaths?.[locale] ?? getCollectionIndexPath(collection, locale),

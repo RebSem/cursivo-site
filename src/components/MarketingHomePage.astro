@@ -2,9 +2,9 @@
 import BaseLayout from "../layouts/BaseLayout.astro";
 import { buildHomepageJsonLd } from "../data/jsonld";
 import DispatchPill from "./DispatchPill.astro";
-import FinalCtaSection from "./FinalCtaSection.astro";
-import HeroLiveDemo from "./HeroLiveDemo.astro";
+import HeroPipelineSimulator from "./HeroPipelineSimulator.astro";
 import OperationsControlSection from "./OperationsControlSection.astro";
+import RequestDemoSection from "./RequestDemoSection.astro";
 import type { HomeContent } from "../data/site";
 
 interface Props {
@@ -60,16 +60,7 @@ const isExternalLink = (href: string) => href.startsWith("http://") || href.star
 					</div>
 				</div>
 				<div class="asym-side">
-					<HeroLiveDemo
-						intakeCard={content.routeCards[0]}
-						qualificationCard={content.routeCards[1]}
-						quoteCard={content.routeCards[2]}
-						handoffCard={content.routeCards[3]}
-						message={content.heroDemoMessage}
-						signals={content.heroDemoSignals}
-						quoteItems={content.heroDemoQuoteItems}
-						managerItems={content.heroDemoManagerItems}
-					/>
+					<HeroPipelineSimulator locale={content.locale} />
 				</div>
 			</section>
 
@@ -118,16 +109,11 @@ const isExternalLink = (href: string) => href.startsWith("http://") || href.star
 				/>
 			</div>
 
-			<div id="contact">
-				<FinalCtaSection
-					eyebrow={content.finalCtaEyebrow}
-					title={content.finalCtaTitle}
-					intro={content.finalCtaIntro}
-					links={content.finalCtaLinks}
-				/>
+				<div id="contact">
+					<RequestDemoSection locale={content.locale} />
+				</div>
 			</div>
 		</div>
-	</div>
 </BaseLayout>
 
 <style>
@@ -389,6 +375,23 @@ const isExternalLink = (href: string) => href.startsWith("http://") || href.star
 	}
 
 	@media (max-width: 900px) {
+		.hero {
+			gap: 1rem;
+		}
+
+		.hero-copy {
+			gap: 0.72rem;
+		}
+
+		.hero-copy :global(h1) {
+			max-width: none;
+			font-size: clamp(2.45rem, 7.8vw, 4rem);
+		}
+
+		.pill-row {
+			margin-bottom: 0.8rem;
+		}
+
 		.value-grid {
 			grid-template-columns: 1fr;
 		}
@@ -396,7 +399,7 @@ const isExternalLink = (href: string) => href.startsWith("http://") || href.star
 
 	@media (max-width: 640px) {
 		.hero-copy {
-			order: 1;
+			order: 0;
 		}
 
 		.hero-copy :global(h1) {
@@ -404,11 +407,16 @@ const isExternalLink = (href: string) => href.startsWith("http://") || href.star
 		}
 
 		.hero-outcomes {
-			grid-template-columns: 1fr;
+			display: none;
+		}
+
+		.hero-subnote {
+			display: none;
 		}
 
 		.links {
 			width: 100%;
+			margin-top: 0.8rem;
 		}
 
 		.links a {

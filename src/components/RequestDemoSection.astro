@@ -1,70 +1,181 @@
 ---
+import type { Locale } from "../data/site";
+
+interface ContactChannel {
+	title: string;
+	meta: string;
+	href: string;
+	icon: "telegram" | "whatsapp" | "linkedin";
+}
+
 interface Props {
 	id?: string;
+	locale?: Locale;
 	eyebrow?: string;
 	title?: string;
 	intro?: string;
+	points?: string[];
+	channels?: ContactChannel[];
 }
+
+const contactCopyByLocale = {
+	en: {
+		eyebrow: "Contact",
+		title: "Ready to see it in action?",
+		intro:
+			"Talk directly with the CEO. We'll show you how Cursivo handles lead intake, quote prep, and manager follow-up without the fluff.",
+		points: [
+			"Dubai rental workflows",
+			"WhatsApp, Site, Telegram and Instagram",
+			"Live operator handoff",
+		],
+		channels: [
+			{
+				title: "Telegram",
+				meta: "Chat with CEO",
+				href: "https://t.me/Michael_Semenov",
+				icon: "telegram",
+			},
+			{
+				title: "WhatsApp",
+				meta: "Direct message",
+				href: "https://wa.me/79822306019",
+				icon: "whatsapp",
+			},
+			{
+				title: "LinkedIn",
+				meta: "Connect on LinkedIn",
+				href: "https://www.linkedin.com/in/mikhail-semenovv/",
+				icon: "linkedin",
+			},
+		],
+	},
+	ru: {
+		eyebrow: "Контакт",
+		title: "Готовы посмотреть это в работе?",
+		intro:
+			"Напрямую поговорите с CEO. Мы покажем, как Cursivo ведет intake лидов, подготовку оффера и handoff менеджеру без лишнего шума.",
+		points: [
+			"Workflow для проката в Дубае",
+			"WhatsApp, сайт, Telegram и Instagram",
+			"Живой handoff оператору",
+		],
+		channels: [
+			{
+				title: "Telegram",
+				meta: "Написать CEO",
+				href: "https://t.me/Michael_Semenov",
+				icon: "telegram",
+			},
+			{
+				title: "WhatsApp",
+				meta: "Напрямую в чат",
+				href: "https://wa.me/79822306019",
+				icon: "whatsapp",
+			},
+			{
+				title: "LinkedIn",
+				meta: "Связаться в LinkedIn",
+				href: "https://www.linkedin.com/in/mikhail-semenovv/",
+				icon: "linkedin",
+			},
+		],
+	},
+	ar: {
+		eyebrow: "تواصل",
+		title: "جاهز لرؤيته أثناء العمل؟",
+		intro:
+			"تحدث مباشرة مع CEO وسنريك كيف تدير Cursivo التقاط الطلبات وتجهيز العرض وتسليم المدير من دون ضجيج أو خطوات زائدة.",
+		points: [
+			"سير عمل تأجير دبي",
+			"WhatsApp والموقع وTelegram وInstagram",
+			"تسليم حي للمشغل",
+		],
+		channels: [
+			{
+				title: "Telegram",
+				meta: "راسل CEO",
+				href: "https://t.me/Michael_Semenov",
+				icon: "telegram",
+			},
+			{
+				title: "WhatsApp",
+				meta: "رسالة مباشرة",
+				href: "https://wa.me/79822306019",
+				icon: "whatsapp",
+			},
+			{
+				title: "LinkedIn",
+				meta: "تواصل عبر LinkedIn",
+				href: "https://www.linkedin.com/in/mikhail-semenovv/",
+				icon: "linkedin",
+			},
+		],
+	},
+} as const;
 
 const {
 	id = "contact",
-	eyebrow = "Contact",
-	title = "Ready to see it in action?",
-	intro = "Talk directly with the CEO. We'll show you how Cursivo handles lead intake, quote prep, and manager follow-up without the fluff.",
+	locale = "en",
+	eyebrow,
+	title,
+	intro,
+	points,
+	channels,
 } = Astro.props;
+
+const copy = contactCopyByLocale[locale];
+const sectionEyebrow = eyebrow ?? copy.eyebrow;
+const sectionTitle = title ?? copy.title;
+const sectionIntro = intro ?? copy.intro;
+const sectionPoints = points ?? copy.points;
+const sectionChannels = channels ?? copy.channels;
 ---
 
 <section class="request-demo section-card" id={id} data-reveal="soft">
 	<div class="request-demo-copy">
-		<p class="type-label request-demo-eyebrow">{eyebrow}</p>
-		<h2 class="type-h2">{title}</h2>
-		<p class="type-body-lg text-muted">{intro}</p>
+		<p class="type-label request-demo-eyebrow">{sectionEyebrow}</p>
+		<h2 class="type-h2">{sectionTitle}</h2>
+		<p class="type-body-lg text-muted">{sectionIntro}</p>
 		<div class="request-demo-points">
-			<span>Dubai rental workflows</span>
-			<span>WhatsApp, Site, Telegram and Instagram</span>
-			<span>Live operator handoff</span>
+			{sectionPoints.map((point) => <span>{point}</span>)}
 		</div>
 	</div>
 
 	<div class="contact-links-grid">
-		<a href="https://t.me/Michael_Semenov" target="_blank" rel="noopener noreferrer" class="contact-link-card">
-			<div class="contact-link-icon telegram">
-				<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-					<path d="M22 2L11 13"></path>
-					<path d="M22 2L15 22L11 13L2 9L22 2Z"></path>
-				</svg>
-			</div>
-			<div class="contact-link-text">
-				<strong>Telegram</strong>
-				<span>Chat with CEO</span>
-			</div>
-		</a>
-
-		<a href="https://wa.me/79822306019" target="_blank" rel="noopener noreferrer" class="contact-link-card">
-			<div class="contact-link-icon whatsapp">
-				<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-					<path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
-				</svg>
-			</div>
-			<div class="contact-link-text">
-				<strong>WhatsApp</strong>
-				<span>Direct message</span>
-			</div>
-		</a>
-
-		<a href="https://www.linkedin.com/in/mikhail-semenovv/" target="_blank" rel="noopener noreferrer" class="contact-link-card">
-			<div class="contact-link-icon linkedin">
-				<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-					<path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
-					<rect x="2" y="9" width="4" height="12"></rect>
-					<circle cx="4" cy="4" r="2"></circle>
-				</svg>
-			</div>
-			<div class="contact-link-text">
-				<strong>LinkedIn</strong>
-				<span>Connect on LinkedIn</span>
-			</div>
-		</a>
+		{sectionChannels.map((channel) => (
+			<a
+				href={channel.href}
+				target="_blank"
+				rel="noopener noreferrer"
+				class="contact-link-card"
+			>
+				<div class={`contact-link-icon ${channel.icon}`}>
+					{channel.icon === "telegram" && (
+						<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+							<path d="M22 2L11 13"></path>
+							<path d="M22 2L15 22L11 13L2 9L22 2Z"></path>
+						</svg>
+					)}
+					{channel.icon === "whatsapp" && (
+						<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+							<path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
+						</svg>
+					)}
+					{channel.icon === "linkedin" && (
+						<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+							<path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
+							<rect x="2" y="9" width="4" height="12"></rect>
+							<circle cx="4" cy="4" r="2"></circle>
+						</svg>
+					)}
+				</div>
+				<div class="contact-link-text">
+					<strong>{channel.title}</strong>
+					<span>{channel.meta}</span>
+				</div>
+			</a>
+		))}
 	</div>
 </section>
 
@@ -106,6 +217,12 @@ const {
 		letter-spacing: 0.05em;
 		text-transform: uppercase;
 		color: var(--color-slate);
+	}
+
+	:global([dir="rtl"]) .request-demo-points span {
+		font-family: var(--font-arabic);
+		letter-spacing: 0;
+		text-transform: none;
 	}
 
 	.contact-links-grid {
@@ -193,6 +310,15 @@ const {
 		gap: 0.15rem;
 	}
 
+	:global([dir="rtl"]) .request-demo-copy,
+	:global([dir="rtl"]) .contact-link-text {
+		text-align: right;
+	}
+
+	:global([dir="rtl"]) .contact-link-card {
+		flex-direction: row-reverse;
+	}
+
 	.contact-link-text strong {
 		color: var(--color-ink);
 		font-family: var(--font-display);
@@ -214,6 +340,19 @@ const {
 	@media (max-width: 760px) {
 		.request-demo {
 			grid-template-columns: 1fr;
+		}
+
+		.contact-links-grid {
+			display: grid;
+			grid-template-columns: 1fr;
+		}
+
+		.contact-link-card {
+			width: 100%;
+		}
+
+		.request-demo-points span {
+			white-space: normal;
 		}
 	}
 </style>

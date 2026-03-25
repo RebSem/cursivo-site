@@ -1,0 +1,142 @@
+---
+import type { Locale, LocaleLink } from "../data/site";
+
+interface Props {
+	localeLinks: LocaleLink[];
+	currentLocale: Locale;
+	label?: string;
+	mode?: "header" | "mobile" | "footer";
+}
+
+const {
+	localeLinks,
+	currentLocale,
+	label = "Language switcher",
+	mode = "header",
+} = Astro.props;
+---
+
+<div
+	class:list={[
+		"locale-switcher",
+		mode === "mobile" && "is-mobile",
+		mode === "footer" && "is-footer",
+	]}
+	role="group"
+	aria-label={label}
+>
+	<div class="locale-switcher-track">
+		{localeLinks.map((link) => (
+			<a
+				class:list={["locale-switcher-link", link.code === currentLocale && "is-active"]}
+				href={link.href}
+				aria-current={link.code === currentLocale ? "page" : undefined}
+			>
+				{link.label}
+			</a>
+		))}
+	</div>
+</div>
+
+<style>
+	.locale-switcher {
+		display: flex;
+		align-items: center;
+	}
+
+	.locale-switcher-track {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 0.35rem;
+		padding: 0.24rem;
+		border-radius: var(--radius-pill);
+		border: 1px solid rgba(113, 88, 62, 0.12);
+		background:
+			linear-gradient(180deg, rgba(255, 253, 249, 0.96), rgba(255, 253, 249, 0.82)),
+			var(--surface-raised);
+		box-shadow:
+			inset 0 1px 0 rgba(255, 255, 255, 0.72),
+			0 10px 24px rgba(20, 32, 51, 0.05);
+	}
+
+	.locale-switcher-link {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		min-width: 2.55rem;
+		padding: 0.46rem 0.66rem;
+		border-radius: var(--radius-pill);
+		border: 1px solid transparent;
+		background: transparent;
+		color: var(--color-slate);
+		font-family: var(--font-mono);
+		font-size: var(--text-label);
+		font-weight: 500;
+		letter-spacing: 0.12em;
+		text-decoration: none;
+		text-transform: uppercase;
+		transition:
+			transform 160ms ease,
+			color 160ms ease,
+			border-color 160ms ease,
+			background-color 160ms ease,
+			box-shadow 160ms ease;
+	}
+
+	.locale-switcher-link:hover {
+		transform: translateY(-1px);
+		color: var(--color-ink);
+		border-color: rgba(201, 106, 58, 0.18);
+		background: rgba(201, 106, 58, 0.06);
+	}
+
+	.locale-switcher-link.is-active {
+		color: var(--color-terracotta-active);
+		border-color: rgba(201, 106, 58, 0.18);
+		background: rgba(201, 106, 58, 0.12);
+		box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.72);
+	}
+
+	:global([dir="rtl"]) .locale-switcher-link {
+		font-family: var(--font-arabic);
+		letter-spacing: 0;
+		text-transform: none;
+	}
+
+	.locale-switcher.is-mobile,
+	.locale-switcher.is-mobile .locale-switcher-track {
+		width: 100%;
+	}
+
+	.locale-switcher.is-mobile .locale-switcher-track {
+		padding: 0.3rem;
+		background:
+			linear-gradient(180deg, rgba(255, 253, 249, 0.99), rgba(255, 253, 249, 0.9)),
+			var(--surface-raised);
+	}
+
+	.locale-switcher.is-mobile .locale-switcher-link {
+		flex: 1 1 0;
+		min-width: 0;
+		padding-block: 0.7rem;
+	}
+
+	.locale-switcher.is-footer .locale-switcher-track {
+		gap: 0.28rem;
+		padding: 0.22rem;
+		border-color: rgba(113, 88, 62, 0.14);
+		background:
+			linear-gradient(180deg, rgba(255, 253, 249, 0.92), rgba(255, 253, 249, 0.78)),
+			var(--surface-card);
+		box-shadow:
+			inset 0 1px 0 rgba(255, 255, 255, 0.65),
+			0 8px 18px rgba(20, 32, 51, 0.04);
+	}
+
+	.locale-switcher.is-footer .locale-switcher-link {
+		min-width: 2.45rem;
+		padding: 0.42rem 0.62rem;
+		font-size: 0.68rem;
+	}
+</style>

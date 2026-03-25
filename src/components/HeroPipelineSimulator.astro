@@ -1,62 +1,185 @@
 ---
-const stages = ["New request", "Quote sent", "Reserved"];
+import type { Locale } from "../data/site";
+
+interface Props {
+	locale?: Locale;
+}
+
+const { locale = "en" } = Astro.props;
+
+const pipelineCopyByLocale = {
+	en: {
+		title: "Live rental pipeline",
+		statusLabel: "Status:",
+		status: "Conveyor-style CRM movement",
+		note: "One deal moves at a time, keeping the board clean and focused.",
+		ariaDescription:
+			"Live rental pipeline simulation showing incoming requests from WhatsApp, Telegram, and Website moving through stages: New request, Quote sent, and Reserved.",
+		taskLabel: "Current Manager task",
+		stages: ["New request", "Quote sent", "Reserved"],
+		daySuffix: "days",
+		currencyLocale: "en-US",
+		quoteBubbleLabel: "Quote sent",
+		reservedBubble: "Deposit received",
+		taskTitlePrefix: "Verify docs for ",
+		taskMetaSuffix: "English translation required",
+		sources: [
+			{ key: "telegram", label: "Telegram", capture: "Captured from Telegram" },
+			{ key: "whatsapp", label: "WhatsApp", capture: "Captured from WhatsApp" },
+			{ key: "website", label: "Website", capture: "Captured from Website" },
+			{ key: "instagram", label: "Instagram", capture: "Captured from Instagram" },
+		],
+		requests: {
+			g63: "G63 request",
+			"rr-sport": "Range Rover request",
+			"rr-vogue": "Range Rover Vogue",
+			x7: "BMW X7 request",
+			x5: "BMW X5 request",
+			bmw520: "BMW 520i request",
+			s500: "S-Class request",
+			e200: "E-Class request",
+			es300h: "Lexus ES request",
+			gls600: "Maybach SUV",
+		},
+	},
+	ru: {
+		title: "Живой pipeline аренды",
+		statusLabel: "Статус:",
+		status: "CRM-движение по конвейерной логике",
+		note: "Сделки двигаются по одной, поэтому доска остается чистой и сфокусированной.",
+		ariaDescription:
+			"Живая симуляция pipeline аренды, где входящие заявки из WhatsApp, Telegram и сайта проходят стадии: новый запрос, оффер отправлен и бронирование.",
+		taskLabel: "Текущая задача менеджера",
+		stages: ["Новый запрос", "Оффер отправлен", "Забронировано"],
+		daySuffix: "дн.",
+		currencyLocale: "ru-RU",
+		quoteBubbleLabel: "Оффер отправлен",
+		reservedBubble: "Депозит получен",
+		taskTitlePrefix: "Проверить документы по ",
+		taskMetaSuffix: "нужен handoff на русском",
+		sources: [
+			{ key: "telegram", label: "Telegram", capture: "Заявка из Telegram" },
+			{ key: "whatsapp", label: "WhatsApp", capture: "Заявка из WhatsApp" },
+			{ key: "website", label: "Сайт", capture: "Заявка с сайта" },
+			{ key: "instagram", label: "Instagram", capture: "Заявка из Instagram" },
+		],
+		requests: {
+			g63: "Запрос на G63",
+			"rr-sport": "Запрос на Range Rover",
+			"rr-vogue": "Запрос на Range Rover Vogue",
+			x7: "Запрос на BMW X7",
+			x5: "Запрос на BMW X5",
+			bmw520: "Запрос на BMW 520i",
+			s500: "Запрос на S-Class",
+			e200: "Запрос на E-Class",
+			es300h: "Запрос на Lexus ES",
+			gls600: "Запрос на Maybach SUV",
+		},
+	},
+	ar: {
+		title: "مسار تأجير حي",
+		statusLabel: "الحالة:",
+		status: "حركة CRM بأسلوب متسلسل واضح",
+		note: "تتحرك صفقة واحدة في كل مرة ليبقى اللوح واضحا ومركزا.",
+		ariaDescription:
+			"محاكاة حية لمسار التأجير حيث تتحرك الطلبات الواردة من WhatsApp وTelegram والموقع عبر مراحل: طلب جديد ثم إرسال العرض ثم الحجز.",
+		taskLabel: "مهمة المدير الحالية",
+		stages: ["طلب جديد", "تم إرسال العرض", "تم الحجز"],
+		daySuffix: "أيام",
+		currencyLocale: "ar-AE",
+		quoteBubbleLabel: "تم إرسال العرض",
+		reservedBubble: "تم استلام العربون",
+		taskTitlePrefix: "مراجعة مستندات ",
+		taskMetaSuffix: "يلزم handoff بالعربية",
+		sources: [
+			{ key: "telegram", label: "Telegram", capture: "تم الالتقاط من Telegram" },
+			{ key: "whatsapp", label: "WhatsApp", capture: "تم الالتقاط من WhatsApp" },
+			{ key: "website", label: "الموقع", capture: "تم الالتقاط من الموقع" },
+			{ key: "instagram", label: "Instagram", capture: "تم الالتقاط من Instagram" },
+		],
+		requests: {
+			g63: "طلب G63",
+			"rr-sport": "طلب Range Rover",
+			"rr-vogue": "طلب Range Rover Vogue",
+			x7: "طلب BMW X7",
+			x5: "طلب BMW X5",
+			bmw520: "طلب BMW 520i",
+			s500: "طلب S-Class",
+			e200: "طلب E-Class",
+			es300h: "طلب Lexus ES",
+			gls600: "طلب Maybach SUV",
+		},
+	},
+} as const;
+
+const pipelineCopy = pipelineCopyByLocale[locale];
+const stages = pipelineCopy.stages;
+const formatCurrency = (value: number) =>
+	new Intl.NumberFormat(pipelineCopy.currencyLocale, {
+		style: "currency",
+		currency: "AED",
+		maximumFractionDigits: 0,
+	}).format(value);
+const formatDuration = (days: number) => `${days} ${pipelineCopy.daySuffix}`;
+const sourceLabel = (key: string) =>
+	pipelineCopy.sources.find((source) => source.key === key)?.label ?? key;
 
 const snapshotCards = [
 	{
 		id: "snapshot-new",
 		stage: 0,
-		source: "WhatsApp",
-		title: "G63 request",
+		source: sourceLabel("whatsapp"),
+		title: pipelineCopy.requests.g63,
 		client: "Ahmad M.",
-		meta: "Dubai Marina · 3 days",
-		amount: "AED 6,400",
+		meta: `Dubai Marina · ${formatDuration(3)}`,
+		amount: formatCurrency(6400),
 	},
 	{
 		id: "snapshot-quote",
 		stage: 1,
-		source: "Telegram",
+		source: sourceLabel("telegram"),
 		title: "BMW 520i",
 		client: "Alexey V.",
-		meta: "DXB Terminal 3 · 5 days",
-		amount: "AED 2,800",
-		bubble: "Quote sent · AED 2,800",
+		meta: `DXB Terminal 3 · ${formatDuration(5)}`,
+		amount: formatCurrency(2800),
+		bubble: `${pipelineCopy.quoteBubbleLabel} · ${formatCurrency(2800)}`,
 	},
 	{
 		id: "snapshot-reserved",
 		stage: 2,
-		source: "Website",
+		source: sourceLabel("website"),
 		title: "Range Rover Sport",
 		client: "Michael S.",
-		meta: "Downtown Dubai · 4 days",
-		amount: "AED 5,600",
+		meta: `Downtown Dubai · ${formatDuration(4)}`,
+		amount: formatCurrency(5600),
 	},
 ];
 
 const fallbackTask = {
-	title: "Verify docs for Range Rover Sport",
-	meta: "Michael S. · English translation required",
+	title: `${pipelineCopy.taskTitlePrefix}Range Rover Sport`,
+	meta: `Michael S. · ${pipelineCopy.taskMetaSuffix}`,
 };
 ---
 
-<div class="crm-hero-sim" data-crm-hero-sim data-enhanced="false">
+<div class="crm-hero-sim" data-crm-hero-sim data-enhanced="false" data-locale={locale}>
 	<div class="sr-only">
-		Live rental pipeline simulation showing incoming requests from WhatsApp, Telegram, and Website moving through stages: New request, Quote sent, and Reserved.
+		{pipelineCopy.ariaDescription}
 	</div>
 	<div class="crm-hero-sim-board">
 		<div class="crm-hero-sim-board-glow"></div>
 
 		<div class="crm-hero-sim-header">
 			<div>
-				<strong>Live rental pipeline</strong>
-				<span class="sr-only">Status:</span>
-				<span>Conveyor-style CRM movement</span>
+				<strong>{pipelineCopy.title}</strong>
+				<span class="sr-only">{pipelineCopy.statusLabel}</span>
+				<span>{pipelineCopy.status}</span>
 			</div>
-			<p>One deal moves at a time, keeping the board clean and focused.</p>
+			<p>{pipelineCopy.note}</p>
 		</div>
 
 		<div class="crm-hero-sim-stage-grid">
-			{stages.map((stage, stageIndex) => (
-				<section class="crm-hero-sim-stage" aria-label={`Pipeline stage: ${stage}`}>
+				{stages.map((stage, stageIndex) => (
+					<section class="crm-hero-sim-stage" aria-label={`${pipelineCopy.title}: ${stage}`}>
 					<header>
 						<span>{stage}</span>
 					</header>
@@ -89,12 +212,12 @@ const fallbackTask = {
 			<div class="crm-hero-sim-card-layer" data-card-layer aria-hidden="true"></div>
 		</div>
 
-		<div class="crm-hero-sim-footer">
-			<div class="crm-hero-sim-task" aria-live="polite">
-				<p class="crm-hero-sim-task-label">Current Manager task</p>
-				<strong data-task-title>{fallbackTask.title}</strong>
-				<span data-task-meta>{fallbackTask.meta}</span>
-			</div>
+			<div class="crm-hero-sim-footer">
+				<div class="crm-hero-sim-task" aria-live="polite">
+					<p class="crm-hero-sim-task-label">{pipelineCopy.taskLabel}</p>
+					<strong data-task-title>{fallbackTask.title}</strong>
+					<span data-task-meta>{fallbackTask.meta}</span>
+				</div>
 		</div>
 	</div>
 </div>
@@ -294,6 +417,20 @@ const fallbackTask = {
 		background: rgba(40, 71, 102, 0.08);
 		color: var(--color-ink);
 	}
+
+	.crm-hero-sim[data-locale="ar"] .crm-hero-sim-header span,
+	.crm-hero-sim[data-locale="ar"] .crm-hero-sim-stage header span,
+	.crm-hero-sim[data-locale="ar"] .crm-hero-sim-task-label,
+	.crm-hero-sim[data-locale="ar"] .crm-hero-sim-chip {
+		font-family: var(--font-arabic);
+		letter-spacing: 0;
+		text-transform: none;
+	}
+
+	.crm-hero-sim[data-locale="ar"] .crm-hero-sim-card,
+	.crm-hero-sim[data-locale="ar"] .crm-hero-sim-task {
+		text-align: right;
+	}
 	
 	.crm-hero-sim-card-core {
 		display: grid;
@@ -424,7 +561,8 @@ const fallbackTask = {
 	@media (max-width: 760px) {
 		.crm-hero-sim-board {
 			min-height: auto;
-			padding: 1rem;
+			gap: 1rem;
+			padding: 0.95rem;
 		}
 
 		.crm-hero-sim-header {
@@ -437,13 +575,30 @@ const fallbackTask = {
 			text-align: left;
 		}
 
+		.crm-hero-sim[data-locale="ar"] .crm-hero-sim-header p {
+			text-align: right;
+		}
+
 		.crm-hero-sim-stage-grid {
-			grid-template-columns: 1fr;
+			grid-template-columns: repeat(3, minmax(13.5rem, 1fr));
+			gap: 0.65rem;
+			overflow-x: auto;
+			padding: 0 0.15rem 0.35rem;
+			scroll-snap-type: x proximity;
+			overscroll-behavior-x: contain;
 		}
 
 		.crm-hero-sim-stage-body {
-			min-height: 11.5rem;
-			padding: 3.2rem 0.75rem 0.75rem;
+			min-height: 10rem;
+			padding: 2.8rem 0.5rem 0.65rem;
+		}
+
+		.crm-hero-sim-stage {
+			scroll-snap-align: start;
+		}
+
+		.crm-hero-sim-slot {
+			inset: 2.8rem 0.5rem 0.65rem;
 		}
 
 		.crm-hero-sim-footer {
@@ -455,20 +610,38 @@ const fallbackTask = {
 			width: 100%;
 		}
 	}
+
+	@media (max-width: 640px) {
+		.crm-hero-sim-header strong {
+			font-size: 1rem;
+		}
+
+		.crm-hero-sim-stage header span,
+		.crm-hero-sim-header span,
+		.crm-hero-sim-task-label {
+			letter-spacing: 0.04em;
+		}
+
+		.crm-hero-sim-card strong {
+			font-size: 0.94rem;
+		}
+
+		.crm-hero-sim-card-meta,
+		.crm-hero-sim-card-client,
+		.crm-hero-sim-task span {
+			font-size: 0.8rem;
+		}
+	}
 </style>
 
-<script is:inline>
+<script is:inline define:vars={{ pipelineCopy }}>
 	(() => {
 		const roots = document.querySelectorAll("[data-crm-hero-sim]");
 
-		const stageLabels = ["New request", "Quote sent", "Reserved"];
-
-		const sources = [
-			{ label: "Telegram", capture: "Captured from Telegram" },
-			{ label: "WhatsApp", capture: "Captured from WhatsApp" },
-			{ label: "Website", capture: "Captured from Website" },
-			{ label: "Instagram", capture: "Captured from Instagram" },
-		];
+		const stageLabels = pipelineCopy.stages;
+		const sources = pipelineCopy.sources;
+		const sourceMap = Object.fromEntries(sources.map((source) => [source.key, source]));
+		const requestMap = pipelineCopy.requests;
 		
 		const clients = [
 			"Michael S.", "Alexey V.", "Ahmad M.", "Sarah L.", "Dmitry K.", 
@@ -476,16 +649,16 @@ const fallbackTask = {
 		];
 
 		const vehicles = [
-			{ key: "g63", name: "Mercedes G63", request: "G63 request", daily: [2200, 2550] },
-			{ key: "rr-sport", name: "Range Rover Sport", request: "Range Rover request", daily: [1350, 1620] },
-			{ key: "rr-vogue", name: "Range Rover Vogue", request: "Range Rover Vogue", daily: [1800, 2150] },
-			{ key: "x7", name: "BMW X7", request: "BMW X7 request", daily: [1120, 1380] },
-			{ key: "x5", name: "BMW X5", request: "BMW X5 request", daily: [880, 1040] },
-			{ key: "bmw520", name: "BMW 520i", request: "BMW 520i request", daily: [440, 520] },
-			{ key: "s500", name: "Mercedes S500", request: "S-Class request", daily: [1550, 1880] },
-			{ key: "e200", name: "Mercedes E200", request: "E-Class request", daily: [520, 640] },
-			{ key: "es300h", name: "Lexus ES 300h", request: "Lexus ES request", daily: [420, 510] },
-			{ key: "gls600", name: "Mercedes Maybach GLS", request: "Maybach SUV", daily: [2600, 3100] },
+			{ key: "g63", name: "Mercedes G63", requestKey: "g63", daily: [2200, 2550] },
+			{ key: "rr-sport", name: "Range Rover Sport", requestKey: "rr-sport", daily: [1350, 1620] },
+			{ key: "rr-vogue", name: "Range Rover Vogue", requestKey: "rr-vogue", daily: [1800, 2150] },
+			{ key: "x7", name: "BMW X7", requestKey: "x7", daily: [1120, 1380] },
+			{ key: "x5", name: "BMW X5", requestKey: "x5", daily: [880, 1040] },
+			{ key: "bmw520", name: "BMW 520i", requestKey: "bmw520", daily: [440, 520] },
+			{ key: "s500", name: "Mercedes S500", requestKey: "s500", daily: [1550, 1880] },
+			{ key: "e200", name: "Mercedes E200", requestKey: "e200", daily: [520, 640] },
+			{ key: "es300h", name: "Lexus ES 300h", requestKey: "es300h", daily: [420, 510] },
+			{ key: "gls600", name: "Mercedes Maybach GLS", requestKey: "gls600", daily: [2600, 3100] },
 		];
 
 		const scenarios = [
@@ -502,11 +675,12 @@ const fallbackTask = {
 		];
 
 		const formatCurrency = (value) =>
-			new Intl.NumberFormat("en-US", {
+			new Intl.NumberFormat(pipelineCopy.currencyLocale, {
 				style: "currency",
 				currency: "AED",
 				maximumFractionDigits: 0,
 			}).format(value);
+		const formatDuration = (days) => `${days} ${pipelineCopy.daySuffix}`;
 
 		const randomFrom = (items) => items[Math.floor(Math.random() * items.length)];
 		const sampleBetween = ([min, max]) => min + Math.round(Math.random() * (max - min));
@@ -540,15 +714,15 @@ const fallbackTask = {
 				const amount = roundToFifty(days * dailyRate + scenario.delivery);
 				counter += 1;
 
-				return {
-					id: `lead-${counter}`,
-					source: source.label,
-					entryBubble: source.capture,
-					vehicle: vehicle.name,
-					request: vehicle.request,
-					client,
-					days,
-					amount,
+					return {
+						id: `lead-${counter}`,
+						source: source.label,
+						entryBubble: source.capture,
+						vehicle: vehicle.name,
+						request: requestMap[vehicle.requestKey] || vehicle.name,
+						client,
+						days,
+						amount,
 					branch: scenario.branch,
 					hint: scenario.hint,
 					stage: 0,
@@ -568,36 +742,36 @@ const fallbackTask = {
 			lead.stageLabel = stageLabels[stage];
 		};
 
-		const buildSeedPipeline = () => {
-			const leadNew = createLead();
-			leadNew.source = "WhatsApp";
-			leadNew.request = "G63 request";
-			leadNew.vehicle = "Mercedes G63";
-			leadNew.client = "Ahmad M.";
-			leadNew.days = 3;
-			leadNew.amount = 6400;
-			leadNew.branch = "Dubai Marina";
+			const buildSeedPipeline = () => {
+				const leadNew = createLead();
+				leadNew.source = sourceMap.whatsapp?.label || "WhatsApp";
+				leadNew.request = requestMap.g63;
+				leadNew.vehicle = "Mercedes G63";
+				leadNew.client = "Ahmad M.";
+				leadNew.days = 3;
+				leadNew.amount = 6400;
+				leadNew.branch = "Dubai Marina";
 			leadNew.hint = "Marina pickup";
 			applyStage(leadNew, 0);
 
-			const leadQuote = createLead();
-			leadQuote.source = "Telegram";
-			leadQuote.request = "BMW 520i request";
-			leadQuote.vehicle = "BMW 520i";
-			leadQuote.client = "Alexey V.";
-			leadQuote.days = 5;
-			leadQuote.amount = 2800;
-			leadQuote.branch = "DXB Terminal 3";
+				const leadQuote = createLead();
+				leadQuote.source = sourceMap.telegram?.label || "Telegram";
+				leadQuote.request = requestMap.bmw520;
+				leadQuote.vehicle = "BMW 520i";
+				leadQuote.client = "Alexey V.";
+				leadQuote.days = 5;
+				leadQuote.amount = 2800;
+				leadQuote.branch = "DXB Terminal 3";
 			leadQuote.hint = "Airport arrival";
 			applyStage(leadQuote, 1);
 
-			const leadReserved = createLead();
-			leadReserved.source = "Website";
-			leadReserved.request = "Range Rover request";
-			leadReserved.vehicle = "Range Rover Sport";
-			leadReserved.client = "Michael S.";
-			leadReserved.days = 4;
-			leadReserved.amount = 5600;
+				const leadReserved = createLead();
+				leadReserved.source = sourceMap.website?.label || "Website";
+				leadReserved.request = requestMap["rr-sport"];
+				leadReserved.vehicle = "Range Rover Sport";
+				leadReserved.client = "Michael S.";
+				leadReserved.days = 4;
+				leadReserved.amount = 5600;
 			leadReserved.branch = "Downtown Dubai";
 			leadReserved.hint = "Burj area handoff";
 			applyStage(leadReserved, 2);
@@ -662,7 +836,7 @@ const fallbackTask = {
 			source.textContent = lead.source || "";
 			title.textContent = lead.stage === 0 ? lead.request : lead.vehicle;
 			client.textContent = lead.client || "";
-			meta.textContent = `${lead.branch} · ${lead.days} days`;
+			meta.textContent = `${lead.branch} · ${formatDuration(lead.days)}`;
 			amount.textContent = formatCurrency(lead.amount);
 			bubble.textContent = lead.bubble || "";
 			
@@ -677,6 +851,7 @@ const fallbackTask = {
 
 		roots.forEach((root) => {
 			if (!(root instanceof HTMLElement)) return;
+			if (window.matchMedia("(max-width: 760px)").matches) return;
 
 			const stageBodies = Array.from(root.querySelectorAll("[data-stage-body]")).filter(
 				(node) => node instanceof HTMLElement,
@@ -807,10 +982,10 @@ const fallbackTask = {
 
 			const bubbleForStage = (lead, stage) => {
 				if (stage === 1) {
-					return `Quote sent · ${formatCurrency(lead.amount)}`;
+					return `${pipelineCopy.quoteBubbleLabel} · ${formatCurrency(lead.amount)}`;
 				}
 
-				return "Deposit received";
+				return pipelineCopy.reservedBubble;
 			};
 
 			const clearLeadBubble = (lead) => {
@@ -834,24 +1009,20 @@ const fallbackTask = {
 				schedule(() => {
 					let delayBeforeMove = 0;
 
-					if (targetLead) {
-						state.pipeline[2] = null;
-						targetLead.isLeaving = true;
-						state.exitingLead = targetLead;
-						
-						// Manager task strictly only for leaving vehicles
-						renderTask(root, `Verify docs for ${shortVehicleName(targetLead.vehicle)}`, `${targetLead.client} · English translation required`);
-						
-						// Manager task strictly only for leaving vehicles
-												
-						// Manager task strictly only for leaving vehicles
-												
-						// Manager task specifically for the leaving vehicle and client
-						
-						
-						positionCards();
-						delayBeforeMove = 600;
-					}
+						if (targetLead) {
+							state.pipeline[2] = null;
+							targetLead.isLeaving = true;
+							state.exitingLead = targetLead;
+							
+							renderTask(
+								root,
+								`${pipelineCopy.taskTitlePrefix}${shortVehicleName(targetLead.vehicle)}`,
+								`${targetLead.client} · ${pipelineCopy.taskMetaSuffix}`,
+							);
+
+							positionCards();
+							delayBeforeMove = 600;
+						}
 
 					schedule(() => {
 						state.pipeline[from] = null;

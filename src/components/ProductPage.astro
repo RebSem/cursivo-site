@@ -344,10 +344,36 @@ const isExternalLink = (href: string) => href.startsWith("http://") || href.star
 	@media (max-width: 640px) {
 		.product-hero-copy :global(h1) {
 			max-width: none;
+			font-size: clamp(2.2rem, 10.4vw, 3.15rem);
+		}
+
+		.product-subnote {
+			display: none;
+		}
+
+		.product-links {
+			width: 100%;
+			margin-top: 0.8rem;
+		}
+
+		.product-links a {
+			flex: 1 1 100%;
 		}
 	}
 
 	@media (max-width: 900px) {
+		.product-hero {
+			gap: 1rem;
+		}
+
+		.product-hero-copy {
+			gap: 0.7rem;
+		}
+
+		.product-pill-row {
+			margin-bottom: 0.8rem;
+		}
+
 		.product-capability-grid {
 			grid-template-columns: 1fr;
 		}

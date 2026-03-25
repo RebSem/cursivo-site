@@ -208,7 +208,7 @@ const rotations = ["-4deg", "-1.5deg", "2deg", "5deg"];
 
 	@media (max-width: 820px) {
 		.stack {
-			min-height: 18.6rem;
+			min-height: 17.75rem;
 			--stack-y-gap: 1.2rem;
 			--stack-x-gap: 0.58rem;
 		}
@@ -216,7 +216,7 @@ const rotations = ["-4deg", "-1.5deg", "2deg", "5deg"];
 
 	@media (max-width: 640px) {
 		.stack {
-			min-height: 17.2rem;
+			min-height: 15.6rem;
 			padding-bottom: 0.6rem;
 			--stack-y-gap: 0.92rem;
 			--stack-x-gap: 0.32rem;
@@ -226,7 +226,7 @@ const rotations = ["-4deg", "-1.5deg", "2deg", "5deg"];
 
 		.stack-card {
 			inset: auto clamp(0.3rem, 0.9vw, 0.65rem) 0.8rem auto;
-			width: min(100%, 16.65rem);
+			width: min(100%, 15.75rem);
 			padding: 0.92rem 0.92rem 0.98rem;
 			--stack-transform:
 				translateY(calc(var(--stack-order) * var(--stack-y-gap) * -1))
@@ -257,6 +257,10 @@ const rotations = ["-4deg", "-1.5deg", "2deg", "5deg"];
 				translateX(calc(var(--stack-order) * var(--stack-x-gap)))
 				scale(1)
 				rotate(calc(var(--card-rotation) + (var(--stack-order) * 0.24deg)));
+		}
+
+		.stack-card h3 {
+			max-width: none;
 		}
 	}
 </style>

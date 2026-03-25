@@ -385,6 +385,10 @@ const roadmap = [
 	}
 
 	@media (max-width: 960px) {
+		.product-hero {
+			gap: 0.85rem;
+		}
+
 		.product-group,
 		.under-hood-grid,
 		.roadmap-grid {
@@ -393,6 +397,21 @@ const roadmap = [
 	}
 
 	@media (max-width: 720px) {
+		.product-hero h1 {
+			max-width: none;
+			font-size: clamp(2.15rem, 10.2vw, 3.15rem);
+		}
+
+		.product-hero p {
+			font-size: 1.02rem;
+			line-height: 1.6;
+		}
+
+		.product-group-preview {
+			min-height: auto;
+			padding: 0.95rem;
+		}
+
 		.preview-kanban,
 		.preview-catalog,
 		.preview-quote-grid {
