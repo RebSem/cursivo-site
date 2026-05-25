@@ -36,7 +36,6 @@ const trustCards = [
 	{ value: s.trust4Value, label: s.trust4Label, hint: s.trust4Hint },
 ];
 
-const openSourceHref = locale === "en" ? "/open-source/" : `/${locale}/open-source/`;
 ---
 
 <div class="page-stack home-page">
@@ -369,11 +368,6 @@ const openSourceHref = locale === "en" ? "/open-source/" : `/${locale}/open-sour
 				</article>
 			))}
 		</div>
-
-		<p class="trust-footnote">
-			<span>{s.trustFootnote}</span>
-			<a href={openSourceHref}>{s.trustFootnoteLink}</a>
-		</p>
 	</section>
 
 	<RequestDemoSection locale={locale} />
@@ -404,16 +398,8 @@ const openSourceHref = locale === "en" ? "/open-source/" : `/${locale}/open-sour
 		padding: clamp(2.2rem, 5vw, 4rem) 0 clamp(1.4rem, 3vw, 2rem);
 	}
 
-	.home-hero::after {
-		content: "";
-		position: absolute;
-		inset: 0;
-		background:
-			radial-gradient(circle at 88% 12%, rgba(201, 106, 58, 0.16), transparent 42%),
-			radial-gradient(circle at 12% 78%, rgba(40, 71, 102, 0.08), transparent 38%);
-		pointer-events: none;
-		z-index: -1;
-	}
+	/* Page-level ambience now lives on body (background-attachment: fixed),
+	   so the hero stays a clean open-air box without its own gradient seam. */
 
 	.home-eyebrow {
 		margin-bottom: var(--space-4);
@@ -1490,39 +1476,6 @@ const openSourceHref = locale === "en" ? "/open-source/" : `/${locale}/open-sour
 		color: var(--color-slate);
 		font-size: 0.85rem;
 		line-height: 1.45;
-	}
-
-	.trust-footnote {
-		display: flex;
-		flex-wrap: wrap;
-		align-items: baseline;
-		gap: 0.5rem;
-		margin: 0;
-		padding-top: 0.6rem;
-		border-top: 1px dashed rgba(113, 88, 62, 0.22);
-		font-family: var(--font-mono);
-		font-size: var(--text-label);
-		letter-spacing: 0.08em;
-		text-transform: uppercase;
-		color: var(--color-slate);
-	}
-
-	:lang(ar) .trust-footnote {
-		font-family: var(--font-arabic);
-		letter-spacing: 0;
-		text-transform: none;
-	}
-
-	.trust-footnote a {
-		color: var(--color-terracotta);
-		text-decoration: none;
-		border-bottom: 1px solid currentColor;
-		padding-bottom: 1px;
-		transition: color var(--motion-fast) ease;
-	}
-
-	.trust-footnote a:hover {
-		color: var(--color-terracotta-active);
 	}
 
 	/* ============================================

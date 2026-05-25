@@ -16,19 +16,16 @@ export const navigationByLocale: Record<Locale, NavItem[]> = {
 		{ label: "Product", href: "/product/" },
 		{ label: "Use cases", href: "/use-cases/" },
 		{ label: "Blog", href: "/blog/" },
-		{ label: "Changelog", href: "/changelog/" },
 	],
 	ru: [
 		{ label: "Продукт", href: "/ru/product/" },
 		{ label: "Кейсы", href: "/ru/use-cases/" },
 		{ label: "Блог", href: "/ru/blog/" },
-		{ label: "Changelog", href: "/ru/changelog/" },
 	],
 	ar: [
 		{ label: "المنتج", href: "/ar/product/" },
 		{ label: "حالات الاستخدام", href: "/ar/use-cases/" },
 		{ label: "المدونة", href: "/ar/blog/" },
-		{ label: "سجل التغييرات", href: "/ar/changelog/" },
 	],
 };
 

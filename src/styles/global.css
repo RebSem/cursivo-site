@@ -107,9 +107,10 @@ body {
 	text-rendering: optimizeLegibility;
 	color: var(--color-ink);
 	background:
-		radial-gradient(circle at top right, var(--color-route-soft), transparent 22rem),
-		radial-gradient(circle at left 16%, rgba(255, 253, 249, 0.92), transparent 24rem),
+		radial-gradient(ellipse 70vw 60vh at 100% 0%, rgba(201, 106, 58, 0.12), rgba(201, 106, 58, 0) 70%),
+		radial-gradient(ellipse 60vw 50vh at 0% 18%, rgba(255, 253, 249, 0.7), rgba(255, 253, 249, 0) 70%),
 		linear-gradient(180deg, #fff8ef 0%, var(--surface-page) 100%);
+	background-attachment: fixed, fixed, scroll;
 	overflow-x: hidden;
 }
 
