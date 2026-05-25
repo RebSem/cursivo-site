@@ -80,17 +80,17 @@ const roadmap = [
 	<section class="product-hero section-card" data-product-hero data-reveal="soft">
 		<div>
 			<p class="type-label product-eyebrow">Product deep dive</p>
-			<h1 class="type-display">One operating system for rental conversations, quotes, and branch execution.</h1>
+			<h1 class="type-display">Five surfaces. One record. Zero copy-paste between chat and CRM.</h1>
 		</div>
 		<p class="type-body-lg text-muted">
-			Cursivo is not a generic CRM with custom fields added on top. It is structured around how
-			car rental teams actually work in Dubai: chat-first demand, urgent availability checks,
-			quote prep, branch coordination, and manager approvals.
+			The AI agent that answered the customer, the lead it created, the car class it matched, the
+			quote it prepared, the task the manager has to approve — all the same record. Open any of the
+			five surfaces below, you are looking at it from a different angle.
 		</p>
 	</section>
 
 	{featureGroups.map((group, index) => (
-		<section class="product-group section-card" data-reveal="soft" style={`--reveal-delay:${100 + index * 70}ms;`}>
+		<section class:list={["product-group", "section-card", index % 2 === 1 && "is-reversed"]} data-reveal="soft" style={`--reveal-delay:${100 + index * 70}ms;`}>
 			<div class="product-group-copy">
 				<div class="product-group-heading">
 					<span>{group.icon}</span>
@@ -228,7 +228,11 @@ const roadmap = [
 	.product-hero h1,
 	.under-hood h2,
 	.roadmap h2 {
-		max-width: 13ch;
+		max-width: 22ch;
+		font-size: clamp(2.3rem, 5vw, 4rem);
+		line-height: 1.02;
+		letter-spacing: -0.045em;
+		text-wrap: balance;
 	}
 
 	.product-hero p {
@@ -241,6 +245,23 @@ const roadmap = [
 		grid-template-columns: minmax(0, 1fr) minmax(18rem, 26rem);
 		gap: clamp(1.2rem, 2.4vw, 1.8rem);
 		align-items: center;
+	}
+
+	.product-group.is-reversed {
+		grid-template-columns: minmax(0, 1fr) minmax(18rem, 26rem);
+	}
+
+	.product-group.is-reversed .product-group-copy {
+		order: 2;
+	}
+
+	.product-group.is-reversed .product-group-preview {
+		order: 1;
+		grid-column: 1;
+	}
+
+	.product-group.is-reversed .product-group-copy {
+		grid-column: 2;
 	}
 
 	.product-group-heading {
@@ -340,7 +361,11 @@ const roadmap = [
 	}
 
 	.preview-catalog {
-		grid-template-columns: repeat(3, minmax(0, 1fr));
+		grid-template-columns: repeat(auto-fit, minmax(8rem, 1fr));
+	}
+
+	.preview-catalog article {
+		min-width: 0;
 	}
 
 	.preview-catalog em {

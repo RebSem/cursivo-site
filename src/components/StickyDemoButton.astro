@@ -1,14 +1,26 @@
 ---
+import type { Locale } from "../data/site";
+import { getStrings } from "../data/strings";
+
 interface Props {
 	href: string;
 	thresholdSelector: string;
+	locale?: Locale;
+	hideNearSelector?: string;
 }
 
-const { href, thresholdSelector } = Astro.props;
+const { href, thresholdSelector, locale = "en", hideNearSelector } = Astro.props;
+const label = getStrings(locale).ctaSticky;
 ---
 
-<a class="sticky-demo-button" data-sticky-demo-button data-threshold-selector={thresholdSelector} href={href}>
-	Request demo
+<a
+	class="sticky-demo-button"
+	data-sticky-demo-button
+	data-threshold-selector={thresholdSelector}
+	data-hide-near={hideNearSelector ?? undefined}
+	href={href}
+>
+	{label}
 </a>
 
 <style>
@@ -72,17 +84,23 @@ const { href, thresholdSelector } = Astro.props;
 			if (!(button instanceof HTMLElement)) return;
 
 			const selector = button.dataset.thresholdSelector;
+			const hideNearSelector = button.dataset.hideNear;
 			const thresholdNode = selector ? document.querySelector(selector) : null;
 			const footerNode = document.querySelector(".site-footer");
+			const hideNearNode = hideNearSelector ? document.querySelector(hideNearSelector) : null;
 			let pastThreshold = false;
 			let footerVisible = false;
+			let hideNearVisible = false;
 
 			const sync = () => {
 				if (footerNode instanceof HTMLElement) {
 					const footerRect = footerNode.getBoundingClientRect();
 					footerVisible = footerRect.top < window.innerHeight - 24;
 				}
-				button.classList.toggle("is-visible", pastThreshold && !footerVisible);
+				button.classList.toggle(
+					"is-visible",
+					pastThreshold && !footerVisible && !hideNearVisible,
+				);
 			};
 
 			if (!(thresholdNode instanceof HTMLElement) || !("IntersectionObserver" in window)) {
@@ -117,6 +135,18 @@ const { href, thresholdSelector } = Astro.props;
 				);
 
 				footerObserver.observe(footerNode);
+			}
+
+			if (hideNearNode instanceof HTMLElement) {
+				const hideNearObserver = new IntersectionObserver(
+					(entries) => {
+						hideNearVisible = entries[0]?.isIntersecting ?? false;
+						sync();
+					},
+					{ threshold: 0.18 },
+				);
+
+				hideNearObserver.observe(hideNearNode);
 			}
 
 			window.addEventListener("scroll", sync, { passive: true });

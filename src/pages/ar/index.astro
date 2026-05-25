@@ -1,8 +1,25 @@
 ---
-import MarketingHomePage from "../../components/MarketingHomePage.astro";
-import { getHomeContent } from "../../data/site";
-
-const content = getHomeContent("ar");
+import HomePage from "../../components/HomePage.astro";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { localeLinks, navigationByLocale } from "../../data/navigation";
 ---
 
-<MarketingHomePage content={content} />
+<BaseLayout
+	title="Cursivo | وكيل ذكاء اصطناعي وCRM لفرق تأجير السيارات"
+	description="Cursivo منتج واحد: وكيل ذكاء اصطناعي يجيب على Telegram وWhatsApp، وCRM تملأ نفسها ببطاقات عملاء جاهزة للمدير مع الفرع والسعر والإجراء التالي."
+	lang="ar"
+	brandMeta="وكيل ذكاء اصطناعي وCRM لفرق تأجير السيارات"
+	navItems={navigationByLocale.ar}
+	localeLinks={localeLinks}
+	currentLocale="ar"
+	footerTitle="Cursivo"
+	footerCopy="منتج واحد، نصفان: وكيل ذكاء اصطناعي على Telegram وWhatsApp، وCRM تملأ نفسها ببطاقات جاهزة للمدير."
+	footerMetaLabel="اللغات"
+	footerMetaValue="EN · RU · AR"
+	canonicalPath="/ar/"
+	ctaHref="/ar/#contact"
+>
+	<div class="site-container">
+		<HomePage locale="ar" contactHref="/ar/#contact" />
+	</div>
+</BaseLayout>

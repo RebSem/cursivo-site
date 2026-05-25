@@ -11,7 +11,11 @@ const pipelineCopyByLocale = {
 	en: {
 		title: "Live rental pipeline",
 		statusLabel: "Status:",
-		status: "Conveyor-style CRM movement",
+		status: "Agent online · auto-moving deals",
+		liveLabel: "Live",
+		todayLabel: "today",
+		leadsHandledPrefix: "leads handled",
+		stageCountSuffix: "in stage",
 		note: "One deal moves at a time, keeping the board clean and focused.",
 		ariaDescription:
 			"Live rental pipeline simulation showing incoming requests from WhatsApp, Telegram, and Website moving through stages: New request, Quote sent, and Reserved.",
@@ -45,7 +49,11 @@ const pipelineCopyByLocale = {
 	ru: {
 		title: "Живой pipeline аренды",
 		statusLabel: "Статус:",
-		status: "CRM-движение по конвейерной логике",
+		status: "Агент онлайн · сделки двигаются сами",
+		liveLabel: "Live",
+		todayLabel: "сегодня",
+		leadsHandledPrefix: "лидов обработано",
+		stageCountSuffix: "на этапе",
 		note: "Сделки двигаются по одной, поэтому доска остается чистой и сфокусированной.",
 		ariaDescription:
 			"Живая симуляция pipeline аренды, где входящие заявки из WhatsApp, Telegram и сайта проходят стадии: новый запрос, оффер отправлен и бронирование.",
@@ -79,7 +87,11 @@ const pipelineCopyByLocale = {
 	ar: {
 		title: "مسار تأجير حي",
 		statusLabel: "الحالة:",
-		status: "حركة CRM بأسلوب متسلسل واضح",
+		status: "الوكيل متصل · صفقات تتحرك تلقائياً",
+		liveLabel: "مباشر",
+		todayLabel: "اليوم",
+		leadsHandledPrefix: "عميل تمت معالجته",
+		stageCountSuffix: "في المرحلة",
 		note: "تتحرك صفقة واحدة في كل مرة ليبقى اللوح واضحا ومركزا.",
 		ariaDescription:
 			"محاكاة حية لمسار التأجير حيث تتحرك الطلبات الواردة من WhatsApp وTelegram والموقع عبر مراحل: طلب جديد ثم إرسال العرض ثم الحجز.",
@@ -169,19 +181,34 @@ const fallbackTask = {
 		<div class="crm-hero-sim-board-glow"></div>
 
 		<div class="crm-hero-sim-header">
-			<div>
+			<div class="crm-hero-sim-header-main">
+				<div class="crm-hero-sim-live-badge">
+					<span class="crm-hero-sim-live-dot"></span>
+					<span class="crm-hero-sim-live-label">{pipelineCopy.liveLabel}</span>
+				</div>
 				<strong>{pipelineCopy.title}</strong>
 				<span class="sr-only">{pipelineCopy.statusLabel}</span>
-				<span>{pipelineCopy.status}</span>
+				<span class="crm-hero-sim-status">{pipelineCopy.status}</span>
 			</div>
-			<p>{pipelineCopy.note}</p>
+			<div class="crm-hero-sim-header-stats">
+				<div class="crm-hero-sim-stat">
+					<strong data-leads-handled>247</strong>
+					<span>{pipelineCopy.leadsHandledPrefix} · {pipelineCopy.todayLabel}</span>
+				</div>
+			</div>
 		</div>
 
 		<div class="crm-hero-sim-stage-grid">
 				{stages.map((stage, stageIndex) => (
-					<section class="crm-hero-sim-stage" aria-label={`${pipelineCopy.title}: ${stage}`}>
+					<section
+						class="crm-hero-sim-stage"
+						aria-label={`${pipelineCopy.title}: ${stage}`}
+						data-stage-index={stageIndex}
+					>
 					<header>
-						<span>{stage}</span>
+						<span class="crm-hero-sim-stage-dot" data-stage-dot></span>
+						<span class="crm-hero-sim-stage-label">{stage}</span>
+						<span class="crm-hero-sim-stage-count" data-stage-count>1</span>
 					</header>
 					<div class="crm-hero-sim-stage-body" data-stage-body>
 						<div class="crm-hero-sim-slot" aria-hidden="true"></div>
@@ -231,9 +258,9 @@ const fallbackTask = {
 	.crm-hero-sim-board {
 		position: relative;
 		display: grid;
-		gap: 1.5rem;
-		min-height: 34rem;
-		padding: 1.5rem;
+		gap: 1.1rem;
+		min-height: 32rem;
+		padding: 1.1rem;
 		border: 1px solid rgba(113, 88, 62, 0.16);
 		border-radius: var(--radius-2xl);
 		background:
@@ -266,24 +293,75 @@ const fallbackTask = {
 		pointer-events: none;
 	}
 
-	.crm-hero-sim-header,
-	.crm-hero-sim-stage header {
+	.crm-hero-sim-header {
 		position: relative;
 		z-index: 1;
-		display: flex;
+		display: grid;
+		grid-template-columns: minmax(0, 1fr) auto;
+		align-items: end;
+		gap: 0.75rem 1rem;
+	}
+
+	.crm-hero-sim-header-main {
+		display: grid;
+		gap: 0.35rem;
+		min-width: 0;
+	}
+
+	.crm-hero-sim-live-badge {
+		display: inline-flex;
 		align-items: center;
-		justify-content: space-between;
-		gap: 0.75rem;
+		gap: 0.4rem;
+		padding: 0.22rem 0.6rem 0.22rem 0.45rem;
+		border-radius: 999px;
+		background: rgba(47, 138, 98, 0.12);
+		width: max-content;
+	}
+
+	.crm-hero-sim-live-dot {
+		width: 0.42rem;
+		height: 0.42rem;
+		border-radius: 999px;
+		background: var(--color-success);
+		box-shadow: 0 0 0 0 rgba(47, 138, 98, 0.55);
+		animation: crmHeroLivePulse 1.6s ease-in-out infinite;
+	}
+
+	.crm-hero-sim-live-label {
+		font-family: var(--font-mono);
+		font-size: 0.65rem;
+		letter-spacing: 0.12em;
+		text-transform: uppercase;
+		color: var(--color-success);
+		font-weight: 700;
+	}
+
+	.crm-hero-sim[data-locale="ar"] .crm-hero-sim-live-label {
+		font-family: var(--font-arabic);
+		letter-spacing: 0;
+		text-transform: none;
+		font-size: 0.78rem;
+	}
+
+	@keyframes crmHeroLivePulse {
+		0%, 100% {
+			box-shadow: 0 0 0 0 rgba(47, 138, 98, 0.55);
+			transform: scale(1);
+		}
+		50% {
+			box-shadow: 0 0 0 0.5rem rgba(47, 138, 98, 0);
+			transform: scale(1.15);
+		}
 	}
 
 	.crm-hero-sim-header strong {
 		display: block;
-		font-size: 1.1rem;
+		font-size: 1rem;
+		line-height: 1.2;
 		color: var(--color-ink);
 	}
 
-	.crm-hero-sim-header span,
-	.crm-hero-sim-stage header span,
+	.crm-hero-sim-status,
 	.crm-hero-sim-task-label {
 		font-family: var(--font-mono);
 		font-size: var(--text-label);
@@ -291,23 +369,131 @@ const fallbackTask = {
 		text-transform: uppercase;
 		color: var(--color-slate);
 	}
-	
-	.crm-hero-sim-stage header span {
-		background: rgba(201, 106, 58, 0.08);
-		color: var(--color-terracotta-active);
-		padding: 0.35rem 0.75rem;
-		border-radius: 999px;
-		font-weight: 600;
-		letter-spacing: 0.08em;
+
+	.crm-hero-sim-header-stats {
+		flex-shrink: 0;
+		text-align: right;
 	}
 
-	.crm-hero-sim-header p {
-		margin: 0;
-		max-width: 14rem;
+	.crm-hero-sim-stat {
+		display: grid;
+		gap: 0.15rem;
+		justify-items: end;
+	}
+
+	.crm-hero-sim-stat strong {
+		font-family: var(--font-display);
+		font-size: 1.45rem;
+		line-height: 1;
+		letter-spacing: -0.04em;
+		color: var(--color-ink);
+		font-feature-settings: "tnum" 1;
+	}
+
+	.crm-hero-sim-stat span {
+		font-family: var(--font-mono);
+		font-size: 0.6rem;
+		letter-spacing: 0.06em;
+		text-transform: uppercase;
 		color: var(--color-slate);
-		font-size: 0.88rem;
-		line-height: 1.4;
+		white-space: nowrap;
+	}
+
+	.crm-hero-sim[data-locale="ar"] .crm-hero-sim-stat span {
+		font-family: var(--font-arabic);
+		letter-spacing: 0;
+		text-transform: none;
+		font-size: 0.78rem;
+	}
+
+	.crm-hero-sim-stage header {
+		position: relative;
+		z-index: 1;
+		display: flex;
+		align-items: center;
+		gap: 0.4rem;
+		padding: 0 0.3rem;
+	}
+
+	.crm-hero-sim-stage-dot {
+		width: 0.38rem;
+		height: 0.38rem;
+		border-radius: 999px;
+		background: var(--color-slate);
+		opacity: 0.4;
+		transition:
+			background 280ms ease,
+			opacity 280ms ease,
+			transform 280ms var(--motion-spring),
+			box-shadow 280ms ease;
+		flex-shrink: 0;
+	}
+
+	.crm-hero-sim-stage.is-active .crm-hero-sim-stage-dot {
+		background: var(--color-terracotta);
+		opacity: 1;
+		transform: scale(1.2);
+		box-shadow: 0 0 0 0 rgba(201, 106, 58, 0.4);
+		animation: crmHeroStagePulse 1.4s ease-in-out infinite;
+	}
+
+	@keyframes crmHeroStagePulse {
+		0%, 100% {
+			box-shadow: 0 0 0 0 rgba(201, 106, 58, 0.4);
+		}
+		50% {
+			box-shadow: 0 0 0 0.4rem rgba(201, 106, 58, 0);
+		}
+	}
+
+	.crm-hero-sim-stage-label {
+		font-family: var(--font-mono);
+		font-size: 0.62rem;
+		letter-spacing: 0.05em;
+		text-transform: uppercase;
+		color: var(--color-terracotta-active);
+		font-weight: 600;
+		background: rgba(201, 106, 58, 0.08);
+		padding: 0.3rem 0.5rem;
+		border-radius: 999px;
+		flex: 1;
+		min-width: 0;
+		text-align: center;
+		transition: background 280ms ease;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+
+	.crm-hero-sim-stage.is-active .crm-hero-sim-stage-label {
+		background: rgba(201, 106, 58, 0.16);
+	}
+
+	/* Stage count hidden at narrow widths — appears only when the simulator
+	   has enough room (board wider than 26rem). */
+	.crm-hero-sim-stage-count {
+		display: none;
+		font-family: var(--font-mono);
+		font-size: 0.7rem;
+		letter-spacing: 0.04em;
+		color: var(--color-slate);
+		font-weight: 700;
+		font-feature-settings: "tnum" 1;
+		min-width: 0.85rem;
 		text-align: right;
+		flex-shrink: 0;
+	}
+
+	@media (min-width: 1280px) {
+		.crm-hero-sim-stage-count {
+			display: inline;
+		}
+	}
+
+	.crm-hero-sim[data-locale="ar"] .crm-hero-sim-stage-label {
+		font-family: var(--font-arabic);
+		letter-spacing: 0;
+		text-transform: none;
 	}
 
 	.crm-hero-sim-stage-grid {
@@ -319,6 +505,7 @@ const fallbackTask = {
 	}
 
 	.crm-hero-sim-stage {
+		position: relative;
 		display: grid;
 		grid-template-rows: auto 1fr;
 		gap: 0.85rem;
@@ -328,6 +515,56 @@ const fallbackTask = {
 			linear-gradient(180deg, rgba(255, 253, 249, 0.96), rgba(244, 236, 228, 0.92)),
 			var(--surface-page);
 		box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.72);
+		transition: box-shadow 320ms ease;
+	}
+
+	.crm-hero-sim-stage.is-active {
+		box-shadow:
+			inset 0 1px 0 rgba(255, 255, 255, 0.72),
+			0 0 0 1px rgba(201, 106, 58, 0.18),
+			0 20px 32px -16px rgba(201, 106, 58, 0.22);
+	}
+
+	/* Flow arrow between columns — appears only when a card is mid-move */
+	.crm-hero-sim-stage:not(:last-of-type)::after {
+		content: "";
+		position: absolute;
+		top: 50%;
+		right: -0.55rem;
+		width: 0.6rem;
+		height: 0.6rem;
+		border-top: 1.5px solid rgba(201, 106, 58, 0.4);
+		border-right: 1.5px solid rgba(201, 106, 58, 0.4);
+		transform: translate(0, -50%) rotate(45deg);
+		opacity: 0;
+		transition: opacity 320ms ease;
+		pointer-events: none;
+		z-index: 2;
+	}
+
+	.crm-hero-sim-stage.is-flowing::after {
+		opacity: 1;
+		animation: crmHeroFlowArrow 1.4s ease-in-out infinite;
+	}
+
+	@keyframes crmHeroFlowArrow {
+		0%, 100% { transform: translate(0, -50%) rotate(45deg); opacity: 0.4; }
+		50% { transform: translate(4px, -50%) rotate(45deg); opacity: 1; }
+	}
+
+	.crm-hero-sim[data-locale="ar"] .crm-hero-sim-stage:not(:last-of-type)::after {
+		right: auto;
+		left: -0.55rem;
+		transform: translate(0, -50%) rotate(-135deg);
+	}
+
+	.crm-hero-sim[data-locale="ar"] .crm-hero-sim-stage.is-flowing::after {
+		animation-name: crmHeroFlowArrowRtl;
+	}
+
+	@keyframes crmHeroFlowArrowRtl {
+		0%, 100% { transform: translate(0, -50%) rotate(-135deg); opacity: 0.4; }
+		50% { transform: translate(-4px, -50%) rotate(-135deg); opacity: 1; }
 	}
 
 	.crm-hero-sim-stage-body {
@@ -362,16 +599,39 @@ const fallbackTask = {
 	.crm-hero-sim-card {
 		position: relative;
 		display: grid;
-		gap: 0.35rem;
-		padding: 0.85rem;
+		gap: 0.28rem;
+		padding: 0.7rem;
 		border: 1px solid rgba(113, 88, 62, 0.16);
-		border-radius: 1.1rem;
+		border-radius: 0.95rem;
 		background:
 			linear-gradient(180deg, rgba(255, 253, 249, 0.99), rgba(255, 253, 249, 0.95)),
 			var(--surface-card);
-		box-shadow: 0 18px 34px rgba(20, 32, 51, 0.08);
+		box-shadow: 0 14px 28px rgba(20, 32, 51, 0.08);
 		will-change: transform, opacity;
+		font-size: 0.85rem;
 	}
+
+	.crm-hero-sim-card strong {
+		font-size: 0.88rem;
+		line-height: 1.25;
+	}
+
+	.crm-hero-sim-card-client,
+	.crm-hero-sim-card-meta {
+		font-size: 0.76rem;
+		line-height: 1.3;
+	}
+
+	.crm-hero-sim-card-amount {
+		font-size: 0.74rem;
+		padding: 0.16rem 0.4rem;
+	}
+
+	.crm-hero-sim-chip {
+		font-size: 0.55rem;
+		padding: 0.28rem 0.5rem;
+	}
+
 
 	.crm-hero-sim-card-layer .crm-hero-sim-card {
 		position: absolute;
@@ -389,10 +649,40 @@ const fallbackTask = {
 	}
 
 	.crm-hero-sim-card-layer .crm-hero-sim-card[data-card-state="active"] {
-		border-color: rgba(201, 106, 58, 0.3);
+		border-color: rgba(201, 106, 58, 0.42);
 		box-shadow:
-			0 20px 38px rgba(20, 32, 51, 0.12),
-			0 0 0 1px rgba(201, 106, 58, 0.08);
+			0 24px 44px rgba(20, 32, 51, 0.14),
+			0 0 0 1px rgba(201, 106, 58, 0.18),
+			0 0 32px rgba(201, 106, 58, 0.22);
+	}
+
+	/* Shimmer band that sweeps through during transitions */
+	.crm-hero-sim-card-layer .crm-hero-sim-card[data-card-state="active"]::before {
+		content: "";
+		position: absolute;
+		inset: 0;
+		border-radius: inherit;
+		background: linear-gradient(
+			115deg,
+			transparent 0%,
+			transparent 40%,
+			rgba(255, 255, 255, 0.55) 50%,
+			transparent 60%,
+			transparent 100%
+		);
+		background-size: 220% 100%;
+		background-position: 100% 0;
+		opacity: 0;
+		animation: crmHeroCardShimmer 2.6s ease-in-out infinite;
+		pointer-events: none;
+		mix-blend-mode: overlay;
+	}
+
+	@keyframes crmHeroCardShimmer {
+		0% { background-position: 100% 0; opacity: 0; }
+		30% { opacity: 0.85; }
+		60% { opacity: 0.85; }
+		100% { background-position: -100% 0; opacity: 0; }
 	}
 
 	.crm-hero-sim-card-topline {
@@ -475,22 +765,22 @@ const fallbackTask = {
 
 	.crm-hero-sim-bubble {
 		position: absolute;
-		bottom: calc(100% + 0.6rem);
+		bottom: calc(100% + 0.5rem);
 		left: 50%;
 		display: inline-flex;
 		align-items: center;
 		justify-content: center;
 		width: max-content;
-		max-width: 13rem;
-		padding: 0.5rem 0.8rem;
+		max-width: 11rem;
+		padding: 0.38rem 0.6rem;
 		border: 1px solid rgba(201, 106, 58, 0.22);
-		border-radius: 0.8rem;
+		border-radius: 0.7rem;
 		background:
 			linear-gradient(180deg, rgba(255, 246, 237, 0.98), rgba(255, 250, 244, 0.96)),
 			var(--surface-card);
-		box-shadow: 0 12px 20px rgba(201, 106, 58, 0.12);
+		box-shadow: 0 10px 18px rgba(201, 106, 58, 0.12);
 		color: var(--color-terracotta-active);
-		font-size: 0.72rem;
+		font-size: 0.66rem;
 		line-height: 1.35;
 		white-space: normal;
 		text-align: center;
@@ -567,16 +857,25 @@ const fallbackTask = {
 
 		.crm-hero-sim-header {
 			display: grid;
+			grid-template-columns: 1fr;
+			gap: 0.6rem;
 			align-items: start;
 		}
 
-		.crm-hero-sim-header p {
-			max-width: none;
+		.crm-hero-sim-header-stats {
 			text-align: left;
 		}
 
-		.crm-hero-sim[data-locale="ar"] .crm-hero-sim-header p {
+		.crm-hero-sim-stat {
+			justify-items: start;
+		}
+
+		.crm-hero-sim[data-locale="ar"] .crm-hero-sim-header-stats {
 			text-align: right;
+		}
+
+		.crm-hero-sim[data-locale="ar"] .crm-hero-sim-stat {
+			justify-items: end;
 		}
 
 		.crm-hero-sim-stage-grid {
@@ -1005,6 +1304,7 @@ const fallbackTask = {
 				lead.bubble = bubbleForStage(lead, to);
 				lead.bubbleVisible = true;
 				positionCards();
+				if (state.markStageFlow) state.markStageFlow(from);
 
 				schedule(() => {
 					let delayBeforeMove = 0;
@@ -1029,6 +1329,7 @@ const fallbackTask = {
 						state.pipeline[to] = lead;
 						applyStage(lead, to);
 						positionCards();
+						if (state.markStageActive) state.markStageActive(to);
 
 						schedule(() => {
 							clearLeadBubble(lead);
@@ -1043,35 +1344,36 @@ const fallbackTask = {
 								}, 300);
 							}
 
-							schedule(runNextPhase, 600);
-						}, 800);
+							if (state.clearStageMarks) state.clearStageMarks();
+							schedule(runNextPhase, 450);
+						}, 700);
 					}, delayBeforeMove);
-				}, 1400);
+				}, 1200);
 			};
 
 			const runEntryPhase = () => {
 				const incoming = state.pendingLead;
-				
+
 				state.pendingLead = createLead(getActiveVehicles());
-				
+
 				applyStage(incoming, 0);
 				incoming.isEntering = true;
 				incoming.bubble = incoming.entryBubble;
 				incoming.bubbleVisible = true;
 				state.pipeline[0] = incoming;
 
-				
-				
 				positionCards({ entryLeadId: incoming.id });
+				if (state.markStageActive) state.markStageActive(0);
 
 				schedule(() => {
 					incoming.isEntering = false;
-				}, 800);
+				}, 700);
 
 				schedule(() => {
 					clearLeadBubble(incoming);
-					schedule(runNextPhase, 600);
-				}, 1800);
+					if (state.clearStageMarks) state.clearStageMarks();
+					schedule(runNextPhase, 450);
+				}, 1500);
 			};
 
 			const runNextPhase = () => {
@@ -1091,20 +1393,62 @@ const fallbackTask = {
 				runMovePhase(phase.from, phase.to);
 			};
 
+			// Live counter — increments every few seconds to feel "alive" even between transitions
+			const leadsHandledEl = root.querySelector("[data-leads-handled]");
+			if (leadsHandledEl instanceof HTMLElement) {
+				let count = 247 + Math.floor(Math.random() * 6);
+				leadsHandledEl.textContent = String(count);
+				const tickHandled = () => {
+					count += 1;
+					leadsHandledEl.textContent = String(count);
+				};
+				const handleInterval = window.setInterval(tickHandled, 4200 + Math.random() * 2400);
+				state.cleanup = state.cleanup || [];
+				state.cleanup.push(() => window.clearInterval(handleInterval));
+			}
+
+			// Update stage-active / stage-flowing classes + stage counts in sync with the pipeline state
+			const stages = Array.from(root.querySelectorAll("[data-stage-index]"));
+			const stageCountEls = Array.from(root.querySelectorAll("[data-stage-count]"));
+			const syncStageVisuals = (activeStageIndex = -1, flowingFromIndex = -1) => {
+				stages.forEach((stage, i) => {
+					if (!(stage instanceof HTMLElement)) return;
+					stage.classList.toggle("is-active", i === activeStageIndex);
+					stage.classList.toggle("is-flowing", i === flowingFromIndex);
+				});
+				stageCountEls.forEach((countEl, i) => {
+					if (!(countEl instanceof HTMLElement)) return;
+					const lead = state.pipeline[i];
+					countEl.textContent = lead ? "1" : "0";
+				});
+			};
+
+			const originalPositionCards = positionCards;
+			// Wrap positionCards so visuals stay in sync after every move
+			const wrappedPositionCards = (opts) => {
+				originalPositionCards(opts);
+				syncStageVisuals();
+			};
+
 			const start = () => {
 				if (state.started) return;
 				state.started = true;
 				root.dataset.enhanced = "true";
-				
-				
+
 				positionCards({ immediate: true });
-				
-				schedule(runNextPhase, 1000);
+				syncStageVisuals();
+
+				schedule(runNextPhase, 350);
 			};
 
 			const handleResize = () => positionCards({ immediate: true });
 			window.addEventListener("resize", handleResize);
-			
+
+			// Expose stage helpers to runMovePhase / runEntryPhase via closure
+			state.markStageActive = (idx) => syncStageVisuals(idx);
+			state.markStageFlow = (fromIdx) => syncStageVisuals(-1, fromIdx);
+			state.clearStageMarks = () => syncStageVisuals();
+
 			schedule(start, 100);
 		});
 	})();
