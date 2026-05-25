@@ -2,168 +2,135 @@
 import HeroPipelineSimulator from "./HeroPipelineSimulator.astro";
 import RequestDemoSection from "./RequestDemoSection.astro";
 import StickyDemoButton from "./StickyDemoButton.astro";
+import type { Locale } from "../data/site";
+import { getStrings } from "../data/strings";
 
-const painPoints = [
-	{
-		title: "Hot leads go cold",
-		copy: "When every inquiry lives in messenger threads, fast renters pick whoever answers first.",
-		icon: "clock",
-	},
-	{
-		title: "No pipeline visibility",
-		copy: "Managers cannot see which branch owns which lead, what is quoted, or what is stuck.",
-		icon: "pipeline",
-	},
-	{
-		title: "Quotes stay manual",
-		copy: "Price checks, car matching, and reservation prep still happen by copy-paste.",
-		icon: "quotes",
-	},
-	{
-		title: "Branches drift apart",
-		copy: "Dubai Marina, Downtown, and airport teams end up operating as separate islands.",
-		icon: "branch",
-	},
-];
+interface Props {
+	locale?: Locale;
+	contactHref?: string;
+}
 
-const trustStats = [
-	{ value: "< 30 sec", label: "response time target" },
-	{ value: "0", label: "lost chat threads" },
-	{ value: "4", label: "workspaces in one system" },
-	{ value: "AI only", label: "qualified lead intake" },
-];
+const { locale = "en", contactHref = "#contact" } = Astro.props;
+const s = getStrings(locale).home;
+const ctaPrimary = getStrings(locale).ctaPrimary;
+const ctaSecondary = getStrings(locale).ctaSecondary;
 
-const solutionTabs = [
-	{
-		id: "inbox",
-		label: "Inbox",
-		title: "See every live conversation in one operator inbox.",
-		copy: "Telegram-first intake lands in a structured conversation view with context, owner, status, and branch routing.",
-	},
-	{
-		id: "leads",
-		label: "Leads",
-		title: "Move demand through a real pipeline instead of scrolling chat history.",
-		copy: "Kanban and list views show who is qualified, quoted, pending payment, or ready for reservation handoff.",
-	},
-	{
-		id: "catalog",
-		label: "Catalog",
-		title: "Keep fleet availability and car data close to every quote.",
-		copy: "Operators match the right car, branch, and rental terms without leaving the CRM.",
-	},
-	{
-		id: "quotes",
-		label: "Quotes",
-		title: "Turn qualified requests into fast, consistent offers.",
-		copy: "Cursivo keeps quote details, pickup plans, and reservation tasks tied to the same customer record.",
-	},
+const tabs = [
+	{ id: "agent", label: s.tabAgent, title: s.panelAgentTitle, copy: s.panelAgentCopy },
+	{ id: "inbox", label: s.tabInbox, title: s.panelInboxTitle, copy: s.panelInboxCopy },
+	{ id: "leads", label: s.tabLeads, title: s.panelLeadsTitle, copy: s.panelLeadsCopy },
+	{ id: "catalog", label: s.tabCatalog, title: s.panelCatalogTitle, copy: s.panelCatalogCopy },
+	{ id: "quotes", label: s.tabQuotes, title: s.panelQuotesTitle, copy: s.panelQuotesCopy },
 ];
 
 const steps = [
-	{
-		number: "01",
-		title: "Onboard fleet",
-		copy: "Import branches, cars, classes, and pricing rules so the system can answer with real context.",
-	},
-	{
-		number: "02",
-		title: "Connect Telegram",
-		copy: "Route inbound inquiries through the AI intake layer and map them to the right branch automatically.",
-	},
-	{
-		number: "03",
-		title: "Start closing deals",
-		copy: "Managers receive qualified leads, quote-ready context, and clear next tasks instead of raw chat noise.",
-	},
+	{ eyebrow: s.step1Eyebrow, title: s.step1Title, copy: s.step1Copy, hint: s.step1Hint },
+	{ eyebrow: s.step2Eyebrow, title: s.step2Title, copy: s.step2Copy, hint: s.step2Hint },
+	{ eyebrow: s.step3Eyebrow, title: s.step3Title, copy: s.step3Copy, hint: s.step3Hint },
 ];
+
+const trustCards = [
+	{ value: s.trust1Value, label: s.trust1Label, hint: s.trust1Hint },
+	{ value: s.trust2Value, label: s.trust2Label, hint: s.trust2Hint },
+	{ value: s.trust3Value, label: s.trust3Label, hint: s.trust3Hint },
+	{ value: s.trust4Value, label: s.trust4Label, hint: s.trust4Hint },
+];
+
+const openSourceHref = locale === "en" ? "/open-source/" : `/${locale}/open-source/`;
 ---
 
-<div class="page-stack">
-	<!-- Hero with animated CRM board mockup -->
-	<section class="home-hero section-card" data-home-hero data-reveal="soft">
+<div class="page-stack home-page">
+	<!-- HERO: open-air, not boxed in a section-card -->
+	<section class="home-hero" data-home-hero data-reveal="soft">
 		<div class="home-hero-copy">
-			<p class="type-label home-eyebrow">Built for modern car rental operators</p>
-			<h1 class="type-display">
-				Your rental business deserves a real CRM, not scattered chats.
+			<p class="type-label home-eyebrow">{s.eyebrow}</p>
+			<h1 class="home-h1">
+				<span class="home-h1-line">{s.h1Line1}</span>
+				<span class="home-h1-line home-h1-line-accent">{s.h1Line2}</span>
 			</h1>
-			<p class="type-body-lg text-muted">
-				Cursivo is an AI-powered operator CRM for car rental companies. It captures Telegram,
-				WhatsApp, and website leads, qualifies intent, organizes the pipeline, and pushes
-				managers toward the next closing action. The first rollout is focused on the UAE, but
-				the operating model is built for rental teams beyond Dubai too.
-			</p>
+			<p class="home-lede type-body-lg text-muted">{s.lede}</p>
 			<div class="home-hero-actions">
-				<a class="home-hero-primary" href="#contact">Request a demo</a>
-				<a class="home-hero-secondary" href="#solution">See how it works</a>
+				<a class="home-hero-primary" href={contactHref}>{ctaPrimary}</a>
+				<a class="home-hero-secondary" href="#flow">{ctaSecondary}</a>
 			</div>
-			<div class="home-hero-notes">
-				<span>Telegram, WhatsApp, web intake</span>
-				<span>Quotes and reservations</span>
+			<div class="home-hero-chips">
+				<span>{s.heroChip1}</span>
+				<span>{s.heroChip2}</span>
+				<span>{s.heroChip3}</span>
 			</div>
+			<p class="home-twin">{s.twinNote}</p>
 		</div>
 
-			<div class="home-hero-visual" aria-hidden="true">
-				<div class="hero-grid"></div>
-				<HeroPipelineSimulator locale="en" />
-			</div>
-		</section>
-
-	<section class="pain-grid" id="benefits">
-		{painPoints.map((item, index) => (
-			<article class="pain-card section-card" data-reveal="soft" style={`--reveal-delay:${80 + index * 60}ms;`}>
-				<div class="pain-card-icon" aria-hidden="true">
-					{item.icon === "clock" && (
-						<svg viewBox="0 0 24 24" fill="none">
-							<circle cx="12" cy="12" r="8"></circle>
-							<path d="M12 8v5l3 2"></path>
-						</svg>
-					)}
-					{item.icon === "pipeline" && (
-						<svg viewBox="0 0 24 24" fill="none">
-							<path d="M4 6h7v4H4z"></path>
-							<path d="M13 14h7v4h-7z"></path>
-							<path d="M11 8h2v8h-2z"></path>
-						</svg>
-					)}
-					{item.icon === "quotes" && (
-						<svg viewBox="0 0 24 24" fill="none">
-							<path d="M6 5h12v14H6z"></path>
-							<path d="M9 9h6"></path>
-							<path d="M9 13h6"></path>
-						</svg>
-					)}
-					{item.icon === "branch" && (
-						<svg viewBox="0 0 24 24" fill="none">
-							<path d="M12 5v14"></path>
-							<path d="M7 9h10"></path>
-							<path d="M5 17h4"></path>
-							<path d="M15 17h4"></path>
-						</svg>
-					)}
-				</div>
-				<h2>{item.title}</h2>
-				<p class="text-muted">{item.copy}</p>
-			</article>
-		))}
+		<div class="home-hero-visual" aria-hidden="true">
+			<HeroPipelineSimulator locale={locale} />
+		</div>
 	</section>
 
-	<!-- Interactive tabs showing HTML/CSS product previews -->
-	<section class="solution section-card" id="solution" data-reveal="soft">
-		<div class="solution-head">
-			<div>
-				<p class="type-label solution-eyebrow">Meet Cursivo</p>
-				<h2 class="type-h2">Each pain point maps to a cleaner operator workflow.</h2>
-			</div>
-			<p class="text-muted">
-				Click through the core workspaces to see how inbox, leads, catalog, and quotes fit
-				together.
-			</p>
+	<!-- PAIN: asymmetric bento — one big "hero pain" + three flanking -->
+	<section class="pain section-card" id="benefits" data-reveal="soft">
+		<header class="pain-head">
+			<p class="type-label pain-eyebrow">{s.painEyebrow}</p>
+			<h2 class="type-h2">{s.painTitle}</h2>
+		</header>
+
+		<div class="pain-bento">
+			<article class="pain-big">
+				<div class="pain-big-marker" aria-hidden="true">
+					<span class="pain-big-pulse"></span>
+					03:14
+				</div>
+				<h3 class="pain-big-title">{s.painBigTitle}</h3>
+				<p class="pain-big-copy text-muted">{s.painBigCopy}</p>
+				<div class="pain-big-stat">
+					<strong>{s.painBigMetric}</strong>
+					<span>{s.painBigMetricLabel}</span>
+				</div>
+			</article>
+
+			<article class="pain-mini pain-mini-1">
+				<svg class="pain-mini-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+					<path d="M4 6h7v4H4z" />
+					<path d="M13 14h7v4h-7z" />
+					<path d="M11 8h2v8h-2z" />
+				</svg>
+				<h3>{s.painPipelineTitle}</h3>
+				<p class="text-muted">{s.painPipelineCopy}</p>
+			</article>
+
+			<article class="pain-mini pain-mini-2">
+				<svg class="pain-mini-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+					<path d="M6 5h12v14H6z" />
+					<path d="M9 9h6" />
+					<path d="M9 13h6" />
+				</svg>
+				<h3>{s.painQuotesTitle}</h3>
+				<p class="text-muted">{s.painQuotesCopy}</p>
+			</article>
+
+			<article class="pain-mini pain-mini-3">
+				<svg class="pain-mini-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+					<path d="M12 5v14" />
+					<path d="M7 9h10" />
+					<path d="M5 17h4" />
+					<path d="M15 17h4" />
+				</svg>
+				<h3>{s.painBranchesTitle}</h3>
+				<p class="text-muted">{s.painBranchesCopy}</p>
+			</article>
 		</div>
+	</section>
+
+	<!-- SOLUTION: 5 tabs, Agent first -->
+	<section class="solution section-card" id="solution" data-reveal="soft">
+		<header class="solution-head">
+			<p class="type-label solution-eyebrow">{s.solutionEyebrow}</p>
+			<h2 class="type-h2">{s.solutionTitle}</h2>
+			<p class="solution-lede text-muted">{s.solutionLede}</p>
+		</header>
 
 		<div class="solution-tabs" data-solution-tabs>
-			<div class="solution-tab-list" role="tablist" aria-label="Product previews">
-				{solutionTabs.map((tab, index) => (
+			<div class="solution-tab-list" role="tablist" aria-label="Product surfaces">
+				{tabs.map((tab, index) => (
 					<button
 						type="button"
 						class:list={["solution-tab-button", index === 0 && "is-active"]}
@@ -177,7 +144,7 @@ const steps = [
 				))}
 			</div>
 
-			{solutionTabs.map((tab, index) => (
+			{tabs.map((tab, index) => (
 				<div
 					class:list={["solution-panel", index === 0 && "is-active"]}
 					id={`panel-${tab.id}`}
@@ -190,6 +157,19 @@ const steps = [
 						<p class="text-muted">{tab.copy}</p>
 					</div>
 
+					{tab.id === "agent" && (
+						<div class="solution-preview agent-preview" aria-hidden="true">
+							<div class="agent-status">
+								<span class="agent-status-dot"></span>
+								<span class="agent-status-label">{s.flowLiveLabel}</span>
+								<span class="agent-status-time" data-agent-time>14 {s.flowSecondsAgo}</span>
+							</div>
+							<div class="agent-bubble agent-bubble-in">{s.flowChatMsg1}</div>
+							<div class="agent-bubble agent-bubble-sys">{s.flowChatMsg2}</div>
+							<div class="agent-bubble agent-bubble-out">{s.flowChatMsg3}</div>
+						</div>
+					)}
+
 					{tab.id === "inbox" && (
 						<div class="solution-preview inbox-preview" aria-hidden="true">
 							<aside>
@@ -200,12 +180,12 @@ const steps = [
 							</aside>
 							<div class="preview-main">
 								<header>
-									<strong>Lead: Ahmed R.</strong>
-									<span>AI qualified 14 sec ago</span>
+									<strong>Ahmed R.</strong>
+									<span>Marina · live</span>
 								</header>
 								<div class="chat-row is-incoming">Need a G-Class for Friday evening.</div>
-								<div class="chat-row is-system">AI tagged: luxury, short-term, Marina</div>
-								<div class="chat-row is-outgoing">Sharing available options and pickup terms.</div>
+								<div class="chat-row is-system">AI · luxury · short-term · Marina</div>
+								<div class="chat-row is-outgoing">Sharing options + pickup terms.</div>
 							</div>
 						</div>
 					)}
@@ -213,17 +193,17 @@ const steps = [
 					{tab.id === "leads" && (
 						<div class="solution-preview leads-preview" aria-hidden="true">
 							<div>
-								<header>New</header>
-								<div class="mini-lead"><strong>Tourist SUV</strong><span>DXB</span></div>
+								<header>Qualified</header>
+								<div class="mini-lead"><strong>Tourist SUV · 5d</strong><span>DXB arrivals</span></div>
 								<div class="mini-lead"><strong>Urgent sedan</strong><span>Downtown</span></div>
 							</div>
 							<div>
 								<header>Quoted</header>
-								<div class="mini-lead"><strong>BMW 7</strong><span>Deposit sent</span></div>
+								<div class="mini-lead"><strong>BMW 520i · 2d</strong><span>AED 1,840</span></div>
 							</div>
 							<div>
 								<header>Reserved</header>
-								<div class="mini-lead"><strong>Range Rover</strong><span>Driver booked</span></div>
+								<div class="mini-lead"><strong>Range Rover · 4d</strong><span>Marina · Sat</span></div>
 							</div>
 						</div>
 					)}
@@ -232,20 +212,20 @@ const steps = [
 						<div class="solution-preview catalog-preview" aria-hidden="true">
 							<div class="catalog-card">
 								<strong>Mercedes G63</strong>
-								<span>Luxury SUV</span>
+								<span>Luxury SUV · Marina</span>
 								<ul>
-									<li>Dubai Marina</li>
+									<li>AED 2,150 / day</li>
 									<li>Ready today</li>
-									<li>Daily quote preset</li>
+									<li>3,500 deposit</li>
 								</ul>
 							</div>
 							<div class="catalog-card">
 								<strong>BMW 520i</strong>
-								<span>Executive sedan</span>
+								<span>Executive · Downtown</span>
 								<ul>
-									<li>Downtown branch</li>
+									<li>AED 920 / day</li>
 									<li>Weekend package</li>
-									<li>Corporate favorite</li>
+									<li>1,200 deposit</li>
 								</ul>
 							</div>
 						</div>
@@ -254,14 +234,14 @@ const steps = [
 					{tab.id === "quotes" && (
 						<div class="solution-preview quotes-preview" aria-hidden="true">
 							<header>
-								<strong>Quote #DXB-204</strong>
-								<span>Prepared in 22 sec</span>
+								<strong>Quote · #DXB-204</strong>
+								<span>Prepared 22s ago</span>
 							</header>
 							<div class="quote-grid">
 								<div><span>Vehicle</span><strong>Range Rover Sport</strong></div>
-								<div><span>Rental</span><strong>3 days</strong></div>
-								<div><span>Pickup</span><strong>Dubai Marina</strong></div>
-								<div><span>Status</span><strong>Awaiting approval</strong></div>
+								<div><span>Rental</span><strong>3 days · Fri → Mon</strong></div>
+								<div><span>Pickup</span><strong>Marina · 19:30</strong></div>
+								<div><span>Total</span><strong>AED 6,400</strong></div>
 							</div>
 						</div>
 					)}
@@ -270,113 +250,220 @@ const steps = [
 		</div>
 	</section>
 
-	<!-- Step-by-step AI flow animation -->
-	<section class="ai-flow section-card" id="ai-flow" data-ai-flow data-reveal="soft">
-		<div class="ai-flow-copy">
-			<p class="type-label ai-flow-eyebrow">AI-powered flow</p>
-			<h2 class="type-h2">Telegram message in. Qualified task out.</h2>
-			<p class="text-muted">
-				The intake layer answers first, captures rental intent, creates the CRM lead, and
-				pushes the manager toward the exact next action.
-			</p>
-		</div>
+	<!-- AI FLOW: hero of the page, open-air, asymmetric, perpetual motion -->
+	<section class="flow" id="flow" data-ai-flow data-reveal="soft">
+		<header class="flow-head">
+			<p class="type-label flow-eyebrow">{s.flowEyebrow}</p>
+			<h2 class="type-h2">{s.flowTitle}</h2>
+			<p class="flow-copy text-muted">{s.flowCopy}</p>
+		</header>
 
-		<div class="ai-flow-grid" aria-live="polite">
-			<div class="ai-flow-chat">
-				<div class="flow-bubble is-incoming" data-flow-message="Need a luxury SUV tonight for 2 days. Marina pickup."></div>
-				<div class="flow-bubble is-system" data-flow-message="AI verified dates, branch, and car class."></div>
-				<div class="flow-bubble is-outgoing" data-flow-message="Lead qualified. Quote context prepared for the Marina team."></div>
+		<div class="flow-grid">
+			<div class="flow-chat" data-flow-chat>
+				<header>
+					<span class="flow-chat-dot"></span>
+					Telegram
+					<span class="flow-chat-time" data-flow-time>03:14</span>
+				</header>
+				<div class="flow-bubble is-incoming" data-flow-message={s.flowChatMsg1}></div>
+				<div class="flow-bubble is-system" data-flow-message={s.flowChatMsg2}></div>
+				<div class="flow-bubble is-outgoing" data-flow-message={s.flowChatMsg3}></div>
 			</div>
 
-			<div class="ai-flow-card" data-flow-card>
-				<p class="type-label">CRM lead created</p>
-				<strong>Lead: Marina luxury SUV</strong>
+			<svg class="flow-path" viewBox="0 0 200 320" preserveAspectRatio="none" aria-hidden="true">
+				<path
+					d="M 4 32 C 90 32, 100 160, 196 160 M 196 160 C 100 160, 90 288, 4 288"
+					fill="none"
+					stroke="currentColor"
+					stroke-width="1.5"
+					stroke-linecap="round"
+					pathLength="100"
+					data-flow-path
+				/>
+			</svg>
+
+			<div class="flow-card" data-flow-card>
+				<div class="flow-card-head">
+					<p class="type-label">{s.flowCrmLabel}</p>
+					<span class="flow-live">
+						<span class="flow-live-dot"></span>
+						{s.flowLiveLabel}
+					</span>
+				</div>
+				<strong class="flow-card-title">{s.flowCrmLeadTitle}</strong>
 				<ul>
-					<li>Source: Telegram</li>
-					<li>Priority: High intent</li>
-					<li>Next: Send quote</li>
+					<li>{s.flowCrmItem1}</li>
+					<li>{s.flowCrmItem2}</li>
+					<li>{s.flowCrmItem3}</li>
 				</ul>
 			</div>
 
-			<div class="ai-flow-task" data-flow-task>
-				<p class="type-label">Manager task</p>
-				<strong>Approve quote and confirm pickup window</strong>
-				<span>Assigned to Marina branch manager</span>
+			<div class="flow-task" data-flow-task>
+				<p class="type-label">{s.flowTaskLabel}</p>
+				<strong>{s.flowTaskTitle}</strong>
+				<span class="flow-task-assigned">{s.flowTaskAssigned}</span>
 			</div>
 		</div>
 	</section>
 
-	<section class="steps-grid" id="how-it-works">
-		{steps.map((step, index) => (
-			<article class="step-card section-card" data-reveal="soft" style={`--reveal-delay:${100 + index * 70}ms;`}>
-				<span class="step-number">{step.number}</span>
-				<h2>{step.title}</h2>
-				<p class="text-muted">{step.copy}</p>
-			</article>
-		))}
+	<!-- STEPS: zigzag timeline -->
+	<section class="steps section-card" id="how-it-works" data-reveal="soft">
+		<header class="steps-head">
+			<p class="type-label steps-eyebrow">{s.stepsEyebrow}</p>
+			<h2 class="type-h2">{s.stepsTitle}</h2>
+		</header>
+
+		<ol class="steps-list">
+			{steps.map((step, index) => (
+				<li class:list={["steps-item", `steps-item-${index + 1}`]}>
+					<div class="steps-copy">
+						<p class="type-label steps-step">{step.eyebrow}</p>
+						<h3 class="steps-title">{step.title}</h3>
+						<p class="steps-body text-muted">{step.copy}</p>
+						<p class="steps-hint">{step.hint}</p>
+					</div>
+
+					<div class="steps-preview" aria-hidden="true">
+						{index === 0 && (
+							<div class="steps-preview-sheet">
+								<header><strong>fleet-marina.xlsx</strong><span>27 cars · 3 branches</span></header>
+								<div class="row"><span>G63</span><span>Marina</span><span>AED 2,150</span></div>
+								<div class="row"><span>520i</span><span>Downtown</span><span>AED 920</span></div>
+								<div class="row is-ghost"><span>Prado</span><span>Airport</span><span>AED 840</span></div>
+							</div>
+						)}
+						{index === 1 && (
+							<div class="steps-preview-token">
+								<header>Telegram bot</header>
+								<code class="steps-token">cursivo://connect/7461<span class="steps-cursor"></span></code>
+								<span class="steps-token-state">Listening for next message…</span>
+							</div>
+						)}
+						{index === 2 && (
+							<div class="steps-preview-board">
+								<header>Marina · this morning</header>
+								<div class="row"><strong>Quote AED 6,400</strong><span>Ready</span></div>
+								<div class="row"><strong>Quote AED 2,940</strong><span>Ready</span></div>
+								<div class="row"><strong>Quote AED 1,560</strong><span>Ready</span></div>
+							</div>
+						)}
+					</div>
+				</li>
+			))}
+		</ol>
 	</section>
 
+	<!-- TRUST: outcome cards with honest numbers -->
 	<section class="trust section-card" id="why-cursivo" data-reveal="soft">
-		<div class="trust-head">
-			<p class="type-label trust-eyebrow">Why Cursivo</p>
-			<h2 class="type-h2">Designed to remove operator chaos before it becomes lost revenue.</h2>
-		</div>
+		<header class="trust-head">
+			<p class="type-label trust-eyebrow">{s.trustEyebrow}</p>
+			<h2 class="type-h2">{s.trustTitle}</h2>
+		</header>
+
 		<div class="trust-grid">
-			{trustStats.map((item, index) => (
-				<article class="trust-card" style={`--reveal-delay:${100 + index * 60}ms;`}>
+			{trustCards.map((item) => (
+				<article class="trust-card">
 					<strong>{item.value}</strong>
-					<span>{item.label}</span>
+					<span class="trust-label">{item.label}</span>
+					<span class="trust-hint">{item.hint}</span>
 				</article>
 			))}
 		</div>
+
+		<p class="trust-footnote">
+			<span>{s.trustFootnote}</span>
+			<a href={openSourceHref}>{s.trustFootnoteLink}</a>
+		</p>
 	</section>
 
-	<RequestDemoSection />
+	<RequestDemoSection locale={locale} />
 </div>
 
-<StickyDemoButton href="#contact" thresholdSelector="[data-home-hero]" />
+<StickyDemoButton
+	href={contactHref}
+	thresholdSelector="[data-home-hero]"
+	hideNearSelector="[data-request-demo]"
+	locale={locale}
+/>
 
 <style>
+	/* ----- LAYOUT ATOMS ----- */
+	.home-page {
+		gap: clamp(2.25rem, 5vw, 4rem);
+	}
+
+	/* ============================================
+	   HERO — open-air, asymmetric, capped height
+	   ============================================ */
 	.home-hero {
 		position: relative;
 		display: grid;
-		grid-template-columns: minmax(0, 1.05fr) minmax(22rem, 0.95fr);
-		gap: clamp(1.5rem, 3vw, 2.5rem);
+		grid-template-columns: minmax(0, 1.18fr) minmax(20rem, 0.82fr);
+		gap: clamp(1.5rem, 4vw, 3.5rem);
 		align-items: center;
-		min-height: min(52rem, 88vh);
+		padding: clamp(2.2rem, 5vw, 4rem) 0 clamp(1.4rem, 3vw, 2rem);
 	}
 
 	.home-hero::after {
 		content: "";
 		position: absolute;
-		inset: auto 0 0 auto;
-		width: 18rem;
-		height: 18rem;
-		background: radial-gradient(circle, var(--color-route-soft), transparent 70%);
+		inset: 0;
+		background:
+			radial-gradient(circle at 88% 12%, rgba(201, 106, 58, 0.16), transparent 42%),
+			radial-gradient(circle at 12% 78%, rgba(40, 71, 102, 0.08), transparent 38%);
 		pointer-events: none;
+		z-index: -1;
 	}
 
-	.home-eyebrow,
-	.solution-eyebrow,
-	.ai-flow-eyebrow,
-	.trust-eyebrow {
-		margin-bottom: var(--space-3);
+	.home-eyebrow {
+		margin-bottom: var(--space-4);
 		color: var(--color-terracotta);
 	}
 
-	.home-hero-copy {
-		position: relative;
-		z-index: 1;
+	.home-h1 {
+		display: grid;
+		gap: 0.1rem;
+		margin-bottom: var(--space-5);
+		font-family: var(--font-display);
+		font-weight: 700;
+		font-size: clamp(2.4rem, 5.4vw, 4.3rem);
+		line-height: 0.99;
+		letter-spacing: -0.045em;
+		max-width: 22ch;
+		text-wrap: balance;
 	}
 
-	.home-hero-copy h1 {
-		margin-bottom: var(--space-4);
-		max-width: 11ch;
+	.home-h1-line {
+		display: block;
 	}
 
-	.home-hero-copy p {
-		margin-bottom: 0;
+	.home-h1-line-accent {
+		color: var(--color-terracotta);
+	}
+
+	.home-lede {
+		margin: 0 0 var(--space-5);
+		max-width: 44rem;
+	}
+
+	.home-twin {
+		margin: var(--space-4) 0 0;
+		padding: 0.85rem 0 0;
+		border-top: 1px dashed rgba(113, 88, 62, 0.22);
+		font-family: var(--font-mono);
+		font-size: var(--text-label);
+		line-height: 1.55;
+		letter-spacing: 0.04em;
+		text-transform: uppercase;
+		color: var(--color-slate);
 		max-width: 42rem;
+	}
+
+	:lang(ar) .home-twin {
+		font-family: var(--font-arabic);
+		letter-spacing: 0;
+		text-transform: none;
+		font-size: 0.85rem;
 	}
 
 	.home-hero-actions {
@@ -391,28 +478,37 @@ const steps = [
 		display: inline-flex;
 		align-items: center;
 		justify-content: center;
-		padding: 0.9rem 1.1rem;
+		padding: 0.9rem 1.25rem;
 		border-radius: var(--radius-pill);
 		text-decoration: none;
 		font-weight: 700;
 		transition:
-			transform var(--motion-fast) ease,
+			transform var(--motion-fast) var(--motion-spring),
 			background var(--motion-fast) ease,
-			border-color var(--motion-fast) ease;
+			border-color var(--motion-fast) ease,
+			box-shadow var(--motion-fast) ease;
 	}
 
 	.home-hero-primary {
-		background: linear-gradient(165deg, #ff6b35, #c96a3a) !important;
-		color: #ffffff !important;
+		background: linear-gradient(165deg, #ff6b35, #c96a3a);
+		color: #ffffff;
 		font-weight: 800;
-		border: 1px solid rgba(255, 255, 255, 0.2) !important;
-		box-shadow: 0 6px 18px rgba(255, 107, 53, 0.3) !important;
+		border: 1px solid rgba(255, 255, 255, 0.22);
+		box-shadow:
+			0 6px 18px rgba(255, 107, 53, 0.3),
+			inset 0 1px 0 rgba(255, 255, 255, 0.25);
 	}
 
 	.home-hero-primary:hover {
-		filter: brightness(1.1);
-		transform: scale(1.05) translateY(-2px);
-		box-shadow: 0 12px 28px rgba(255, 107, 53, 0.45) !important;
+		filter: brightness(1.08);
+		transform: translateY(-2px) scale(1.02);
+		box-shadow:
+			0 12px 28px rgba(255, 107, 53, 0.42),
+			inset 0 1px 0 rgba(255, 255, 255, 0.32);
+	}
+
+	.home-hero-primary:active {
+		transform: scale(0.97);
 	}
 
 	.home-hero-secondary {
@@ -426,120 +522,250 @@ const steps = [
 		transform: translateY(-1px);
 	}
 
-	.home-hero-notes {
+	.home-hero-chips {
 		display: flex;
 		flex-wrap: wrap;
-		gap: 0.6rem;
+		gap: 0.5rem;
 		margin-top: var(--space-5);
 	}
 
-	.home-hero-notes span {
-		padding: 0.5rem 0.75rem;
+	.home-hero-chips span {
+		padding: 0.45rem 0.75rem;
 		border-radius: var(--radius-pill);
-		background: var(--color-accent-soft);
+		background: rgba(255, 253, 249, 0.7);
+		border: 1px solid var(--color-border-sand);
 		font-family: var(--font-mono);
 		font-size: var(--text-label);
-		letter-spacing: 0.05em;
+		letter-spacing: 0.06em;
 		text-transform: uppercase;
 		color: var(--color-terracotta-active);
+		backdrop-filter: blur(8px);
+	}
+
+	:lang(ar) .home-hero-chips span {
+		font-family: var(--font-arabic);
+		letter-spacing: 0;
+		text-transform: none;
+		font-size: 0.85rem;
 	}
 
 	.home-hero-visual {
 		position: relative;
-		min-height: 30rem;
-		transform: translateY(-1.5rem);
+		min-height: 26rem;
 	}
 
-	.hero-grid {
-		position: absolute;
-		inset: 8% 0 0 8%;
-		border-radius: var(--radius-2xl);
+	/* ============================================
+	   PAIN — bento, asymmetric, no 4-equal-columns
+	   ============================================ */
+	.pain {
+		display: grid;
+		gap: clamp(1.4rem, 2.5vw, 2rem);
+	}
+
+	.pain-head {
+		display: grid;
+		gap: 0.4rem;
+		max-width: 38rem;
+	}
+
+	.pain-eyebrow {
+		color: var(--color-terracotta);
+	}
+
+	.pain-bento {
+		display: grid;
+		grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+		grid-template-rows: repeat(3, minmax(0, 1fr));
+		gap: clamp(0.85rem, 1.4vw, 1.1rem);
+		min-height: 28rem;
+	}
+
+	.pain-big {
+		grid-column: 1;
+		grid-row: 1 / span 3;
+		display: grid;
+		grid-template-rows: auto 1fr auto;
+		gap: 1rem;
+		padding: clamp(1.3rem, 2.4vw, 1.85rem);
+		border-radius: var(--radius-xl);
 		background:
-			linear-gradient(90deg, var(--color-route-soft), transparent),
-			linear-gradient(180deg, var(--surface-card), transparent);
-		filter: blur(0.2rem);
+			linear-gradient(165deg, rgba(40, 71, 102, 0.06), rgba(201, 106, 58, 0.04)),
+			var(--surface-card);
+		border: 1px solid rgba(113, 88, 62, 0.18);
+		box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5);
+		position: relative;
+		overflow: clip;
 	}
 
-	.pain-grid,
-	.steps-grid {
+	.pain-big::after {
+		content: "";
+		position: absolute;
+		inset: -40% -10% auto auto;
+		width: 60%;
+		aspect-ratio: 1;
+		background: radial-gradient(circle, rgba(201, 106, 58, 0.18), transparent 60%);
+		pointer-events: none;
+	}
+
+	.pain-big-marker {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.5rem;
+		padding: 0.35rem 0.7rem 0.35rem 0.5rem;
+		border-radius: var(--radius-pill);
+		background: rgba(20, 32, 51, 0.08);
+		font-family: var(--font-mono);
+		font-size: var(--text-label);
+		letter-spacing: 0.1em;
+		color: var(--color-ink);
+		width: max-content;
+	}
+
+	.pain-big-pulse {
+		display: inline-block;
+		width: 0.5rem;
+		height: 0.5rem;
+		border-radius: 999px;
+		background: var(--color-terracotta);
+		box-shadow: 0 0 0 0 rgba(201, 106, 58, 0.45);
+		animation: painPulse 1.8s ease-out infinite;
+	}
+
+	@keyframes painPulse {
+		0% { box-shadow: 0 0 0 0 rgba(201, 106, 58, 0.45); }
+		70% { box-shadow: 0 0 0 0.6rem rgba(201, 106, 58, 0); }
+		100% { box-shadow: 0 0 0 0 rgba(201, 106, 58, 0); }
+	}
+
+	.pain-big-title {
+		font-size: clamp(1.6rem, 3vw, 2.15rem);
+		line-height: 1.05;
+		letter-spacing: -0.035em;
+		max-width: 14ch;
+	}
+
+	.pain-big-copy {
+		margin: 0;
+		max-width: 42ch;
+	}
+
+	.pain-big-stat {
 		display: grid;
-		grid-template-columns: repeat(4, minmax(0, 1fr));
-		gap: clamp(1rem, 2vw, 1.4rem);
+		grid-template-columns: auto 1fr;
+		gap: 0.85rem 1rem;
+		align-items: end;
+		padding-top: 0.85rem;
+		border-top: 1px solid rgba(113, 88, 62, 0.16);
 	}
 
-	.pain-card,
-	.step-card {
+	.pain-big-stat strong {
+		font-family: var(--font-display);
+		font-size: clamp(2rem, 4vw, 2.85rem);
+		line-height: 1;
+		color: var(--color-terracotta);
+		letter-spacing: -0.04em;
+	}
+
+	.pain-big-stat span {
+		color: var(--color-slate);
+		font-size: var(--text-small);
+		line-height: 1.45;
+		max-width: 30ch;
+	}
+
+	.pain-mini {
+		grid-column: 2;
 		display: grid;
-		gap: 0.85rem;
+		gap: 0.5rem;
+		padding: 1.1rem 1.2rem;
+		border-radius: var(--radius-lg);
+		border: 1px solid var(--color-border-sand);
+		background: var(--surface-card);
+		transition:
+			transform var(--motion-fast) var(--motion-spring),
+			border-color var(--motion-fast) ease,
+			box-shadow var(--motion-fast) ease;
 	}
 
-	.pain-card-icon {
-		display: inline-grid;
-		place-items: center;
-		width: 3rem;
-		height: 3rem;
-		border-radius: 1rem;
-		background: var(--color-accent-soft);
-		color: var(--color-terracotta-active);
+	.pain-mini:hover {
+		transform: translateY(-2px);
+		border-color: rgba(201, 106, 58, 0.3);
+		box-shadow: 0 14px 28px rgba(20, 32, 51, 0.08);
 	}
 
-	.pain-card-icon svg {
-		width: 1.35rem;
-		height: 1.35rem;
-		stroke: currentColor;
+	.pain-mini h3 {
+		font-size: 1.05rem;
+		line-height: 1.2;
+	}
+
+	.pain-mini p {
+		margin: 0;
+		font-size: 0.93rem;
+		line-height: 1.5;
+	}
+
+	.pain-mini-icon {
+		width: 1.2rem;
+		height: 1.2rem;
+		stroke: var(--color-terracotta-active);
 		stroke-width: 1.7;
 		stroke-linecap: round;
 		stroke-linejoin: round;
 	}
 
-	.pain-card h2,
-	.step-card h2 {
-		font-size: var(--text-h3);
-	}
-
-	.pain-card p,
-	.step-card p {
-		margin: 0;
-	}
-
+	/* ============================================
+	   SOLUTION
+	   ============================================ */
 	.solution {
 		display: grid;
-		gap: 1.25rem;
+		gap: clamp(1.25rem, 2vw, 1.75rem);
 	}
 
 	.solution-head {
 		display: grid;
-		grid-template-columns: minmax(0, 1fr) minmax(16rem, 24rem);
-		gap: 1rem;
-		align-items: end;
+		gap: 0.35rem;
+		max-width: 44rem;
 	}
 
-	.solution-head p:last-child {
-		margin-bottom: 0;
+	.solution-eyebrow {
+		color: var(--color-terracotta);
+	}
+
+	.solution-lede {
+		margin: 0.35rem 0 0;
+		max-width: 42rem;
 	}
 
 	.solution-tabs {
 		display: grid;
-		gap: 1rem;
+		gap: 1.1rem;
 	}
 
 	.solution-tab-list {
 		display: flex;
 		flex-wrap: wrap;
-		gap: 0.65rem;
+		gap: 0.5rem;
 	}
 
 	.solution-tab-button {
-		padding: 0.65rem 0.85rem;
+		padding: 0.6rem 1rem;
 		border: 1px solid var(--color-border-sand);
 		border-radius: var(--radius-pill);
 		background: var(--surface-card);
 		color: var(--color-slate);
+		font-weight: 600;
 		cursor: pointer;
 		transition:
 			background var(--motion-fast) ease,
 			color var(--motion-fast) ease,
-			border-color var(--motion-fast) ease;
+			border-color var(--motion-fast) ease,
+			transform var(--motion-fast) var(--motion-spring);
+	}
+
+	.solution-tab-button:hover {
+		transform: translateY(-1px);
+		border-color: var(--color-terracotta);
+		color: var(--color-ink);
 	}
 
 	.solution-tab-button.is-active {
@@ -550,33 +776,43 @@ const steps = [
 
 	.solution-panel {
 		display: none;
-		grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
-		gap: 1.25rem;
+		grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+		gap: clamp(1rem, 2vw, 1.6rem);
 		align-items: center;
+		opacity: 0;
+		transform: translateY(0.4rem);
+		transition:
+			opacity var(--motion-base) var(--motion-spring),
+			transform var(--motion-base) var(--motion-spring);
 	}
 
 	.solution-panel.is-active {
 		display: grid;
+		opacity: 1;
+		transform: translateY(0);
 	}
 
 	.solution-copy h3 {
-		font-size: var(--text-h2);
+		font-size: clamp(1.35rem, 2.4vw, 1.75rem);
+		line-height: 1.15;
 		margin-bottom: var(--space-3);
+		max-width: 22ch;
 	}
 
 	.solution-copy p {
 		margin: 0;
+		max-width: 38ch;
 	}
 
 	.solution-preview {
 		display: grid;
-		gap: 0.8rem;
-		padding: 1rem;
+		gap: 0.75rem;
+		padding: 1.1rem;
 		border: 1px solid var(--color-border-sand);
 		border-radius: var(--radius-xl);
 		background: linear-gradient(180deg, var(--surface-card), var(--surface-raised));
 		box-shadow: var(--shadow-card);
-		min-height: 19rem;
+		min-height: 18rem;
 	}
 
 	.inbox-preview {
@@ -584,42 +820,37 @@ const steps = [
 	}
 
 	.inbox-preview aside,
-	.preview-main,
-	.leads-preview > div,
-	.catalog-card,
-	.quotes-preview {
+	.preview-main {
 		padding: 0.85rem;
 		border-radius: 1rem;
 		background: var(--surface-page);
-	}
-
-	.inbox-preview aside,
-	.preview-main {
 		display: grid;
-		gap: 0.7rem;
+		gap: 0.6rem;
 		align-content: start;
 	}
 
-	.inbox-preview aside span,
-	.preview-main header span,
-	.chat-row,
-	.mini-lead span,
-	.catalog-card span,
-	.quotes-preview span,
-	.quote-grid span {
-		color: var(--color-slate);
-		font-size: var(--text-small);
-	}
+	.inbox-preview aside strong { font-size: 0.95rem; }
+	.inbox-preview aside span { color: var(--color-slate); font-size: var(--text-small); }
+	.preview-main header { display: flex; justify-content: space-between; align-items: baseline; gap: 0.6rem; }
+	.preview-main header span { color: var(--color-slate); font-size: var(--text-small); }
 
 	.chat-row {
-		padding: 0.75rem;
-		border-radius: 0.9rem;
+		padding: 0.7rem 0.85rem;
+		border-radius: 0.85rem;
 		background: var(--surface-card);
+		font-size: var(--text-small);
 	}
 
 	.chat-row.is-system {
 		background: var(--color-accent-soft);
 		color: var(--color-terracotta-active);
+		font-family: var(--font-mono);
+		letter-spacing: 0.04em;
+	}
+
+	:lang(ar) .chat-row.is-system {
+		font-family: var(--font-arabic);
+		letter-spacing: 0;
 	}
 
 	.chat-row.is-outgoing {
@@ -632,103 +863,274 @@ const steps = [
 	}
 
 	.leads-preview > div {
+		padding: 0.85rem;
+		border-radius: 1rem;
+		background: var(--surface-page);
 		display: grid;
-		gap: 0.75rem;
+		gap: 0.65rem;
 		align-content: start;
 	}
 
+	.leads-preview header { font-weight: 700; font-size: 0.95rem; }
+
 	.mini-lead {
 		display: grid;
-		gap: 0.3rem;
-		padding: 0.7rem;
-		border-radius: 0.9rem;
+		gap: 0.25rem;
+		padding: 0.65rem 0.75rem;
+		border-radius: 0.8rem;
 		background: var(--surface-card);
 	}
+
+	.mini-lead strong { font-size: 0.95rem; }
+	.mini-lead span { color: var(--color-slate); font-size: var(--text-small); }
 
 	.catalog-preview {
 		grid-template-columns: repeat(2, minmax(0, 1fr));
 	}
 
-	.catalog-card ul,
-	.ai-flow-card ul {
-		margin: 0;
-		padding-left: 1rem;
-		color: var(--color-slate);
+	.catalog-card {
+		display: grid;
+		gap: 0.4rem;
+		padding: 0.95rem;
+		border-radius: 1rem;
+		background: var(--surface-page);
 	}
 
-	.quotes-preview {
-		align-content: start;
+	.catalog-card strong { font-size: 1.05rem; }
+	.catalog-card span { color: var(--color-slate); font-size: var(--text-small); }
+	.catalog-card ul {
+		margin: 0.35rem 0 0;
+		padding-left: 1rem;
+		color: var(--color-slate);
+		font-size: var(--text-small);
+		display: grid;
+		gap: 0.2rem;
 	}
+
+	.quotes-preview header {
+		display: flex;
+		justify-content: space-between;
+		align-items: baseline;
+		gap: 1rem;
+	}
+
+	.quotes-preview header strong { font-size: 1.05rem; }
+	.quotes-preview header span { color: var(--color-slate); font-size: var(--text-small); }
 
 	.quote-grid {
 		display: grid;
 		grid-template-columns: repeat(2, minmax(0, 1fr));
-		gap: 0.75rem;
+		gap: 0.6rem;
 		margin-top: 0.85rem;
 	}
 
 	.quote-grid div {
 		display: grid;
-		gap: 0.25rem;
-		padding: 0.75rem;
-		border-radius: 0.9rem;
-		background: var(--surface-card);
+		gap: 0.2rem;
+		padding: 0.7rem 0.8rem;
+		border-radius: 0.85rem;
+		background: var(--surface-page);
 	}
 
-	.ai-flow {
+	.quote-grid span { color: var(--color-slate); font-size: var(--text-small); }
+	.quote-grid strong { font-size: 0.96rem; }
+
+	/* Agent preview (first tab) */
+	.agent-preview {
 		display: grid;
-		gap: 1.2rem;
+		gap: 0.7rem;
+		background: linear-gradient(180deg, var(--surface-card), rgba(40, 71, 102, 0.06));
 	}
 
-	.ai-flow-copy p:last-child {
-		margin-bottom: 0;
+	.agent-status {
+		display: flex;
+		align-items: center;
+		gap: 0.55rem;
+		padding: 0.35rem 0.75rem;
+		border-radius: var(--radius-pill);
+		background: var(--surface-page);
+		width: max-content;
+		font-family: var(--font-mono);
+		font-size: var(--text-label);
+		letter-spacing: 0.06em;
+		text-transform: uppercase;
+	}
+
+	:lang(ar) .agent-status {
+		font-family: var(--font-arabic);
+		letter-spacing: 0;
+		text-transform: none;
+		font-size: 0.85rem;
+	}
+
+	.agent-status-dot {
+		width: 0.5rem;
+		height: 0.5rem;
+		border-radius: 999px;
+		background: var(--color-success);
+		box-shadow: 0 0 0 0 rgba(47, 138, 98, 0.5);
+		animation: agentPulse 1.6s ease-in-out infinite;
+	}
+
+	@keyframes agentPulse {
+		0%, 100% { box-shadow: 0 0 0 0 rgba(47, 138, 98, 0.5); }
+		50% { box-shadow: 0 0 0 0.5rem rgba(47, 138, 98, 0); }
+	}
+
+	.agent-status-label { color: var(--color-success); font-weight: 700; }
+	.agent-status-time { color: var(--color-slate); margin-left: auto; }
+
+	.agent-bubble {
+		padding: 0.8rem 0.95rem;
+		border-radius: 1rem;
+		font-size: 0.95rem;
+		line-height: 1.45;
+	}
+
+	.agent-bubble-in {
+		background: var(--surface-page);
+		max-width: 85%;
+	}
+
+	.agent-bubble-sys {
+		background: var(--color-accent-soft);
+		color: var(--color-terracotta-active);
+		font-family: var(--font-mono);
+		font-size: 0.82rem;
+		letter-spacing: 0.05em;
+		max-width: 85%;
+	}
+
+	:lang(ar) .agent-bubble-sys {
+		font-family: var(--font-arabic);
+		letter-spacing: 0;
+		font-size: 0.88rem;
+	}
+
+	.agent-bubble-out {
+		background: var(--color-navy-soft);
+		color: var(--color-ink);
+		max-width: 85%;
+		justify-self: end;
+	}
+
+	/* ============================================
+	   FLOW — open-air, asymmetric
+	   ============================================ */
+	.flow {
+		position: relative;
+		display: grid;
+		gap: clamp(1.4rem, 2.5vw, 2rem);
+		padding: clamp(1rem, 2.5vw, 2rem) 0;
+	}
+
+	.flow-head {
+		display: grid;
+		gap: 0.5rem;
+		max-width: 46rem;
+	}
+
+	.flow-eyebrow {
+		color: var(--color-terracotta);
+	}
+
+	.flow-copy {
+		margin: 0;
 		max-width: 42rem;
 	}
 
-	.ai-flow-grid {
+	.flow-grid {
+		position: relative;
 		display: grid;
-		grid-template-columns: minmax(0, 1fr) minmax(15rem, 18rem) minmax(15rem, 18rem);
+		grid-template-columns: minmax(0, 1.5fr) minmax(13rem, 14rem) minmax(0, 1fr);
+		grid-template-rows: minmax(0, 1fr) minmax(0, 1fr);
+		grid-template-areas:
+			"chat path card"
+			"chat path task";
 		gap: 1rem;
 		align-items: stretch;
+		color: var(--color-terracotta);
 	}
 
-	.ai-flow-chat,
-	.ai-flow-card,
-	.ai-flow-task {
-		padding: 1rem;
-		border: 1px solid var(--color-border-sand);
-		border-radius: var(--radius-xl);
-		background: linear-gradient(180deg, var(--surface-card), var(--surface-raised));
-		min-height: 15rem;
-	}
-
-	.ai-flow-chat {
+	.flow-chat {
+		grid-area: chat;
 		display: grid;
 		gap: 0.8rem;
 		align-content: start;
+		padding: 1.15rem 1.2rem;
+		border-radius: var(--radius-xl);
+		background: linear-gradient(180deg, var(--surface-card), var(--surface-raised));
+		border: 1px solid var(--color-border-sand);
+		box-shadow: var(--shadow-card);
+	}
+
+	.flow-chat header {
+		display: flex;
+		align-items: center;
+		gap: 0.55rem;
+		padding-bottom: 0.5rem;
+		border-bottom: 1px solid rgba(113, 88, 62, 0.14);
+		font-family: var(--font-mono);
+		font-size: var(--text-label);
+		letter-spacing: 0.1em;
+		text-transform: uppercase;
+		color: var(--color-ink);
+	}
+
+	:lang(ar) .flow-chat header {
+		font-family: var(--font-arabic);
+		letter-spacing: 0;
+		text-transform: none;
+	}
+
+	.flow-chat-dot {
+		display: inline-block;
+		width: 0.5rem;
+		height: 0.5rem;
+		border-radius: 999px;
+		background: var(--color-success);
+		box-shadow: 0 0 0 0 rgba(47, 138, 98, 0.5);
+		animation: agentPulse 1.8s ease-in-out infinite;
+	}
+
+	.flow-chat-time {
+		margin-left: auto;
+		color: var(--color-slate);
 	}
 
 	.flow-bubble {
-		min-height: 3.8rem;
-		padding: 0.85rem;
+		min-height: 2.6rem;
+		padding: 0.8rem 0.95rem;
 		border-radius: 1rem;
 		background: var(--surface-page);
 		color: var(--color-slate);
-		opacity: 0.45;
+		font-size: 0.95rem;
+		line-height: 1.45;
+		opacity: 0.42;
+		transform: translateY(0.2rem);
 		transition:
 			opacity var(--motion-fast) ease,
-			transform var(--motion-fast) ease;
+			transform var(--motion-fast) var(--motion-spring);
 	}
 
 	.flow-bubble.is-current,
 	.flow-bubble.is-complete {
 		opacity: 1;
-		transform: translateY(-0.1rem);
+		transform: translateY(0);
 	}
 
 	.flow-bubble.is-system {
 		background: var(--color-accent-soft);
 		color: var(--color-terracotta-active);
+		font-family: var(--font-mono);
+		font-size: 0.85rem;
+		letter-spacing: 0.04em;
+	}
+
+	:lang(ar) .flow-bubble.is-system {
+		font-family: var(--font-arabic);
+		letter-spacing: 0;
+		font-size: 0.92rem;
 	}
 
 	.flow-bubble.is-outgoing {
@@ -736,159 +1138,501 @@ const steps = [
 		color: var(--color-ink);
 	}
 
-	.ai-flow-card,
-	.ai-flow-task {
+	.flow-path {
+		grid-area: path;
+		width: 100%;
+		height: 100%;
+		min-height: 14rem;
+		pointer-events: none;
+	}
+
+	.flow-path path {
+		stroke-dasharray: 100;
+		stroke-dashoffset: 100;
+		transition: stroke-dashoffset 1.4s var(--motion-spring) 0.2s;
+	}
+
+	[data-ai-flow].is-flowed .flow-path path {
+		stroke-dashoffset: 0;
+	}
+
+	.flow-card,
+	.flow-task {
+		padding: 1.1rem 1.15rem;
+		border-radius: var(--radius-xl);
+		background: var(--surface-card);
+		border: 1px solid var(--color-border-sand);
+		box-shadow: var(--shadow-card);
 		display: grid;
 		align-content: start;
-		gap: 0.75rem;
+		gap: 0.5rem;
 		opacity: 0.55;
-		transform: translateY(0.8rem);
+		transform: translateY(0.5rem) scale(0.995);
 		transition:
 			opacity var(--motion-base) var(--motion-spring),
 			transform var(--motion-base) var(--motion-spring);
 	}
 
-	.ai-flow-card.is-active,
-	.ai-flow-task.is-active {
+	.flow-card.is-active,
+	.flow-task.is-active {
 		opacity: 1;
-		transform: translateY(0);
+		transform: translateY(0) scale(1);
 	}
 
-	.ai-flow-task span {
+	.flow-card { grid-area: card; }
+	.flow-task { grid-area: task; }
+
+	.flow-card-head {
+		display: flex;
+		justify-content: space-between;
+		align-items: baseline;
+		gap: 0.6rem;
+	}
+
+	.flow-live {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.4rem;
+		padding: 0.18rem 0.55rem 0.18rem 0.45rem;
+		border-radius: var(--radius-pill);
+		background: rgba(47, 138, 98, 0.1);
+		color: var(--color-success);
+		font-family: var(--font-mono);
+		font-size: 0.7rem;
+		letter-spacing: 0.1em;
+		text-transform: uppercase;
+	}
+
+	:lang(ar) .flow-live {
+		font-family: var(--font-arabic);
+		letter-spacing: 0;
+		text-transform: none;
+	}
+
+	.flow-live-dot {
+		width: 0.35rem;
+		height: 0.35rem;
+		border-radius: 999px;
+		background: var(--color-success);
+		box-shadow: 0 0 0 0 rgba(47, 138, 98, 0.5);
+		animation: agentPulse 1.6s ease-in-out infinite;
+	}
+
+	.flow-card-title {
+		font-size: 1.05rem;
+		line-height: 1.2;
+	}
+
+	.flow-card ul {
+		margin: 0;
+		padding-left: 1rem;
 		color: var(--color-slate);
+		font-size: var(--text-small);
+		display: grid;
+		gap: 0.2rem;
 	}
 
-	.step-number {
+	.flow-task strong {
+		font-size: 1rem;
+		line-height: 1.25;
+	}
+
+	.flow-task-assigned {
+		color: var(--color-slate);
+		font-size: var(--text-small);
+	}
+
+	/* ============================================
+	   STEPS — zigzag timeline with mini previews
+	   ============================================ */
+	.steps {
+		display: grid;
+		gap: clamp(1.4rem, 2.4vw, 2rem);
+	}
+
+	.steps-head {
+		display: grid;
+		gap: 0.4rem;
+		max-width: 38rem;
+	}
+
+	.steps-eyebrow {
+		color: var(--color-terracotta);
+	}
+
+	.steps-list {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+		display: grid;
+		gap: clamp(1.4rem, 3vw, 2.4rem);
+		position: relative;
+	}
+
+	.steps-list::before {
+		content: "";
+		position: absolute;
+		left: 50%;
+		top: 0.5rem;
+		bottom: 0.5rem;
+		width: 1px;
+		background: repeating-linear-gradient(
+			to bottom,
+			rgba(113, 88, 62, 0.25) 0,
+			rgba(113, 88, 62, 0.25) 6px,
+			transparent 6px,
+			transparent 12px
+		);
+		transform: translateX(-50%);
+	}
+
+	.steps-item {
+		display: grid;
+		grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+		gap: clamp(1rem, 3vw, 2.5rem);
+		align-items: center;
+		position: relative;
+	}
+
+	.steps-item-2 .steps-copy { order: 2; }
+	.steps-item-2 .steps-preview { order: 1; }
+
+	.steps-step {
+		color: var(--color-terracotta);
+		margin-bottom: 0.5rem;
+	}
+
+	.steps-title {
+		font-size: clamp(1.5rem, 2.6vw, 1.95rem);
+		line-height: 1.1;
+		letter-spacing: -0.03em;
+		max-width: 18ch;
+		margin-bottom: 0.6rem;
+	}
+
+	.steps-body {
+		margin: 0 0 0.85rem;
+		max-width: 42ch;
+	}
+
+	.steps-hint {
+		margin: 0;
 		font-family: var(--font-mono);
 		font-size: var(--text-label);
 		letter-spacing: 0.08em;
 		text-transform: uppercase;
-		color: var(--color-terracotta);
+		color: var(--color-terracotta-active);
 	}
 
+	:lang(ar) .steps-hint {
+		font-family: var(--font-arabic);
+		letter-spacing: 0;
+		text-transform: none;
+	}
+
+	.steps-preview {
+		padding: 1rem 1.15rem;
+		border-radius: var(--radius-xl);
+		background: var(--surface-card);
+		border: 1px solid var(--color-border-sand);
+		box-shadow: var(--shadow-card);
+		display: grid;
+		gap: 0.55rem;
+	}
+
+	.steps-preview header {
+		display: flex;
+		justify-content: space-between;
+		align-items: baseline;
+		gap: 0.6rem;
+		padding-bottom: 0.5rem;
+		border-bottom: 1px solid rgba(113, 88, 62, 0.14);
+		font-family: var(--font-mono);
+		font-size: var(--text-label);
+		letter-spacing: 0.08em;
+		text-transform: uppercase;
+		color: var(--color-ink);
+	}
+
+	:lang(ar) .steps-preview header {
+		font-family: var(--font-arabic);
+		letter-spacing: 0;
+		text-transform: none;
+	}
+
+	.steps-preview header span {
+		color: var(--color-slate);
+	}
+
+	.steps-preview .row {
+		display: grid;
+		grid-template-columns: 1fr auto auto;
+		align-items: baseline;
+		gap: 0.75rem;
+		padding: 0.55rem 0.65rem;
+		border-radius: 0.75rem;
+		background: var(--surface-page);
+		font-size: 0.92rem;
+	}
+
+	.steps-preview-board .row {
+		grid-template-columns: 1fr auto;
+	}
+
+	.steps-preview-board .row span {
+		color: var(--color-success);
+		font-family: var(--font-mono);
+		font-size: 0.78rem;
+		letter-spacing: 0.08em;
+		text-transform: uppercase;
+	}
+
+	:lang(ar) .steps-preview-board .row span {
+		font-family: var(--font-arabic);
+		letter-spacing: 0;
+		text-transform: none;
+	}
+
+	.steps-preview .row.is-ghost {
+		opacity: 0.55;
+	}
+
+	.steps-token {
+		display: inline-flex;
+		align-items: center;
+		padding: 0.65rem 0.8rem;
+		border-radius: 0.75rem;
+		background: var(--surface-page);
+		font-family: var(--font-mono);
+		font-size: 0.9rem;
+		color: var(--color-ink);
+		width: 100%;
+		gap: 0.15rem;
+	}
+
+	.steps-cursor {
+		display: inline-block;
+		width: 0.5ch;
+		height: 1.05em;
+		background: var(--color-terracotta);
+		margin-left: 0.1rem;
+		animation: tokenCursor 1.05s steps(2, end) infinite;
+		vertical-align: middle;
+	}
+
+	@keyframes tokenCursor {
+		0%, 50% { opacity: 1; }
+		50.01%, 100% { opacity: 0; }
+	}
+
+	.steps-token-state {
+		color: var(--color-slate);
+		font-size: var(--text-small);
+	}
+
+	/* ============================================
+	   TRUST — outcome cards
+	   ============================================ */
 	.trust {
 		display: grid;
-		gap: 1.2rem;
+		gap: clamp(1.3rem, 2.4vw, 1.85rem);
+	}
+
+	.trust-head {
+		display: grid;
+		gap: 0.4rem;
+		max-width: 42rem;
+	}
+
+	.trust-eyebrow {
+		color: var(--color-terracotta);
 	}
 
 	.trust-grid {
 		display: grid;
 		grid-template-columns: repeat(4, minmax(0, 1fr));
-		gap: 1rem;
+		gap: clamp(0.85rem, 1.4vw, 1.1rem);
 	}
 
 	.trust-card {
 		display: grid;
-		gap: 0.45rem;
-		padding: 1rem;
+		gap: 0.4rem;
+		padding: 1.1rem 1.15rem;
+		border-radius: var(--radius-lg);
 		border: 1px solid var(--color-border-sand);
-		border-radius: 1rem;
 		background: var(--surface-card);
+		transition:
+			transform var(--motion-fast) var(--motion-spring),
+			border-color var(--motion-fast) ease,
+			box-shadow var(--motion-fast) ease;
+	}
+
+	.trust-card:hover {
+		transform: translateY(-2px);
+		border-color: rgba(201, 106, 58, 0.32);
+		box-shadow: 0 14px 28px rgba(20, 32, 51, 0.08);
 	}
 
 	.trust-card strong {
 		font-family: var(--font-display);
-		font-size: clamp(1.9rem, 4vw, 2.6rem);
+		font-size: clamp(1.8rem, 3.6vw, 2.4rem);
 		line-height: 1;
+		letter-spacing: -0.04em;
+		color: var(--color-ink);
 	}
 
-	.trust-card span {
+	.trust-label {
+		font-weight: 700;
+		font-size: 0.95rem;
+	}
+
+	.trust-hint {
+		color: var(--color-slate);
+		font-size: 0.85rem;
+		line-height: 1.45;
+	}
+
+	.trust-footnote {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: baseline;
+		gap: 0.5rem;
+		margin: 0;
+		padding-top: 0.6rem;
+		border-top: 1px dashed rgba(113, 88, 62, 0.22);
+		font-family: var(--font-mono);
+		font-size: var(--text-label);
+		letter-spacing: 0.08em;
+		text-transform: uppercase;
 		color: var(--color-slate);
 	}
 
+	:lang(ar) .trust-footnote {
+		font-family: var(--font-arabic);
+		letter-spacing: 0;
+		text-transform: none;
+	}
+
+	.trust-footnote a {
+		color: var(--color-terracotta);
+		text-decoration: none;
+		border-bottom: 1px solid currentColor;
+		padding-bottom: 1px;
+		transition: color var(--motion-fast) ease;
+	}
+
+	.trust-footnote a:hover {
+		color: var(--color-terracotta-active);
+	}
+
+	/* ============================================
+	   RESPONSIVE
+	   ============================================ */
 	@media (max-width: 1080px) {
 		.home-hero,
 		.solution-panel,
-		.ai-flow-grid {
+		.steps-item {
 			grid-template-columns: 1fr;
 		}
 
 		.home-hero {
-			min-height: auto;
 			gap: 1.25rem;
+			padding-top: 1.5rem;
 		}
 
-		.home-hero-visual {
-			transform: none;
-			min-height: 22rem;
+		.home-hero-visual { min-height: 22rem; }
+
+		.flow-grid {
+			grid-template-columns: 1fr;
+			grid-template-rows: auto auto auto auto;
+			grid-template-areas:
+				"chat"
+				"path"
+				"card"
+				"task";
 		}
 
-		.pain-grid,
-		.steps-grid,
+		.flow-path {
+			min-height: 4rem;
+			transform: rotate(90deg);
+		}
+
+		.pain-bento {
+			grid-template-columns: 1fr;
+			grid-template-rows: auto;
+			min-height: auto;
+		}
+
+		.pain-big {
+			grid-column: 1;
+			grid-row: auto;
+		}
+
+		.pain-mini {
+			grid-column: 1;
+		}
+
 		.trust-grid {
 			grid-template-columns: repeat(2, minmax(0, 1fr));
 		}
 
-		.solution-head {
-			grid-template-columns: 1fr;
-		}
-	}
-
-	@media (max-width: 760px) {
-		.home-hero-copy {
-			gap: 0.75rem;
+		.steps-list::before {
+			left: 1rem;
 		}
 
-		.home-hero-copy h1 {
-			max-width: none;
-			font-size: clamp(2.2rem, 10.8vw, 3.25rem);
+		.steps-item {
+			padding-left: 0;
 		}
 
-		.home-hero-actions {
-			margin-top: 1rem;
-		}
-
-		.home-hero-primary,
-		.home-hero-secondary {
-			padding: 0.82rem 0.95rem;
-		}
-
-		.home-hero-notes {
-			display: none;
-		}
-
-		.home-hero-visual {
-			min-height: auto;
-		}
-
-		.leads-preview,
-		.catalog-preview,
-		.quote-grid {
-			grid-template-columns: 1fr;
-		}
-
-		.inbox-preview {
-			grid-template-columns: 1fr;
-		}
+		.steps-item-2 .steps-copy { order: 1; }
+		.steps-item-2 .steps-preview { order: 2; }
 	}
 
 	@media (max-width: 640px) {
-		.pain-grid,
-		.steps-grid,
+		.home-h1 {
+			font-size: clamp(2rem, 9.5vw, 2.8rem);
+			max-width: none;
+		}
+
+		.home-hero-chips span {
+			font-size: 0.7rem;
+		}
+
 		.trust-grid {
 			grid-template-columns: 1fr;
 		}
 
-		.home-hero {
-			gap: 1rem;
-		}
-
-		.home-hero-visual {
-			min-height: auto;
-		}
-
-		.home-hero::after {
+		.steps-list::before {
 			display: none;
+		}
+
+		.solution-tab-list {
+			gap: 0.4rem;
+		}
+
+		.solution-tab-button {
+			padding: 0.55rem 0.85rem;
+			font-size: 0.85rem;
 		}
 	}
 
-	html[data-motion="reduce"] .sticky-demo-button {
+	html[data-motion="reduce"] .pain-big-pulse,
+	html[data-motion="reduce"] .agent-status-dot,
+	html[data-motion="reduce"] .flow-chat-dot,
+	html[data-motion="reduce"] .flow-live-dot,
+	html[data-motion="reduce"] .steps-cursor {
 		animation: none;
+	}
+
+	html[data-motion="reduce"] .flow-path path {
+		stroke-dashoffset: 0;
+		transition: none;
 	}
 </style>
 
 <script is:inline>
 	(() => {
+		/* Solution tabs */
 		const tabRoots = document.querySelectorAll("[data-solution-tabs]");
 		tabRoots.forEach((root) => {
 			const buttons = Array.from(root.querySelectorAll("[data-tab-target]"));
@@ -913,6 +1657,7 @@ const steps = [
 			});
 		});
 
+		/* AI Flow */
 		const flowRoot = document.querySelector("[data-ai-flow]");
 		if (!(flowRoot instanceof HTMLElement)) return;
 
@@ -926,6 +1671,7 @@ const steps = [
 				bubble.textContent = bubble.getAttribute("data-flow-message") ?? "";
 				bubble.classList.add("is-complete");
 			});
+			flowRoot.classList.add("is-flowed");
 			card?.classList.add("is-active");
 			task?.classList.add("is-active");
 		};
@@ -946,7 +1692,7 @@ const steps = [
 						return;
 					}
 
-					window.setTimeout(tick, 22);
+					window.setTimeout(tick, 18);
 				};
 
 				element.classList.add("is-current");
@@ -966,27 +1712,47 @@ const steps = [
 			for (const bubble of bubbles) {
 				const message = bubble.getAttribute("data-flow-message") ?? "";
 				await typeText(bubble, message);
-				await new Promise((resolve) => window.setTimeout(resolve, 220));
+				await new Promise((resolve) => window.setTimeout(resolve, 180));
 			}
 
-			card?.classList.add("is-active");
-			window.setTimeout(() => task?.classList.add("is-active"), 260);
+			flowRoot.classList.add("is-flowed");
+			window.setTimeout(() => card?.classList.add("is-active"), 80);
+			window.setTimeout(() => task?.classList.add("is-active"), 320);
+		};
+
+		const triggerIfVisible = () => {
+			const rect = flowRoot.getBoundingClientRect();
+			const vh = window.innerHeight || document.documentElement.clientHeight;
+			if (rect.top < vh * 0.85 && rect.bottom > 0) {
+				start();
+			}
 		};
 
 		if (!("IntersectionObserver" in window)) {
 			start();
-			return;
+		} else {
+			const observer = new IntersectionObserver(
+				(entries) => {
+					if (!entries[0]?.isIntersecting) return;
+					observer.disconnect();
+					start();
+				},
+				{ threshold: 0.2, rootMargin: "0px 0px -10% 0px" },
+			);
+			observer.observe(flowRoot);
+			// Safety net: if section is already in viewport when script runs.
+			window.setTimeout(triggerIfVisible, 50);
 		}
 
-		const observer = new IntersectionObserver(
-			(entries) => {
-				if (!entries[0]?.isIntersecting) return;
-				observer.disconnect();
-				start();
-			},
-			{ threshold: 0.35 },
-		);
-
-		observer.observe(flowRoot);
+		/* Agent preview live ticker (perpetual) */
+		const agentTime = document.querySelector("[data-agent-time]");
+		if (agentTime instanceof HTMLElement && !reduceMotion) {
+			const suffix = agentTime.textContent?.replace(/^\d+\s*/, "") ?? "";
+			let n = 14;
+			window.setInterval(() => {
+				n = (n % 59) + 1;
+				agentTime.textContent = `${n} ${suffix}`;
+			}, 1100);
+		}
 	})();
 </script>

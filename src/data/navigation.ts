@@ -13,39 +13,40 @@ export const localeLinks: LocaleLink[] = [
 
 export const navigationByLocale: Record<Locale, NavItem[]> = {
 	en: [
-		{ label: "Home", href: "/" },
 		{ label: "Product", href: "/product/" },
+		{ label: "Use cases", href: "/use-cases/" },
 		{ label: "Blog", href: "/blog/" },
-		// TODO: uncomment when cases are ready.
-		// { label: "Cases", href: "/cases/" },
+		{ label: "Changelog", href: "/changelog/" },
 	],
 	ru: [
-		{ label: "Главная", href: "/ru/" },
 		{ label: "Продукт", href: "/ru/product/" },
+		{ label: "Кейсы", href: "/ru/use-cases/" },
 		{ label: "Блог", href: "/ru/blog/" },
+		{ label: "Changelog", href: "/ru/changelog/" },
 	],
 	ar: [
-		{ label: "الرئيسية", href: "/ar/" },
 		{ label: "المنتج", href: "/ar/product/" },
+		{ label: "حالات الاستخدام", href: "/ar/use-cases/" },
 		{ label: "المدونة", href: "/ar/blog/" },
+		{ label: "سجل التغييرات", href: "/ar/changelog/" },
 	],
 };
 
 export const footerLinkGroupsByLocale: Record<Locale, FooterLinkGroup[]> = {
 	en: [
 		{
-			title: "Pages",
+			title: "Product",
 			links: [
-				{ label: "Home", href: "/" },
-				{ label: "Product", href: "/product/" },
-				{ label: "Blog", href: "/blog/" },
+				{ label: "Overview", href: "/product/" },
+				{ label: "Use cases", href: "/use-cases/" },
+				{ label: "Changelog", href: "/changelog/" },
 			],
 		},
 		{
-			title: "Explore",
+			title: "Read",
 			links: [
-				{ label: "Why Cursivo", href: "/#why-cursivo" },
-				{ label: "How it works", href: "/#how-it-works" },
+				{ label: "Blog", href: "/blog/" },
+				{ label: "Open source", href: "/open-source/" },
 				{ label: "Request demo", href: "/#contact" },
 			],
 		},
@@ -59,18 +60,18 @@ export const footerLinkGroupsByLocale: Record<Locale, FooterLinkGroup[]> = {
 	],
 	ru: [
 		{
-			title: "Страницы",
+			title: "Продукт",
 			links: [
-				{ label: "Главная", href: "/ru/" },
-				{ label: "Продукт", href: "/ru/product/" },
-				{ label: "Блог", href: "/ru/blog/" },
+				{ label: "Обзор", href: "/ru/product/" },
+				{ label: "Кейсы", href: "/ru/use-cases/" },
+				{ label: "Changelog", href: "/ru/changelog/" },
 			],
 		},
 		{
-			title: "Навигация",
+			title: "Читать",
 			links: [
-				{ label: "Почему Cursivo", href: "/ru/#benefits" },
-				{ label: "Как это работает", href: "/ru/#how-it-works" },
+				{ label: "Блог", href: "/ru/blog/" },
+				{ label: "Open source", href: "/ru/open-source/" },
 				{ label: "Запросить демо", href: "/ru/#contact" },
 			],
 		},
@@ -84,19 +85,19 @@ export const footerLinkGroupsByLocale: Record<Locale, FooterLinkGroup[]> = {
 	],
 	ar: [
 		{
-			title: "الصفحات",
+			title: "المنتج",
 			links: [
-				{ label: "الرئيسية", href: "/ar/" },
-				{ label: "المنتج", href: "/ar/product/" },
-				{ label: "المدونة", href: "/ar/blog/" },
+				{ label: "نظرة عامة", href: "/ar/product/" },
+				{ label: "حالات الاستخدام", href: "/ar/use-cases/" },
+				{ label: "سجل التغييرات", href: "/ar/changelog/" },
 			],
 		},
 		{
-			title: "التنقل",
+			title: "اقرأ",
 			links: [
-				{ label: "لماذا Cursivo", href: "/ar/#benefits" },
-				{ label: "كيف يعمل", href: "/ar/#how-it-works" },
-				{ label: "اطلب عرضا", href: "/ar/#contact" },
+				{ label: "المدونة", href: "/ar/blog/" },
+				{ label: "المصدر المفتوح", href: "/ar/open-source/" },
+				{ label: "اطلب عرضًا", href: "/ar/#contact" },
 			],
 		},
 		{

@@ -2,6 +2,7 @@
 import LocaleSwitcher from "./LocaleSwitcher.astro";
 import { footerLinkGroupsByLocale } from "../data/navigation";
 import type { Locale, LocaleLink } from "../data/site";
+import { getStrings, socialLinks } from "../data/strings";
 
 interface Props {
 	footerTitle: string;
@@ -12,8 +13,14 @@ interface Props {
 	currentLocale: Locale;
 }
 
-const { footerTitle, footerCopy, footerMetaLabel, footerMetaValue, localeLinks, currentLocale } = Astro.props;
+const { footerTitle, footerCopy, footerMetaLabel, localeLinks, currentLocale } = Astro.props;
+const strings = getStrings(currentLocale);
 const linkGroups = footerLinkGroupsByLocale[currentLocale];
+const socials = [
+	{ label: strings.footer.socials.telegram, href: socialLinks.telegram },
+	{ label: strings.footer.socials.linkedin, href: socialLinks.linkedin },
+	{ label: strings.footer.socials.github, href: socialLinks.github },
+];
 ---
 
 <footer class="site-footer">
@@ -24,12 +31,13 @@ const linkGroups = footerLinkGroupsByLocale[currentLocale];
 				<div>
 					<p class="site-footer-title">{footerTitle}</p>
 					<p class="site-footer-copy text-muted">{footerCopy}</p>
+					<p class="site-footer-made-in text-muted">{strings.footer.madeIn}</p>
 				</div>
 			</div>
-			<div class="site-footer-socials" aria-label="Social placeholders">
-				<span>Telegram</span>
-				<span>LinkedIn</span>
-				<span>Instagram</span>
+			<div class="site-footer-socials" aria-label="Social channels">
+				{socials.map((item) => (
+					<a href={item.href} target="_blank" rel="noreferrer">{item.label}</a>
+				))}
 			</div>
 		</div>
 		<div class="site-footer-links">
@@ -56,7 +64,7 @@ const linkGroups = footerLinkGroupsByLocale[currentLocale];
 					/>
 				</div>
 			</div>
-			<p class="text-muted">{footerMetaValue}</p>
+			<p class="text-muted">{strings.footer.metaLine}</p>
 		</div>
 	</div>
 </footer>
@@ -110,8 +118,8 @@ const linkGroups = footerLinkGroupsByLocale[currentLocale];
 		margin-top: var(--space-3);
 	}
 
-	.site-footer-socials span {
-		padding: 0.4rem 0.7rem;
+	.site-footer-socials a {
+		padding: 0.42rem 0.78rem;
 		border: 1px solid var(--color-border-sand);
 		border-radius: var(--radius-pill);
 		background: var(--surface-card);
@@ -119,7 +127,33 @@ const linkGroups = footerLinkGroupsByLocale[currentLocale];
 		font-family: var(--font-mono);
 		font-size: var(--text-label);
 		text-transform: uppercase;
-		letter-spacing: 0.05em;
+		letter-spacing: 0.08em;
+		text-decoration: none;
+		transition:
+			color var(--motion-fast) ease,
+			border-color var(--motion-fast) ease,
+			transform var(--motion-fast) var(--motion-spring);
+	}
+
+	.site-footer-socials a:hover {
+		color: var(--color-ink);
+		border-color: var(--color-terracotta);
+		transform: translateY(-1px);
+	}
+
+	.site-footer-made-in {
+		margin-top: 0.45rem;
+		font-family: var(--font-mono);
+		font-size: var(--text-label);
+		letter-spacing: 0.06em;
+		text-transform: uppercase;
+		color: var(--color-slate);
+	}
+
+	:lang(ar) .site-footer-made-in {
+		font-family: var(--font-arabic);
+		letter-spacing: 0;
+		text-transform: none;
 	}
 
 	.site-footer-links {

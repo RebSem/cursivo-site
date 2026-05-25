@@ -1,8 +1,25 @@
 ---
-import MarketingHomePage from "../../components/MarketingHomePage.astro";
-import { getHomeContent } from "../../data/site";
-
-const content = getHomeContent("ru");
+import HomePage from "../../components/HomePage.astro";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { localeLinks, navigationByLocale } from "../../data/navigation";
 ---
 
-<MarketingHomePage content={content} />
+<BaseLayout
+	title="Cursivo | AI-агент и CRM для команд автопроката"
+	description="Cursivo — один продукт: AI-агент отвечает в Telegram и WhatsApp, а CRM сама собирает готовые карточки лидов с филиалом, ценой и задачей менеджеру."
+	lang="ru"
+	brandMeta="AI-агент и CRM для команд автопроката"
+	navItems={navigationByLocale.ru}
+	localeLinks={localeLinks}
+	currentLocale="ru"
+	footerTitle="Cursivo"
+	footerCopy="Один продукт, две половины: AI-агент в Telegram и WhatsApp плюс CRM, которая сама заполняется готовыми карточками лидов."
+	footerMetaLabel="Языки"
+	footerMetaValue="EN · RU · AR"
+	canonicalPath="/ru/"
+	ctaHref="/ru/#contact"
+>
+	<div class="site-container">
+		<HomePage locale="ru" contactHref="/ru/#contact" />
+	</div>
+</BaseLayout>
