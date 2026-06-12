@@ -69,9 +69,11 @@
 	--font-mono: "IBM Plex Mono", "SFMono-Regular", monospace;
 	--font-arabic: "Noto Sans Arabic", "Segoe UI", sans-serif;
 
-	--text-display: clamp(2.8rem, 6vw, 5rem);
-	--text-h1: clamp(2.25rem, 5vw, 4rem);
-	--text-h2: clamp(1.6rem, 3vw, 2.2rem);
+	/* Minimums raised so the 641px value meets the 640px mobile-override value
+	   — otherwise headings shrink abruptly crossing 640→641px then grow back. */
+	--text-display: clamp(3.15rem, 6vw, 5rem);
+	--text-h1: clamp(2.85rem, 5vw, 4rem);
+	--text-h2: clamp(1.9rem, 3vw, 2.2rem);
 	--text-h3: clamp(1.2rem, 2.2vw, 1.45rem);
 	--text-body-lg: 1.125rem;
 	--text-body: 1rem;
@@ -294,7 +296,7 @@ select {
 
 html[data-motion="enabled"] [data-reveal] {
 	opacity: 0;
-	transform: translate3d(0, var(--reveal-offset, 18px), 0) scale(var(--reveal-scale, 0.985));
+	transform: translate3d(0, var(--reveal-offset, 18px), 0);
 	transition:
 		opacity var(--motion-base) var(--motion-spring),
 		transform var(--motion-base) var(--motion-spring);
@@ -304,12 +306,11 @@ html[data-motion="enabled"] [data-reveal] {
 
 html[data-motion="enabled"] [data-reveal="soft"] {
 	--reveal-offset: 14px;
-	--reveal-scale: 0.992;
 }
 
 html[data-motion="enabled"] [data-reveal].is-visible {
 	opacity: 1;
-	transform: translate3d(0, 0, 0) scale(1);
+	transform: translate3d(0, 0, 0);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -410,5 +411,11 @@ html[data-motion="enabled"] [data-reveal].is-visible {
 		--text-h1: clamp(1.95rem, 8.8vw, 2.85rem);
 		--text-h2: clamp(1.45rem, 6.4vw, 1.9rem);
 		--section-padding: 1.25rem;
+	}
+
+	/* Fixed gradient layers force a repaint on every scroll frame on mobile
+	   Safari for no visual gain (the parallax is barely honored there). */
+	body {
+		background-attachment: scroll, scroll, scroll;
 	}
 }

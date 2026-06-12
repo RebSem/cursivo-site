@@ -463,6 +463,15 @@ const trustCards = [
 		text-wrap: balance;
 	}
 
+	/* Arabic headline runs ~10% longer per line and the Latin display face's
+	   tight tracking is harmful for connected script — give it room to settle
+	   into two balanced lines and reset the tracking. */
+	:lang(ar) .home-h1 {
+		max-width: 24ch;
+		font-size: clamp(2.3rem, 4.5vw, 3.7rem);
+		letter-spacing: 0;
+	}
+
 	.home-h1-line {
 		display: block;
 	}
@@ -713,7 +722,7 @@ const trustCards = [
 		display: grid;
 		grid-template-columns: auto 1fr;
 		gap: 0.85rem 1rem;
-		align-items: end;
+		align-items: center;
 		padding-top: 0.85rem;
 		border-top: 1px solid rgba(113, 88, 62, 0.16);
 	}
@@ -1209,7 +1218,7 @@ const trustCards = [
 	.flow-path path {
 		stroke-dasharray: 100;
 		stroke-dashoffset: 100;
-		transition: stroke-dashoffset 1.4s var(--motion-spring) 0.2s;
+		transition: stroke-dashoffset var(--motion-slow) var(--motion-spring);
 	}
 
 	[data-ai-flow].is-flowed .flow-path path {
@@ -1571,17 +1580,21 @@ const trustCards = [
 
 		.flow-grid {
 			grid-template-columns: 1fr;
-			grid-template-rows: auto auto auto auto;
+			grid-template-rows: auto auto auto;
 			grid-template-areas:
 				"chat"
-				"path"
 				"card"
 				"task";
 		}
 
+		/* The decorative S-curve connector only reads as a left-to-right link
+		   between the two desktop columns. Stacked, it has no meaningful
+		   direction and its preserveAspectRatio="none" + height:100% blows the
+		   SVG up to the full row height (then rotate swaps it to a page-wide
+		   overflow). Drop it from the stacked flow and let the vertical rhythm
+		   carry the eye instead. */
 		.flow-path {
-			min-height: 4rem;
-			transform: rotate(90deg);
+			display: none;
 		}
 
 		.pain-bento {
@@ -1623,6 +1636,9 @@ const trustCards = [
 
 		.home-hero-chips span {
 			font-size: 0.7rem;
+			white-space: normal;
+			overflow-wrap: anywhere;
+			line-height: 1.25;
 		}
 
 		.trust-grid {
