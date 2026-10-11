@@ -1,5 +1,9 @@
 # Cursivo Site - Project Overview & Context
 
+> The canonical, up-to-date agent guide is [`AGENTS.md`](AGENTS.md) (current state,
+> verified commands, rules, gotchas). This file is the earlier overview, kept for Gemini;
+> where the two disagree, AGENTS.md wins.
+
 This is the public multilingual marketing site for **Cursivo**, an AI CRM and operations layer specifically designed for car rental operators. It is built as a static [Astro 5](https://astro.build/) project.
 
 ## Project Mission
@@ -11,7 +15,7 @@ The site aims to answer three key questions:
 ## Core Technologies
 - **Framework:** Astro 5 (Static Output)
 - **Language:** TypeScript
-- **Content:** MDX via Astro Content Collections
+- **Content:** Markdown (`.md`) Astro Content Collections; the MDX integration is enabled
 - **Styling:** Plain CSS (No Tailwind, following a custom design system)
 - **Typography:** Space Grotesk (Headlines), Manrope (Body), IBM Plex Mono (Labels), Noto Sans Arabic (Arabic)
 - **Deployment:** Static hosting (Target: GitHub Pages)
@@ -40,12 +44,12 @@ The site aims to answer three key questions:
 - **Translation Keys:** Content collections use a `translationKey` to link translated versions of the same entry.
 
 ### Design System (The "Concierge" Look)
-- **Palette:** Warm sand (`#F5EFE6`), Ivory (`#FFFDF9`), Ink (`#142033`), Terracotta (`#C96A3A`), and Reservation Navy (`#284766`).
+- **Palette:** Warm sand (`#F5EFE6`), Ivory (`#FFFDF9`), Ink (`#142033`), Terracotta (`#C96A3A` in the blueprint; the token in `src/styles/global.css` is now `#A64D25`), and Reservation Navy (`#284766`).
 - **Asymmetry:** Layouts favor offset blocks and layered cards over centered templates.
 - **Visual Metaphors:** "Route lines" and "dispatch pills" are used to represent operational workflows.
 
 ### Content Strategy
-- Homepage content is managed in `src/data/site.ts` to allow for easy localization of complex landing page blocks.
+- Homepage copy for all three locales lives in `src/data/strings.ts` (since May 2026); `src/data/site.ts` still holds shared types and the content used by the product, blog, changelog and use-case pages.
 - Long-form content lives in `src/content/`.
 
 ### SEO & Discoverability
