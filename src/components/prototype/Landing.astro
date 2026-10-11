@@ -1,0 +1,147 @@
+---
+import '@fontsource/manrope/latin-400.css';
+import '@fontsource/manrope/cyrillic-400.css';
+import '@fontsource/manrope/latin-500.css';
+import '@fontsource/manrope/cyrillic-500.css';
+import '@fontsource/manrope/latin-600.css';
+import '@fontsource/manrope/cyrillic-600.css';
+import '@fontsource/manrope/latin-700.css';
+import '@fontsource/manrope/cyrillic-700.css';
+import '@fontsource/manrope/latin-800.css';
+import '@fontsource/manrope/cyrillic-800.css';
+import FleetConsole from './FleetConsole.astro';
+import AgentBooking from './AgentBooking.astro';
+import Icon from './Icon.astro';
+import Mark from './Mark.astro';
+import { prototypeCopy, type PrototypeLocale } from '../../data/prototype';
+import '../../styles/prototype.css';
+interface Props { locale?: PrototypeLocale; }
+const { locale = 'ru' } = Astro.props;
+const t = prototypeCopy[locale];
+const paths = ['#product', '#workflow', '#agents'];
+const original = locale === 'ru' ? '/ru/' : '/';
+---
+<!doctype html>
+<html lang={locale} dir="ltr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={t.description} />
+    <meta name="robots" content="noindex, nofollow" />
+    <meta name="theme-color" content="#fafafa" />
+    <link rel="icon" type="image/svg+xml" href="/prototype-mark.svg" />
+    <title>{t.title}</title>
+  </head>
+  <body class="prototype-page">
+    <a class="skip-link" href="#main">{t.skip}</a>
+    <header class="p-header">
+      <div class="p-nav wrap">
+        <a class="p-brand" href={locale === 'ru' ? '/prototype/' : '/prototype/en/'} aria-label="Cursivo"><Mark /><span>cursivo</span></a>
+        <nav class="desktop-nav" aria-label={t.menu}>
+          {t.nav.map((item, i) => <a href={paths[i]}>{item}{i === 2 && <span class="nav-dot" />}</a>)}
+        </nav>
+        <div class="nav-actions">
+          <div class="locale-switch" aria-label={locale === 'ru' ? 'Язык' : 'Language'}><a href="/prototype/" lang="ru" aria-current={locale === 'ru' ? 'page' : undefined}>RU</a><span>/</span><a href="/prototype/en/" lang="en" aria-current={locale === 'en' ? 'page' : undefined}>EN</a></div>
+          <a class="button button-small nav-cta" href="#contact">{t.cta}<Icon name="arrow" size={15} /></a>
+          <details class="mobile-menu"><summary aria-label={t.menu}><span></span><span></span></summary><nav aria-label={t.menu}>{t.nav.map((item, i) => <a href={paths[i]}>{item}</a>)}<a href="#contact">{t.cta}</a></nav></details>
+        </div>
+      </div>
+    </header>
+    <main id="main">
+      <section class="p-hero" aria-labelledby="hero-title">
+        <div class="hero-copy wrap">
+          <a class="announcement" href="#agents"><span class="announcement-tag">{t.announcementTag}</span><span>{t.announcement}</span><Icon name="chevron" size={13} /></a>
+          <p class="hero-eyebrow">{t.eyebrow}</p>
+          <h1 id="hero-title">{t.hero[0]}<br /><span>{t.hero[1]}</span></h1>
+          <p class="hero-lede">{t.lede}</p>
+          <div class="hero-actions"><a class="button" href="#contact">{t.cta}<Icon name="arrow" size={17} /></a><a class="text-button" href="#product"><span class="play-icon"><Icon name="play" size={14} /></span>{t.watch}</a></div>
+          <p class="hero-note">{t.heroNote}</p>
+        </div>
+        <div class="product-stage wrap" id="product">
+          <div class="stage-caption"><span><i></i>{t.screenshotCaption}</span><span>{t.screenshotNote}</span></div>
+          <div class="console-shell"><FleetConsole locale={locale} /></div>
+          <div class="stage-reflection" aria-hidden="true"></div>
+        </div>
+      </section>
+      <div class="connection-strip wrap" aria-label={t.connected}>
+        <span class="connection-label">{t.connected}</span>
+        <span><Icon name="telegram" />{t.channel}</span>
+        <span><Icon name="globe" /><span><strong>{t.multilingual}</strong><small>{t.languageLabel}</small></span></span>
+        <span><Icon name="branch" />{t.branchLabel}</span>
+        <span><Icon name="shield" />{t.humanLabel}</span>
+      </div>
+      <section class="p-product wrap section-space" aria-labelledby="product-title">
+        <div class="section-intro" data-enter>
+          <div><p class="section-kicker">{t.productLabel}</p><h2 id="product-title">{t.productHeading[0]}<br /><span>{t.productHeading[1]}</span></h2></div>
+          <p>{t.productIntro}</p>
+        </div>
+        <div class="story-grid">
+          <article class="conversation-story" data-enter>
+            <div class="story-copy"><h3>{t.conversationTitle}</h3><p>{t.conversationCopy}</p></div>
+            <div class="conversation-example" aria-label={locale === 'ru' ? 'Пример диалога и созданной заявки' : 'Example conversation and lead'}>
+              <div class="example-topline"><span><Icon name="telegram" size={16} /> Telegram</span><span>03:14</span></div>
+              <div class="customer-message">{t.chatCustomer}<time>03:14</time></div>
+              <div class="agent-message"><span class="avatar-mark"><Mark size={18} /></span><div><strong>Cursivo AI</strong><p>{t.chatAgent}</p></div></div>
+              <div class="lead-created"><span class="check-circle"><Icon name="check" size={15} /></span><div><strong>{t.prepared}</strong><p>{t.preparedMeta}</p></div><Icon name="arrow" size={18} /></div>
+            </div>
+          </article>
+          <article class="control-story" data-enter>
+            <div class="story-copy"><h3>{t.controlTitle}</h3><p>{t.controlCopy}</p></div>
+            <div class="lead-example">
+              <div class="lead-top"><span>{t.lead}</span><span class="lead-id">#CR-2048</span></div>
+              <div class="lead-person"><span>AM</span><div><strong>{t.leadName}</strong><small>{t.assigned}</small></div><span class="manager-avatar" aria-hidden="true">MK</span></div>
+              <ul><li><Icon name="car" size={17} />{t.leadCar}</li><li><Icon name="calendar" size={17} />{t.leadDates}</li><li><Icon name="pin" size={17} />{t.leadBranch}</li></ul>
+              <div class="lead-status"><span><i></i>{t.leadStatus}</span><Icon name="shield" size={17} /></div>
+            </div>
+            <p class="control-foot"><Icon name="shield" size={14} />{t.controlFoot}</p>
+          </article>
+        </div>
+      </section>
+      <section class="p-agents" id="agents" aria-labelledby="agents-title">
+        <div class="wrap">
+          <div class="agent-section-top"><span class="agent-section-kicker"><Icon name="spark" size={20} />{t.agentBadge}</span><span class="roadmap-badge"><i></i>{t.roadmap}</span></div>
+          <div class="agent-layout">
+            <div class="agent-copy" data-enter>
+              <h2 id="agents-title">{t.agentHeading[0]}<br /><span>{t.agentHeading[1]}</span></h2>
+              <p class="agent-intro">{t.agentIntro}</p>
+              <p class="agent-description">{t.agentBody}</p>
+              <a class="light-link" href="#contact">{t.agentLink}<Icon name="arrow" size={18} /></a>
+              <div class="mcp-definition"><svg viewBox="0 0 32 32" fill="none" aria-hidden="true"><path d="m8 20 10-10a4 4 0 0 1 6 6L14 26m-9-9L15 7a4 4 0 0 1 6 0m-9 16 3 3a4 4 0 0 0 6-6l-6-6" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" /></svg><p>{t.mcpExplain}</p></div>
+            </div>
+            <div class="agent-demo" data-enter><AgentBooking locale={locale} /></div>
+          </div>
+          <div class="mcp-points">{t.mcpPoints.map(([title, body], i) => <div><Icon name={['calendar', 'compare', 'check'][i]} size={22} /><div><h3>{title}</h3><p>{body}</p></div></div>)}</div>
+          <p class="mcp-footnote">{t.mcpFoot}</p>
+        </div>
+      </section>
+      <section class="p-workflow wrap section-space" id="workflow" aria-labelledby="workflow-title">
+        <div class="workflow-heading" data-enter><h2 id="workflow-title">{t.workflowHeading[0]}<br /><span>{t.workflowHeading[1]}</span></h2><p>{t.workflowIntro}</p></div>
+        <ol class="workflow-steps">{t.steps.map(([title, body], i) => <li data-enter><div class="step-top"><span>0{i+1}</span><div></div>{i < 2 && <Icon name="arrow" size={16} />}</div><h3>{title}</h3><p>{body}</p></li>)}</ol>
+      </section>
+      <section class="p-faq wrap" aria-labelledby="faq-title"><h2 id="faq-title">{t.faqHeading}</h2><div class="faq-list">{t.faq.map(([q, a]) => <details><summary>{q}<span aria-hidden="true">+</span></summary><p>{a}</p></details>)}</div></section>
+      <section class="p-contact" id="contact" aria-labelledby="contact-title">
+        <div class="wrap contact-inner" data-enter><div class="contact-mark"><Mark size={38} /></div><p class="section-kicker">{t.contactLabel}</p><h2 id="contact-title">{t.contactHeading[0]}<br /><span>{t.contactHeading[1]}</span></h2><p class="contact-body">{t.contactBody}</p><div class="contact-actions"><a class="button" href="https://t.me/Michael_Semenov" target="_blank" rel="noopener noreferrer">{t.telegram}<Icon name="arrow" size={17} /></a><a class="text-button" href="https://wa.me/79822306019" target="_blank" rel="noopener noreferrer">{t.whatsapp}<Icon name="arrow" size={17} /></a></div><a class="founder" href="https://www.linkedin.com/in/mikhail-semenovv/" target="_blank" rel="noopener noreferrer"><span class="founder-avatar">MS</span><span><strong>{t.founder}</strong><small>{t.founderRole}</small></span><Icon name="arrow" size={14} /></a></div>
+      </section>
+    </main>
+    <footer class="p-footer wrap"><div class="footer-brand"><a class="p-brand" href={locale === 'ru' ? '/prototype/' : '/prototype/en/'}><Mark size={23} /><span>cursivo</span></a><p>{t.footerLine}</p></div><div class="footer-links"><a href={`${original}privacy/`}>{t.privacy}</a><a href={`${original}terms/`}>{t.terms}</a><a href={original}>{t.original}<Icon name="arrow" size={13} /></a></div><div class="footer-bottom"><span>© {new Date().getFullYear()} Cursivo</span><span>{t.prototype} · RU / EN</span></div></footer>
+    <script>
+      const menu = document.querySelector<HTMLDetailsElement>('.mobile-menu');
+      menu?.querySelectorAll('a').forEach(link => link.addEventListener('click', () => { menu.open = false; }));
+      document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape' && menu?.open) { menu.open = false; menu.querySelector('summary')?.focus(); }
+      });
+      document.addEventListener('click', (event) => {
+        if (menu?.open && event.target instanceof Node && !menu.contains(event.target)) menu.open = false;
+      });
+      if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches && 'IntersectionObserver' in window) {
+        const observer = new IntersectionObserver((entries) => {
+          for (const entry of entries) if (entry.isIntersecting) {
+            entry.target.animate([{ opacity: 0, transform: 'translateY(18px)' }, { opacity: 1, transform: 'translateY(0)' }], { duration: 550, easing: 'cubic-bezier(.22,1,.36,1)' });
+            observer.unobserve(entry.target);
+          }
+        }, { threshold: .12 });
+        document.querySelectorAll('[data-enter]').forEach(node => observer.observe(node));
+      }
+    </script>
+  </body>
+</html>
